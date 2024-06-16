@@ -1,7 +1,8 @@
-import {Component} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {CommentItemComponent} from "../comment-item/comment-item.component";
 import {CommentModel} from "../../_models/comment.model";
 import {CommonModule} from "@angular/common";
+import {PostModel} from "../../_models/post.model";
 
 @Component({
   selector: 'app-post-item',
@@ -13,39 +14,15 @@ import {CommonModule} from "@angular/common";
   templateUrl: './post-item.component.html',
   styleUrl: './post-item.component.css'
 })
-export class PostItemComponent {
+export class PostItemComponent implements OnInit {
   comments: CommentModel[] = [];
+  @Input() post!: PostModel;
 
+  constructor() { }
 
-  constructor() {
-    this.comments = [
-      {
-        userImg: 'assets/images/user/02.jpg',
-        name: 'Monty Carlo',
-        text: 'Lorem ipsum dolor sit amet',
-        timestamp: '5 min',
-        id: 0,
-        postId: 0,
-        email: ''
-      },
-      {
-        userImg: 'assets/images/user/03.jpg',
-        name: 'Paul Molive',
-        text: 'Lorem ipsum dolor sit amet',
-        timestamp: '5 min',
-        id: 0,
-        postId: 0,
-        email: ''
-      },
-      {
-        userImg: 'assets/images/user/04.jpg',
-        name: 'Anna Mull',
-        text: 'Lorem ipsum dolor sit amet',
-        timestamp: '5 min',
-        id: 0,
-        postId: 0,
-        email: ''
-      }
-    ];
+  ngOnInit() {
+    if (this.post) {
+      this.comments = this.post.comments;
+    }
   }
 }

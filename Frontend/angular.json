@@ -31,7 +31,17 @@
               "node_modules/remixicon/fonts/remixicon.css",
               "node_modules/font-awesome/css/font-awesome.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "src/assets/js/app.js",
+              "src/assets/js/select2.min.js",
+              "src/assets/js/slider.js",
+              "src/assets/js/masonry.pkgd.min.js",
+              "src/assets/js/enchanter.js",
+              "src/assets/js/lottie.js"
+            ]
           },
           "configurations": {
             "production": {

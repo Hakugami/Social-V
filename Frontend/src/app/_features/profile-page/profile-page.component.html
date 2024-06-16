@@ -1,0 +1,79 @@
+<div class="content-page" id="content-page">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <app-profile-header></app-profile-header>
+        </div>
+        <div class="card">
+          <div class="card-body p-0">
+            <div class="user-tabing">
+              <ul
+                class="nav nav-pills d-flex align-items-center justify-content-center profile-feed-items p-0 m-0"
+              >
+                <li class="nav-item col-12 col-sm-3 p-0">
+                  <a
+                    class="nav-link active"
+                    data-bs-target="#timeline"
+                    data-bs-toggle="pill"
+                    href="#pills-timeline-tab"
+                    role="button"
+                  >Timeline</a
+                  >
+                </li>
+                <li class="nav-item col-12 col-sm-3 p-0">
+                  <a
+                    class="nav-link"
+                    data-bs-target="#about"
+                    data-bs-toggle="pill"
+                    href="#pills-about-tab"
+                    role="button"
+                  >About</a
+                  >
+                </li>
+                <li class="nav-item col-12 col-sm-3 p-0">
+                  <a
+                    class="nav-link"
+                    data-bs-target="#friends"
+                    data-bs-toggle="pill"
+                    href="#pills-friends-tab"
+                    role="button"
+                  >Friends</a
+                  >
+                </li>
+                <li class="nav-item col-12 col-sm-3 p-0">
+                  <a
+                    class="nav-link"
+                    data-bs-target="#photos"
+                    data-bs-toggle="pill"
+                    href="#pills-photos-tab"
+                    role="button"
+                  >Photos</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div class="tab-content">
+          <div class="tab-pane fade show active" id="timeline" role="tabpanel">
+            <app-profile-timeline></app-profile-timeline>
+          </div>
+          <div class="tab-pane fade" id="about" role="tabpanel">
+            <app-profile-about></app-profile-about>
+          </div>
+          <div class="tab-pane fade" id="friends" role="tabpanel">
+            <app-profile-friends></app-profile-friends>
+          </div>
+          <div class="tab-pane fade" id="photos" role="tabpanel">
+            <app-profile-photos></app-profile-photos>
+          </div>
+
+
+          </div>
+      </div>
+    </div>
+  </div>
+
