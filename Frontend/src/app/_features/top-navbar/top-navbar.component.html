@@ -271,7 +271,8 @@
             </div>
           </li>
           <li class="nav-item dropdown">
-            <a href="#" class="   d-flex align-items-center dropdown-toggle" id="drop-down-arrow" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <!-- check possible Qombla -->
+            <a [routerLink]="['/profile']" class="   d-flex align-items-center dropdown-toggle" id="drop-down-arrow" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <img src="assets/images/user/1.jpg" class="img-fluid rounded-circle me-3" alt="user">
               <div class="caption">
                 <h6 class="mb-0 line-height">Bni Cyst</h6>
@@ -286,7 +287,7 @@
                   </div>
                 </div>
                 <div class="card-body p-0 ">
-                  <a href="app/profile.html" class="iq-sub-card iq-bg-primary-hover">
+                  <a [routerLink]="['/profile']" class="iq-sub-card iq-bg-primary-hover">
                     <div class="d-flex align-items-center">
                       <div class="rounded card-icon bg-soft-primary">
                         <i class="ri-file-user-line"></i>
@@ -297,7 +298,7 @@
                       </div>
                     </div>
                   </a>
-                  <a href="app/profile-edit.html" class="iq-sub-card iq-bg-warning-hover">
+                  <a [routerLink]="['/profile/edit']" class="iq-sub-card iq-bg-warning-hover">
                     <div class="d-flex align-items-center">
                       <div class="rounded card-icon bg-soft-warning">
                         <i class="ri-profile-line"></i>
