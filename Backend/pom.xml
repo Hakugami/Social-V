@@ -18,6 +18,7 @@
         <module>ServiceDiscovery</module>
         <module>ConfigServer</module>
         <module>AuthenticationServer</module>
+        <module>UserService</module>
     </modules>
 
 
