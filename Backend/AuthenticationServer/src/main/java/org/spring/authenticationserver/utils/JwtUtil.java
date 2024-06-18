@@ -2,15 +2,19 @@ package org.spring.authenticationserver.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.function.Function;
 
 @Component
+@Slf4j
 public class JwtUtil {
 
 	@Value("${jwt.secret}")
@@ -19,13 +23,22 @@ public class JwtUtil {
 	@Value("${jwt.expiration}")
 	private long EXPIRATION_TIME;
 
+	private SecretKey key;
+
+	public JwtUtil() {
+		// Generate a secure key
+		key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+		// Print the key
+		log.info("Secret key: " + key);
+
+	}
 
 	public String generateToken(UserDetails userDetails) {
 		return Jwts.builder()
 				.setSubject(userDetails.getUsername())
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-				.signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
+				.signWith(key)
 				.compact();
 	}
 
