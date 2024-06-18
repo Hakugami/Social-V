@@ -1,0 +1,19 @@
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+       <div class="header-title">
+          <h4 class="card-title">Upcoming Birthday</h4>
+       </div>
+    </div>
+    <div class="card-body">
+        <ul>
+            <li *ngFor="let birthday of birthdays" class="d-flex mb-4 align-items-center">
+              <img [src]="birthday.image" alt="story-img" class="rounded-circle img-fluid">
+              <div class="stories-data ms-3">
+                 <h5>{{ birthday.name }}</h5>
+                 <p class="mb-0">{{ birthday.date }}</p>
+              </div>
+            </li>
+          </ul>
+    </div>
+ </div>
