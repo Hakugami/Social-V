@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
 public class AuthController {
 
@@ -21,7 +22,7 @@ public class AuthController {
 
 	@PostMapping("/login")
 	public ResponseEntity<AuthenticationResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
-		log.info("Received login request for user: {}", authenticationRequest.username());
+		log.info("Received login request for user: {}", authenticationRequest.email());
 		AuthenticationResponse authenticationResponse = authService.authenticate(authenticationRequest);
 		return ResponseEntity.ok(authenticationResponse);
 	}

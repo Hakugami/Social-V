@@ -15,4 +15,6 @@ public interface UserModelRepository extends JpaRepository<UserModel, Long> {
     boolean existsByUsername(String fullName);
 
 	boolean existsByEmail(String email);
+
+	AuthModelDto findByEmail(String email);
 }
