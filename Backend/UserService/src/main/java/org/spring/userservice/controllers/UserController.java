@@ -21,6 +21,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
 public class UserController {
 
@@ -58,5 +59,20 @@ public class UserController {
 		resource.add(linkTo.withRel("self"));
 		return ResponseEntity.ok(resource);
 	}
+
+	@GetMapping("/checkFullName")
+	@ApiResponse(description = "Check if a full name is taken", responseCode = "200")
+	public ResponseEntity<Boolean> isFullNameTaken(@RequestParam String fullName) {
+		boolean isTaken = userService.isFullNameTaken(fullName);
+		return ResponseEntity.ok(isTaken);
+	}
+
+	@GetMapping("/checkEmail")
+	@ApiResponse(description = "Check if an email is taken", responseCode = "200")
+	public ResponseEntity<Boolean> isEmailTaken(@RequestParam String email) {
+		boolean isTaken = userService.isEmailTaken(email);
+		return ResponseEntity.ok(isTaken);
+	}
+
 
 }

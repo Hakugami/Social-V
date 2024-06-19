@@ -11,4 +11,8 @@ public interface UserModelRepository extends JpaRepository<UserModel, Long> {
 	Page<UserModelDto> findAllBy(Pageable pageable);
 
 	AuthModelDto findByUsername(String username);
+
+    boolean existsByUsername(String fullName);
+
+	boolean existsByEmail(String email);
 }
