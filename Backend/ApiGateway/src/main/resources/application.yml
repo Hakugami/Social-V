@@ -1,6 +1,16 @@
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri:
+            http://localhost:8181/realms/Social-media-microservices
+          jwk-set-uri:
+            http://localhost:8181/realms/Social-media-microservices/protocol/openid-connect/certs
+
   application:
     name: api-gateway
+
 
 
 eureka:
@@ -13,4 +23,12 @@ eureka:
 
 server:
   port: 8082
+
+
+logging:
+  level:
+    org.springframework.cloud.gateway.route.CachingRouteDefinitionLocator: INFO
+    org.springframework.cloud.gateway: TRACE
+    root: INFO
+
 
