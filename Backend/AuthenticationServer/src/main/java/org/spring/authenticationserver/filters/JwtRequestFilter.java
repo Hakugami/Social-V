@@ -35,7 +35,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
 			log.info("Validating token");
-			String jwt = authorizationHeader.substring(7);
+			String jwt = jwtUtil.removeBearer(authorizationHeader);
 			try {
 				boolean b = validateAndSetAuthentication(jwt, request);
 				if (!b) {

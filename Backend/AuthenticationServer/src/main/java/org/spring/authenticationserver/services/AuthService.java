@@ -31,8 +31,9 @@ public class AuthService {
 
 		// Generate the JWT token
 		String jwt = jwtUtil.generateToken(userDetails);
+		String refreshToken = jwtUtil.generateRefreshToken(userDetails);
 
-		return new AuthenticationResponse(jwt);
+		return new AuthenticationResponse(jwt, refreshToken);
 	}
 
 	private Authentication authenticate(String username, String password) {
@@ -48,6 +49,9 @@ public class AuthService {
 			throw new RuntimeException("Invalid credentials");
 		}
 	}
+
+
+
 
 
 }

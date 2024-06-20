@@ -6,6 +6,7 @@ import org.spring.authenticationserver.filters.JwtRequestFilter;
 import org.spring.authenticationserver.models.AuthenticationRequest;
 import org.spring.authenticationserver.models.AuthenticationResponse;
 import org.spring.authenticationserver.services.AuthService;
+import org.spring.authenticationserver.services.JwtService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
 	private final AuthService authService;
-	private final JwtRequestFilter jwtRequestFilter;
+	private final JwtService jwtService;
 
 
 	@PostMapping("/login")
@@ -28,7 +29,15 @@ public class AuthController {
 	}
 
 	@PostMapping("/validate")
-	public ResponseEntity<Boolean> validateToken(){
+	public ResponseEntity<Boolean> validateToken(@RequestHeader("Authorization") String token) {
+		log.info("Received request to validate token");
 		return ResponseEntity.ok(true);
+	}
+
+	@PostMapping("/refresh")
+	public ResponseEntity<AuthenticationResponse> refresh(@RequestHeader("Authorization") String token) {
+		log.info("Received request to refresh token");
+		AuthenticationResponse authenticationResponse = jwtService.refresh(token);
+		return ResponseEntity.ok(authenticationResponse);
 	}
 }
