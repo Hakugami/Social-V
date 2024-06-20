@@ -50,4 +50,8 @@ public class UserService {
 	public boolean isEmailTaken(String email) {
 		return userModelRepository.existsByEmail(email);
 	}
+
+    public AuthModelDto getUserByEmail(String email) {
+		return userModelRepository.findByEmail(email);
+    }
 }

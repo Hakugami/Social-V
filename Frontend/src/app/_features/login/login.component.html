@@ -1,28 +1,30 @@
 <h1 class="mb-0">Sign in</h1>
 <p>Enter your email address and password to access admin panel.</p>
-<form class="mt-4">
+
+<form class="mt-4" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <div class="form-group">
     <label class="form-label" for="exampleInputEmail1">Email address</label>
-    <input type="email" class="form-control mb-0" id="exampleInputEmail1" placeholder="Enter email">
+    <input type="email" formControlName="email" class="form-control mb-0" id="exampleInputEmail1" placeholder="Enter email">
+    <div *ngIf="loginForm.get('email')?.errors?.['email']" class="text-danger">
+      Please enter a valid email.
+    </div>
   </div>
   <div class="form-group">
     <label class="form-label" for="exampleInputPassword1">Password</label>
     <a href="#" class="float-end">Forgot password?</a>
-    <input type="password" class="form-control mb-0" id="exampleInputPassword1" placeholder="Password">
+    <input formControlName="password" type="password" class="form-control mb-0" id="exampleInputPassword1" placeholder="Password">
   </div>
   <div class="d-inline-block w-100">
     <div class="form-check d-inline-block mt-2 pt-1">
       <input type="checkbox" class="form-check-input" id="customCheck11">
       <label class="form-check-label" for="customCheck11">Remember Me</label>
     </div>
-    <button type="submit" class="btn btn-primary float-end">Sign in</button>
+    <button type="submit" class="btn btn-primary float-end" [disabled]="!loginForm.valid">Sign in</button>
   </div>
   <div class="sign-info">
-    <span class="dark-color d-inline-block line-height-2">Don't have an account? <a href="sign-up.html">Sign up</a></span>
+    <span class="dark-color d-inline-block line-height-2">Don't have an account? <a routerLink="/auth/register">Sign up</a></span>
     <ul class="iq-social-media">
-      <li><a href="#"><i class="ri-facebook-box-line"></i></a></li>
-      <li><a href="#"><i class="ri-twitter-line"></i></a></li>
-      <li><a href="#"><i class="ri-instagram-line"></i></a></li>
+      <li><a href="#"><i class="ri-google-line"></i></a></li>
     </ul>
   </div>
 </form>
