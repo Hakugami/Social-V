@@ -1,0 +1,20 @@
+<li class="nav-item dropdown">
+    <a href="#" class="dropdown-toggle" id="group-drop" data-bs-toggle="dropdown"
+       aria-haspopup="true" aria-expanded="false"><i class="ri-group-line"></i></a>
+    <div class="sub-drop sub-drop-large dropdown-menu" aria-labelledby="group-drop">
+      <div class="card shadow-none m-0">
+        <div class="card-header d-flex justify-content-between bg-primary">
+          <div class="header-title">
+            <h5 class="mb-0 text-white">Friend Request</h5>
+          </div>
+          <small class="badge bg-light text-dark ">{{number}}</small>
+        </div>
+        <div class="card-body p-0">
+          <app-friend-request-item *ngFor="let friendRequest of friendRequests" [friendRequest]="friendRequest"></app-friend-request-item>
+          <div class="text-center">
+            <a [routerLink]="['/friend-request']" class="btn text-primary">View More Request</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </li>
