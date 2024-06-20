@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -13,5 +14,5 @@ public class PostDto implements Serializable {
 	String userId;
 	String username;
 	String content;
-	String createdAt;
+	LocalDateTime createdAt;
 }

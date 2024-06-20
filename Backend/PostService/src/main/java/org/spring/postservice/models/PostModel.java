@@ -1,13 +1,20 @@
 package org.spring.postservice.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Document(collection = "posts")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PostModel {
 
 	@MongoId
@@ -17,7 +24,7 @@ public class PostModel {
 	private String content;
 	private List<String> imageUrl;
 	private String videoUrl;
-	private String createdAt;
+	private LocalDateTime createdAt;
 	private String type;
 
 
