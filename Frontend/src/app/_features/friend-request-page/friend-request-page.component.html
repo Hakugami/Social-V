@@ -1,0 +1,21 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">Friend Request</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <ul *ngFor="let friend of friendRequests" class="request-list list-inline m-0 p-0">
+                            <app-friend-request-card [request]="friend"></app-friend-request-card>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center">
+                <a href="#" class="btn btn-link" (click)="loadMoreRequests()">View More Requests</a>
+            </div>
+        </div>
+    </div>
+</div>
