@@ -15,7 +15,7 @@ public class PostResponse {
 	String content;
 	String createdAt;
 	Integer likes;
-	Integer comments;
+	List<CommentDto> comments;
 	String videoUrl;
 	List<String> imagesUrl;
 }
