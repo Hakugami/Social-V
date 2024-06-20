@@ -49,15 +49,30 @@ public class UserModel implements Serializable {
     }
 
     @Override
-    public final boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserModel userModel = (UserModel) o;
-        return Objects.equals(id, userModel.id);
+        return Objects.equals(id, userModel.id) &&
+                Objects.equals(username, userModel.username) &&
+                Objects.equals(password, userModel.password) &&
+                Objects.equals(email, userModel.email) &&
+                status == userModel.status &&
+                Objects.equals(firstName, userModel.firstName) &&
+                Objects.equals(lastName, userModel.lastName) &&
+                Objects.equals(address, userModel.address) &&
+                gender == userModel.gender &&
+                Objects.equals(country, userModel.country) &&
+                Objects.equals(city, userModel.city) &&
+                Objects.equals(birthDate, userModel.birthDate) &&
+                Objects.equals(phoneNumber, userModel.phoneNumber) &&
+                Objects.equals(profilePicture, userModel.profilePicture) &&
+                Objects.equals(coverPicture, userModel.coverPicture) &&
+                Objects.equals(url, userModel.url);
     }
 
     @Override
-    public final int hashCode() {
-        return Objects.hash(id);
+    public int hashCode() {
+        return Objects.hash(id, username, password, email, status, firstName, lastName, address, gender, country, city, birthDate, phoneNumber, profilePicture, coverPicture, url);
     }
 }
