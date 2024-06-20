@@ -26,10 +26,8 @@ public class AuthController {
 		return ResponseEntity.ok(authenticationResponse);
 	}
 
-	@PostMapping("/validate-token")
-	public ResponseEntity<Boolean> validateToken(@RequestHeader("Authorization") String token){
-		String jwt = token.substring(7); // Extract the token from the header
-		boolean isValid = jwtRequestFilter.validateAndSetAuthentication(jwt, null);
-		return ResponseEntity.ok(isValid);
+	@PostMapping("/validate")
+	public ResponseEntity<Boolean> validateToken(){
+		return ResponseEntity.ok(true);
 	}
 }

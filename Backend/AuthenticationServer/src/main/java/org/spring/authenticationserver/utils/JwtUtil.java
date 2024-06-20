@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,11 +26,12 @@ public class JwtUtil {
 
 	private SecretKey key;
 
-	public JwtUtil() {
+	@PostConstruct
+	public void init() {
 		// Generate a secure key
-		key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+		key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 		// Print the key
-		log.info("Secret key: " + key);
+		log.info("Secret key: {}", key);
 
 	}
 
@@ -38,7 +40,7 @@ public class JwtUtil {
 				.setSubject(userDetails.getUsername())
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-				.signWith(key)
+				.signWith(key, SignatureAlgorithm.HS512)
 				.compact();
 	}
 
