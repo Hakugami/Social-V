@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - post-service-network
+    volumes:
+      - ./data:/data/mongo/db
+networks:
+    post-service-network:
+        driver: bridge
