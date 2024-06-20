@@ -5,6 +5,7 @@ import { NewsFeedComponent } from './_features/news-feed/news-feed.component';
 import { LoginComponent } from './_features/login/login.component';
 import { RegisterComponent } from "./_features/register/register.component";
 import { AuthenticationComponent } from "./_features/authentication/authentication.component";
+import { FriendRequestPageComponent } from './_features/friend-request-page/friend-request-page.component';
 
 
 export const routes: Routes = [
@@ -20,5 +21,8 @@ export const routes: Routes = [
       { path: 'register', component: RegisterComponent },
     ]
   },
+  {path:'friend-request',component: FriendRequestPageComponent }
+
+
 
 ];
