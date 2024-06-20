@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.spring.authenticationserver.utils.JwtUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,40 +20,56 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    private final UserDetailsService userDetailsService;
-    private final JwtUtil jwtUtil;
+	private final UserDetailsService userDetailsService;
+	private final JwtUtil jwtUtil;
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws ServletException, IOException {
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+			throws ServletException, IOException {
+		log.info("Filtering request: {}", request.getRequestURI());
+		final String authorizationHeader = request.getHeader("Authorization");
+		log.info("Authorization header: {}", authorizationHeader);
 
-        final String authorizationHeader = request.getHeader("Authorization");
+		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+			log.info("Validating token");
+			String jwt = authorizationHeader.substring(7);
+			try {
+				boolean b = validateAndSetAuthentication(jwt, request);
+				if (!b) {
+					response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
+					return;
+				}
+			} catch (Exception e) {
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
+				return;
+			}
+		}
 
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            String jwt = authorizationHeader.substring(7);
-            validateAndSetAuthentication(jwt, request);
-        }
+		chain.doFilter(request, response);
+	}
 
-        chain.doFilter(request, response);
-    }
+	public boolean validateAndSetAuthentication(String jwt, HttpServletRequest request) {
+		String username = jwtUtil.getUsernameFromToken(jwt);
+		log.info("Username from token: {}", username);
 
-    public boolean validateAndSetAuthentication(String jwt, HttpServletRequest request) {
-        String username = jwtUtil.getUsernameFromToken(jwt);
+		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+			UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+			log.info("User details: {}", userDetails);
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-            if (jwtUtil.validateToken(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken
-                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-                return true;
-            }
-        }
-        return false;
-    }
+			if (jwtUtil.validateToken(jwt, userDetails)) {
+				log.info("Token is valid");
+				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+						new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+				usernamePasswordAuthenticationToken
+						.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+				return true;
+			}
+		}
+		log.info("Token is invalid");
+		return false;
+	}
 }

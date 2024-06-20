@@ -24,6 +24,7 @@ public class SecurityConfig {
 
 	private final UserDetailsService userDetailsService;
 	private final JwtRequestFilter jwtRequestFilter;
+	private final String[] permitAll = new String[]{"/auth/login" , "/auth/validate"};
 
 	private static void configureCsrf(HttpSecurity http) throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable);
