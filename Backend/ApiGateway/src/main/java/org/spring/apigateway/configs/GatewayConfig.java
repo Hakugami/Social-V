@@ -41,4 +41,14 @@ public class GatewayConfig {
 				.build();
 	}
 
+	@Bean
+	public RouterFunction<ServerResponse> friendsRouter() {
+		return GatewayRouterFunctions.route("FRIENDSERVICE")
+				.route(RequestPredicates.path("/friends/**"), HandlerFunctions.http())
+				.before(rewritePath("/friends/(?<segment>.*)", "/${segment}"))
+				.before(jwtValidationFilter) // remove this filter if you don't want to check authentication
+				.filter(lb("FRIENDSERVICE"))
+				.build();
+	}
+
 }

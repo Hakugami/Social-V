@@ -87,5 +87,13 @@ public class UserController {
 		return ResponseEntity.ok(isTaken);
 	}
 
+	@GetMapping("/exists/{username}")
+	@ApiResponse(description = "check if user exists")
+	public ResponseEntity<Boolean> doesUserExist(@PathVariable String username){
+		AuthModelDto user = userService.getUserByUsername(username);
+		boolean exists = user != null;
+		return ResponseEntity.ok(exists);
+	}
+
 
 }
