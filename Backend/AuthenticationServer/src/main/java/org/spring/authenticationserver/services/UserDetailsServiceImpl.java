@@ -22,7 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// Fetch the user details from the UserServiceClient
 		log.info("Fetching user details for user: {}", username);
-		AuthModel user = userServiceClient.getUserByUsername(username);
+		AuthModel user = userServiceClient.getUserByEmail(username);
 		log.info("User details fetched: {}", user);
 		if (user == null) {
 			throw new UsernameNotFoundException("User not found");
@@ -30,7 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 		// Create and return a UserDetails object with the user's credentials and empty authorities
 		return new org.springframework.security.core.userdetails.User(
-				user.username(),
+				user.email(),
 				user.password(),
 				Collections.emptyList() // Replace with proper authorities if needed
 		);

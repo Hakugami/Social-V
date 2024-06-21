@@ -40,6 +40,7 @@ public class UserController {
 		}
 	}
 
+
 	@GetMapping("/")
 	@ApiResponse(description = "Get all users", responseCode = "200")
 	public ResponseEntity<PagedModel<EntityModel<UserModelDto>>> getAllUsers(@RequestParam(defaultValue = "0") int page
@@ -59,6 +60,18 @@ public class UserController {
 		resource.add(linkTo.withRel("self"));
 		return ResponseEntity.ok(resource);
 	}
+
+	@GetMapping("/auth/email/{email}")
+	@ApiResponse(description = "Get user by email", responseCode = "200")
+	public ResponseEntity<EntityModel<AuthModelDto>> getUserByEmail(@PathVariable String email) {
+		log.info("Received request to get user by email: {}", email);
+		AuthModelDto user = userService.getUserByEmail(email);
+		EntityModel<AuthModelDto> resource = EntityModel.of(user);
+		WebMvcLinkBuilder linkTo = WebMvcLinkBuilder.linkTo(methodOn(this.getClass()).getUserByEmail(email));
+		resource.add(linkTo.withRel("self"));
+		return ResponseEntity.ok(resource);
+	}
+
 
 	@GetMapping("/checkFullName")
 	@ApiResponse(description = "Check if a full name is taken", responseCode = "200")

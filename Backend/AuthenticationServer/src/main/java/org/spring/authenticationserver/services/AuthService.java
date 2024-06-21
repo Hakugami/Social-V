@@ -1,7 +1,6 @@
 package org.spring.authenticationserver.services;
 
 import lombok.RequiredArgsConstructor;
-import org.spring.authenticationserver.client.UserServiceClient;
 import org.spring.authenticationserver.models.AuthenticationRequest;
 import org.spring.authenticationserver.models.AuthenticationResponse;
 import org.spring.authenticationserver.utils.JwtUtil;
@@ -10,7 +9,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,7 +22,7 @@ public class AuthService {
 	public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
 		// Authenticate the user with the AuthenticationManager
 		Authentication authentication = authenticate(
-				authenticationRequest.username(),
+				authenticationRequest.email(),
 				authenticationRequest.password()
 		);
 
