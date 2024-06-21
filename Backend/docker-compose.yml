@@ -11,5 +11,5 @@ services:
     volumes:
       - ./data:/data/mongo/db
 networks:
-    post-service-network:
-        driver: bridge
+  post-service-network:
+    driver: bridge

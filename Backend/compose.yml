@@ -1,0 +1,156 @@
+version: '3.8'
+services:
+  ## MySQL Docker Compose Config
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    restart: always
+    ports:
+      - "3307:3306"
+    expose:
+      - "3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: user_service
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpassword
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - ./db-init/data.sql:/docker-entrypoint-initdb.d/data.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks:
+        - my-network
+
+
+  ## Mongo Docker Compose Config
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    expose:
+      - "27017"
+    volumes:
+      - ./mongo-data:/data/mongo/db
+    healthcheck:
+      test: ["CMD", "mongo", "localhost:27017", "--eval", "db.adminCommand('ping')"]
+      interval: 2s
+      retries: 10
+      timeout: 2s
+    networks:
+        - my-network
+
+  service-discovery:
+    build:
+      context: ./ServiceDiscovery  # Adjust this path to the directory containing the Dockerfile
+      dockerfile: Dockerfile  # Optional if the file is named Dockerfile
+    container_name: service-discovery
+    ports:
+      - "8761:8761"
+    networks:
+      - my-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 2s
+      retries: 10
+      timeout: 2s
+
+  api-gateway:
+    build:
+      context: ./ApiGateway  # Adjust this path to the directory containing the Dockerfile
+      dockerfile: Dockerfile  # Optional if the file is named Dockerfile
+    container_name: api-gateway
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "8082:8082"
+    networks:
+      - my-network
+    depends_on:
+      service-discovery:
+        condition: service_healthy  # Wait until service-discovery is healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8082/actuator/health" ]
+      interval: 2s
+      retries: 10
+      timeout: 2s
+
+  user-service:
+    build:
+      context: ./UserService  # Adjust this path to the directory containing the Dockerfile
+      dockerfile: Dockerfile  # Optional if the file is named Dockerfile
+    container_name: user-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "8081:8081"
+    networks:
+      - my-network
+    depends_on:
+      ## no condition means it will start as soon as the container is up
+      mysql:
+        condition: service_healthy  # Wait until postgres-user is healthy
+      service-discovery:
+        condition: service_healthy  # Wait until service-discovery is healthy
+      api-gateway:
+        condition: service_healthy  # Wait until api-gateway is healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
+      interval: 2s
+      retries: 10
+      timeout: 2s
+
+  authentication-server:
+    build:
+      context: ./AuthenticationServer  # Adjust this path to the directory containing the Dockerfile
+      dockerfile: Dockerfile  # Optional if the file is named Dockerfile
+    container_name: authentication-server
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "9999:9999"
+    networks:
+      - my-network
+    depends_on:
+      service-discovery:
+        condition: service_healthy  # Wait until service-discovery is healthy
+      api-gateway:
+        condition: service_healthy  # Wait until api-gateway is healthy
+      user-service:
+        condition: service_healthy  # Wait until user-service is healthy
+
+
+  post-service:
+    build:
+      context: ./PostService  # Adjust this path to the directory containing the Dockerfile
+      dockerfile: Dockerfile  # Optional if the file is named Dockerfile
+    container_name: post-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATA_MONGODB_HOST=mongo
+    ports:
+      - "8083:8083"
+    networks:
+      - my-network
+    depends_on:
+      service-discovery:
+        condition: service_healthy  # Wait until service-discovery is healthy
+      api-gateway:
+        condition: service_healthy  # Wait until api-gateway is healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      interval: 2s
+      retries: 10
+      timeout: 2s
+
+
+networks:
+  my-network:
+    driver: bridge
