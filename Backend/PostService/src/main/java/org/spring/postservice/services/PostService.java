@@ -33,8 +33,9 @@ public class PostService {
 	public PostModel savePost(PostDto postDto) {
 		log.info("Saving post: {}", postDto);
 		PostModel postModel = toPostModel(postDto);
+		postRepository.save(postModel);
 		kafkaTemplate.send("post-topic", new PostCreatedEvent(postModel.getId()));
-		return postRepository.save(postModel);
+		return postModel;
 	}
 
 	public CompletableFuture<PostModel> saveVideoPost(VideoPostDto videoPostDto) {
