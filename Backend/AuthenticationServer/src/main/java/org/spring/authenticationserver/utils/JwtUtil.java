@@ -3,7 +3,6 @@ package org.spring.authenticationserver.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,8 +13,6 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -146,6 +143,7 @@ public class JwtUtil {
 		Date expiration = getExpirationDateFromToken(token);
 		return expiration.before(new Date());
 	}
+
 	// Refresh token method
 	public String refreshToken(String token) {
 		Claims claims = getAllClaimsFromToken(token);
@@ -153,7 +151,7 @@ public class JwtUtil {
 	}
 
 	public String removeBearer(String token) {
-		if (token==null || !token.startsWith("Bearer ")) {
+		if (token == null || !token.startsWith("Bearer ")) {
 			throw new RuntimeException("Invalid token");
 		}
 		return token.substring(7);

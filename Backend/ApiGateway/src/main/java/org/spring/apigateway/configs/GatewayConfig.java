@@ -27,7 +27,7 @@ public class GatewayConfig {
 		return GatewayRouterFunctions.route("USERSERVICE")
 				.route(RequestPredicates.path("/users/**"), HandlerFunctions.http())
 				.before(rewritePath("/users/(?<segment>.*)", "/${segment}"))
-				.before(jwtValidationFilter) // remove this filter if dont want to authentication check
+				.before(jwtValidationFilter) // remove this filter if you dont want to authentication check
 				.filter(lb("USERSERVICE"))
 				.build();
 	}
