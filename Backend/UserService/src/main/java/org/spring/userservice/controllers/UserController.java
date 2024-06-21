@@ -65,6 +65,7 @@ public class UserController {
 	@ApiResponse(description = "Get user by email", responseCode = "200")
 	public ResponseEntity<EntityModel<AuthModelDto>> getUserByEmail(@PathVariable String email) {
 		log.info("Received request to get user by email: {}", email);
+
 		AuthModelDto user = userService.getUserByEmail(email);
 		EntityModel<AuthModelDto> resource = EntityModel.of(user);
 		WebMvcLinkBuilder linkTo = WebMvcLinkBuilder.linkTo(methodOn(this.getClass()).getUserByEmail(email));

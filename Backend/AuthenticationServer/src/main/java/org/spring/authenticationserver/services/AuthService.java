@@ -3,6 +3,7 @@ package org.spring.authenticationserver.services;
 import lombok.RequiredArgsConstructor;
 import org.spring.authenticationserver.models.AuthenticationRequest;
 import org.spring.authenticationserver.models.AuthenticationResponse;
+import org.spring.authenticationserver.models.CustomUserDetails;
 import org.spring.authenticationserver.utils.JwtUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -27,7 +28,7 @@ public class AuthService {
 		);
 
 		// Get the authenticated user details
-		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
 		// Generate the JWT token
 		String jwt = jwtUtil.generateToken(userDetails);

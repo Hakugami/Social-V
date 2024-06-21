@@ -24,20 +24,30 @@ public class GatewayConfig {
 
 	@Bean
 	public RouterFunction<ServerResponse> usersRouter() {
-		return GatewayRouterFunctions.route("USERSERVICE")
+		return GatewayRouterFunctions.route("user-service")
 				.route(RequestPredicates.path("/users/**"), HandlerFunctions.http())
 				.before(rewritePath("/users/(?<segment>.*)", "/${segment}"))
-				.before(jwtValidationFilter) // remove this filter if dont want to authentication check
-				.filter(lb("USERSERVICE"))
+				.before(jwtValidationFilter) // remove this filter if you don't want to validate JWT
+				.filter(lb("user-service"))
 				.build();
 	}
 
 	@Bean
 	public RouterFunction<ServerResponse> authRouter() {
-		return GatewayRouterFunctions.route("AUTHSERVICE")
+		return GatewayRouterFunctions.route("authentication-server")
 				.route(RequestPredicates.path("/auth/**"), HandlerFunctions.http())
 				.before(rewritePath("/auth/(?<segment>.*)", "/${segment}"))
-				.filter(lb("AUTHENTICATIONSERVER"))
+				.filter(lb("authentication-server"))
+				.build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> postsRouter() {
+		return GatewayRouterFunctions.route("post-service")
+				.route(RequestPredicates.path("/posts/**"), HandlerFunctions.http())
+				.before(rewritePath("/posts/(?<segment>.*)", "/${segment}"))
+				.before(jwtValidationFilter) // remove this filter if you don't want to validate JWT
+				.filter(lb("post-service"))
 				.build();
 	}
 

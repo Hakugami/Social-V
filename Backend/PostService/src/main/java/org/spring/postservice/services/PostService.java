@@ -42,7 +42,7 @@ public class PostService {
 					if (urls.isEmpty()) {
 						throw new RuntimeException("No URL returned from video upload");
 					}
-					postModel.setVideoUrl(urls.get(0));
+					postModel.setVideoUrl(urls.getFirst());
 					return postModel;
 				})
 				.thenApply(postRepository::save)
