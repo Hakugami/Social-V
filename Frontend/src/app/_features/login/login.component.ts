@@ -35,7 +35,9 @@ export class LoginComponent implements OnInit {
       this.authService.login(loginModel).subscribe(response => {
         console.log(response);
         const jwtToken = response.jwtToken;
+        const refreshToken = response.refreshToken;
         localStorage.setItem('token', jwtToken);
+        localStorage.setItem('refresh', refreshToken);
         this.router.navigate(['home']);
       }, error => {
         console.log(error);

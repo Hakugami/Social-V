@@ -1,0 +1,35 @@
+.selected-files .list-group {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.selected-files .list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.selected-files .list-group-item > div {
+  flex: 1;
+  min-width: 0; /* This allows text-truncate to work properly */
+}
+
+.selected-files .list-group-item .text-truncate {
+  max-width: calc(100% - 70px); /* Adjust based on your button width */
+  display: inline-block;
+}
+
+
+.post-opt-btn {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.post-opt-btn:hover {
+  background-color: #007bff !important; /* Primary color, adjust as needed */
+  color: white;
+}
+
+.post-opt-btn:hover img {
+  filter: brightness(0) invert(1); /* This will make the icon white on hover */
+}
