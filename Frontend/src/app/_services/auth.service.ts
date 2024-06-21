@@ -45,8 +45,53 @@ export class AuthService {
     if (decoded.exp) {
       const expirationDate = new Date(0);
       expirationDate.setUTCSeconds(decoded.exp);
+      console.log(expirationDate);
       return expirationDate < new Date();
     }
     return false;
+  }
+
+  getUsername(): string {
+    const token = this.getToken();
+    if (token) {
+      const decoded: any = jwtDecode(token);
+      return decoded.username;
+    }
+    return '';
+  }
+
+  getEmail(): string {
+    const token = this.getToken();
+    if (token) {
+      const decoded: any = jwtDecode(token);
+      return decoded.email;
+    }
+    return '';
+  }
+
+  getProfilePicUrl(): string {
+    const token = this.getToken();
+    if (token) {
+      const decoded: any = jwtDecode(token);
+      return decoded.profilePicUrl;
+    }
+    return '';
+  }
+
+
+  logout(): void {
+    localStorage.removeItem('token');
+  }
+
+  getUserInfoFromToken() {
+    const token = this.getToken();
+    if (token) {
+      const decoded: any = jwtDecode(token);
+      return {
+        username: decoded.username,
+        email: decoded.email
+      };
+    }
+    return null;
   }
 }

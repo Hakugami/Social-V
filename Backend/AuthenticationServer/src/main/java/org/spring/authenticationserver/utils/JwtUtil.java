@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.spring.authenticationserver.models.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -86,19 +87,18 @@ public class JwtUtil {
 		}
 	}
 
-	public String generateToken(UserDetails userDetails) {
-		Map<String, Object> claims = new HashMap<>();
-		claims.put("role", userDetails.getAuthorities());
+	public String generateToken(CustomUserDetails userDetails) {
+		Map<String, Object> claims = createClaims(userDetails);
 		return createToken(claims, userDetails.getUsername(), expirationTime);
 	}
 
-	public String generateRefreshToken(UserDetails userDetails) {
-		Map<String, Object> claims = new HashMap<>();
-		claims.put("role", userDetails.getAuthorities());
+	public String generateRefreshToken(CustomUserDetails userDetails) {
+		Map<String, Object> claims = createClaims(userDetails);
 		return createToken(claims, userDetails.getUsername(), refreshExpirationTime);
 	}
 
 	private String createToken(Map<String, Object> claims, String subject, long expiration) {
+		;log.info("Creating token with claims: {}", claims);
 		return Jwts.builder()
 				.setClaims(claims)
 				.setSubject(subject)
@@ -155,5 +155,15 @@ public class JwtUtil {
 			throw new RuntimeException("Invalid token");
 		}
 		return token.substring(7);
+	}
+
+	private Map<String, Object> createClaims(CustomUserDetails userDetails) {
+		Map<String, Object> claims = new HashMap<>();
+		claims.put("role", userDetails.getAuthorities());
+		claims.put("profilePicUrl", userDetails.getProfilePicUrl());
+		claims.put("email", userDetails.getEmail());
+		claims.put("username", userDetails.getUsernameField());
+		log.info("Claims created: {}", claims);
+		return claims;
 	}
 }
