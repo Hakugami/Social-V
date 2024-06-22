@@ -1,36 +1,34 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { FriendRequest } from '../_models/friend-request.model'; // Import the model
+import { FriendRequestDTO } from '../_models/request-dto.model';
+import { FriendRequest } from '../_models/friend-request.model';
+import { UserModelDTO } from '../_models/userdto.model';
+import {environment} from '../../environments/environment';
 
 @Injectable({
-    providedIn: 'root'
+providedIn: 'root'
 })
 export class FriendRequestsService {
-    private apiUrl = 'https://your-api-endpoint/friend-requests'; // Replace with your actual API endpoint
 
 
-    // constructor(private http: HttpClient) {
+constructor(private http: HttpClient) {}
 
-    //  }
+  sendFriendRequest(request: FriendRequestDTO): Observable<void> {
+    return this.http.post<void>(`${environment.friendApiUrl}/request`, request);
+  }
 
-    getFriendRequests(): Observable<FriendRequest[]> {
-        // return this.http.get<FriendRequest[]>(this.apiUrl);
-        // For now, return some mock data
-        return new Observable<FriendRequest[]>(observer => {
-            observer.next([
-                {
-                    id: 2, name: 'John Doe', image: '../assets/images/user/05.jpg',
-                    friendCount: 12
-                },
-                {
-                    id: 3, name: 'Jane Smith', image: "../assets/images/user/05.jpg",
-                    friendCount: 0
-                }
-            ]);
-            observer.complete();
-        });
-    }
+  getFriendRequests(userId: string): Observable<FriendRequest[]> {
+    return this.http.get<FriendRequest[]>(`${environment.friendApiUrl}/request/${userId}`);
+  }
 
-    // Add methods for handling other operations like confirming, deleting requests, etc.
+  acceptFriendRequest(requestId: string): Observable<void> {
+    return this.http.post<void>(`${environment.friendApiUrl}/accept`, null, { params: { requestId } });
+  }
+
+  getFriends(userId: string, page: number = 0, size: number = 10): Observable<UserModelDTO[]> {
+    return this.http.get<UserModelDTO[]>(`${environment.friendApiUrl}/${userId}`, {
+      params: { page: page.toString(), size: size.toString() }
+    });
+  }
 }
