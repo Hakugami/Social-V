@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface UserModelRepository extends JpaRepository<UserModel, Long> {
 	Page<UserModelDto> findAllBy(Pageable pageable);
 
@@ -17,4 +19,8 @@ public interface UserModelRepository extends JpaRepository<UserModel, Long> {
 	boolean existsByEmail(String email);
 
 	AuthModelDto findByEmail(String email);
+
+	List<UserModelDto> findByEmailIn(List<String> emails);
+
+
 }

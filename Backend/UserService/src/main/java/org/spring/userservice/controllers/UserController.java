@@ -16,6 +16,8 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
@@ -88,12 +90,19 @@ public class UserController {
 		return ResponseEntity.ok(isTaken);
 	}
 
-	@GetMapping("/exists/{username}")
+	@GetMapping("/exists/{email}")
 	@ApiResponse(description = "check if user exists")
-	public ResponseEntity<Boolean> doesUserExist(@PathVariable String username){
-		AuthModelDto user = userService.getUserByUsername(username);
+	public ResponseEntity<Boolean> doesUserExist(@PathVariable String email){
+		AuthModelDto user = userService.getUserByEmail(email);
 		boolean exists = user != null;
 		return ResponseEntity.ok(exists);
+	}
+
+	@GetMapping("/byEmail")
+	@ApiResponse(description = "Get users by a list of emails or usernames", responseCode = "200")
+	public ResponseEntity<List<UserModelDto>> getUsersByEmailsOrUsernames(@RequestParam List<String> emails) {
+		List<UserModelDto> users = userService.getUsersByEmails(emails);
+		return ResponseEntity.ok(users);
 	}
 
 
