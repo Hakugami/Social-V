@@ -19,6 +19,11 @@
         <module>ConfigServer</module>
         <module>AuthenticationServer</module>
         <module>UserService</module>
+        <module>PostService</module>
+        <module>CommentService</module>
+        <module>LikeService</module>
+        <module>UploadService</module>
+        <module>FriendService</module>
     </modules>
 
 

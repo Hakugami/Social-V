@@ -1,34 +1,64 @@
 package org.spring.apigateway.configs;
 
 
-import org.springframework.cloud.gateway.route.RouteLocator;
-import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
+
+import lombok.RequiredArgsConstructor;
+import org.spring.apigateway.filters.JwtValidationFilter;
+import org.springframework.cloud.gateway.server.mvc.handler.GatewayRouterFunctions;
+import org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.function.RequestPredicates;
+import org.springframework.web.servlet.function.RouterFunction;
+import org.springframework.web.servlet.function.ServerResponse;
+
+import static org.springframework.cloud.gateway.server.mvc.filter.BeforeFilterFunctions.rewritePath;
+import static org.springframework.cloud.gateway.server.mvc.filter.LoadBalancerFilterFunctions.lb;
+
 
 @Configuration
+@RequiredArgsConstructor
 public class GatewayConfig {
 
-	private static void userServiceRoute(RouteLocatorBuilder.Builder builder) {
-		builder
-				.route("user-service", r -> r.path("/users/**")
-						.filters(f -> f.rewritePath("/users/(?<segment>.*)", "/${segment}"))
-						.uri("lb://userservice"));
-	}
+	private final JwtValidationFilter jwtValidationFilter;
 
-	private static void authServiceRoute(RouteLocatorBuilder.Builder builder) {
-		builder
-				.route("auth-service", r -> r.path("/auth/**")
-						.filters(f -> f.rewritePath("/auth/(?<segment>.*)", "/${segment}"))
-						.uri("lb://authenticationserver"));
+	@Bean
+	public RouterFunction<ServerResponse> usersRouter() {
+		return GatewayRouterFunctions.route("user-service")
+				.route(RequestPredicates.path("/users/**"), HandlerFunctions.http())
+				.before(rewritePath("/users/(?<segment>.*)", "/${segment}"))
+				.before(jwtValidationFilter) // remove this filter if you don't want to validate JWT
+				.filter(lb("user-service"))
+				.build();
 	}
 
 	@Bean
-	public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
-		RouteLocatorBuilder.Builder routes = builder.routes();
-		userServiceRoute(routes);
-		authServiceRoute(routes);
-		return routes.build();
+	public RouterFunction<ServerResponse> authRouter() {
+		return GatewayRouterFunctions.route("authentication-server")
+				.route(RequestPredicates.path("/auth/**"), HandlerFunctions.http())
+				.before(rewritePath("/auth/(?<segment>.*)", "/${segment}"))
+				.filter(lb("authentication-server"))
+				.build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> postsRouter() {
+		return GatewayRouterFunctions.route("post-service")
+				.route(RequestPredicates.path("/posts/**"), HandlerFunctions.http())
+				.before(rewritePath("/posts/(?<segment>.*)", "/${segment}"))
+				.before(jwtValidationFilter) // remove this filter if you don't want to validate JWT
+				.filter(lb("post-service"))
+				.build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> friendsRouter() {
+		return GatewayRouterFunctions.route("FRIENDSERVICE")
+				.route(RequestPredicates.path("/friends/**"), HandlerFunctions.http())
+				.before(rewritePath("/friends/(?<segment>.*)", "/${segment}"))
+				.before(jwtValidationFilter) // remove this filter if you don't want to check authentication
+				.filter(lb("FRIENDSERVICE"))
+				.build();
 	}
 
 }

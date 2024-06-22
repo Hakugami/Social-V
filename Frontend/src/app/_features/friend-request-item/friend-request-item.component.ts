@@ -1,15 +1,22 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FriendRequest } from '../../_models/friend-request.model';
-import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-friend-request-item',
-  standalone: true,
-  imports: [NgFor],
   templateUrl: './friend-request-item.component.html',
-  styleUrl: './friend-request-item.component.css'
+  styleUrls: ['./friend-request-item.component.css'],
+  standalone: true
 })
 export class FriendRequestItemComponent {
-@Input()
-friendRequest!: FriendRequest;
+  @Input() friendRequest!: FriendRequest;
+  @Output() confirm = new EventEmitter<FriendRequest>();
+  @Output() delete = new EventEmitter<FriendRequest>();
+
+  onConfirm() {
+    this.confirm.emit(this.friendRequest);
+  }
+
+  onDelete() {
+    this.delete.emit(this.friendRequest);
+  }
 }

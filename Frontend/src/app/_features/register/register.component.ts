@@ -1,54 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
 import {RegisterDTO} from "../../_models/register.model";
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import {NgIf} from "@angular/common";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import { debounceTime } from 'rxjs/operators';
+import {AuthService} from "../../_services/auth.service";
+import {passwordValidator} from "../../_utils/password.validator";
 
 
-export function passwordValidator(): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const value = control.value;
-    if (!value) {
-      return null;
-    }
-    const hasUpperCase = /[A-Z]/.test(value);
-    const hasLowerCase = /[a-z]/.test(value);
-    const hasNumeric = /[0-9]/.test(value);
-    const hasSymbol = /\W/.test(value);
-    const isLengthValid = value.length >= 8 && value.length <= 12;
 
-    if (!hasUpperCase) {
-      return { missingUpperCase: true };
-    }
-    if (!hasLowerCase) {
-      return { missingLowerCase: true };
-    }
-    if (!hasNumeric) {
-      return { missingNumeric: true };
-    }
-    if (!hasSymbol) {
-      return { missingSymbol: true };
-    }
-    if (!isLengthValid) {
-      return { lengthInvalid: true };
-    }
-    return null;
-  };
-}
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, HttpClientModule],
+  imports: [ReactiveFormsModule, NgIf, HttpClientModule, RouterLink],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
 export class RegisterComponent implements OnInit{
   registerForm: FormGroup = {} as FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private http: HttpClient) { }
+  constructor(private authService: AuthService,private formBuilder: FormBuilder, private route: ActivatedRoute, private http: HttpClient) { }
 
 
   ngOnInit(): void {
@@ -63,7 +36,7 @@ export class RegisterComponent implements OnInit{
       debounceTime(2000)  // Wait for 2 seconds of inactivity
     ).subscribe(value => {
       if (value) {
-        this.http.get<boolean>('http://localhost:8081/api/v1/users/checkFullName', { params: { fullName: value } }).subscribe(isTaken => {
+        this.authService.checkFullName(value).subscribe(isTaken => {
           if (isTaken)
             this.registerForm.get('fullName')?.setErrors({ 'taken': true });
         });
@@ -74,7 +47,7 @@ export class RegisterComponent implements OnInit{
       debounceTime(2000)  // Wait for 2 seconds of inactivity
     ).subscribe(value => {
       if (value) {
-        this.http.get<boolean>('http://localhost:8081/api/v1/users/checkEmail', { params: { email: value } }).subscribe(isTaken => {
+        this.authService.checkEmail(value).subscribe(isTaken => {
           if (isTaken)
             this.registerForm.get('email')?.setErrors({ 'taken': true });
         });
@@ -91,7 +64,7 @@ export class RegisterComponent implements OnInit{
       };
 
       //console.log(registerDTO);
-      this.http.post('http://localhost:8081/api/v1/users/register', registerDTO).subscribe(response => {
+      this.authService.register(registerDTO).subscribe(response => {
         console.log(response);
         // Handle the response here
       }, error => {

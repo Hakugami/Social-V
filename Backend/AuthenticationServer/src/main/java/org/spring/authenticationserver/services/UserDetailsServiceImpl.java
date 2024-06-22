@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.spring.authenticationserver.client.UserServiceClient;
 import org.spring.authenticationserver.models.AuthModel;
+import org.spring.authenticationserver.models.CustomUserDetails;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,17 +23,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// Fetch the user details from the UserServiceClient
 		log.info("Fetching user details for user: {}", username);
-		AuthModel user = userServiceClient.getUserByUsername(username);
+		AuthModel user = userServiceClient.getUserByEmail(username);
 		log.info("User details fetched: {}", user);
 		if (user == null) {
 			throw new UsernameNotFoundException("User not found");
 		}
 
 		// Create and return a UserDetails object with the user's credentials and empty authorities
-		return new org.springframework.security.core.userdetails.User(
-				user.username(),
-				user.password(),
-				Collections.emptyList() // Replace with proper authorities if needed
-		);
+		return new CustomUserDetails(user);
 	}
 }

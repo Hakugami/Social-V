@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -35,8 +37,7 @@ public class UserService {
 
 
 	public Page<UserModelDto> getAllUsers(int page, int size) {
-		return userModelRepository.findAllBy(PageRequest.of(page, size));
-
+		return null;
 	}
 
 	public AuthModelDto getUserByUsername(String username) {
@@ -49,5 +50,15 @@ public class UserService {
 
 	public boolean isEmailTaken(String email) {
 		return userModelRepository.existsByEmail(email);
+	}
+
+    public AuthModelDto getUserByEmail(String email) {
+		return userModelRepository.findByEmail(email);
+    }
+
+	public List<UserModelDto> getUsersByEmails(List<String> emails) { return userModelRepository.findByEmailIn(emails); }
+
+	public UserModelDto getByEmail(String email) {
+		return userModelRepository.findUserByEmail(email);
 	}
 }
