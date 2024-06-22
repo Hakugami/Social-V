@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.spring.postservice.clients.CommentServiceClient;
 import org.spring.postservice.clients.LikeServiceClient;
+import org.spring.postservice.events.PostCreatedEvent;
 import org.spring.postservice.models.Dtos.ImagePostDto;
 import org.spring.postservice.models.Dtos.PostDto;
 import org.spring.postservice.models.Dtos.PostResponse;
@@ -12,6 +13,7 @@ import org.spring.postservice.models.PostModel;
 import org.spring.postservice.repositories.PostRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.kafka.core.KafkaTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,11 +27,15 @@ public class PostService {
 	private final UploadService uploadClient;
 	private final LikeServiceClient likeServiceClient;
 	private final CommentServiceClient commentServiceClient;
+	private final KafkaTemplate<String, PostCreatedEvent> kafkaTemplate;
+
 
 	public PostModel savePost(PostDto postDto) {
 		log.info("Saving post: {}", postDto);
 		PostModel postModel = toPostModel(postDto);
-		return postRepository.save(postModel);
+		postRepository.save(postModel);
+		kafkaTemplate.send("post-topic", new PostCreatedEvent(postModel.getId()));
+		return postModel;
 	}
 
 	public CompletableFuture<PostModel> saveVideoPost(VideoPostDto videoPostDto) {
