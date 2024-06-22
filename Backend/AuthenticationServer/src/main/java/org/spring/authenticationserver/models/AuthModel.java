@@ -1,4 +1,6 @@
 package org.spring.authenticationserver.models;
 
-public record AuthModel(String email, String password) {
+import java.io.Serializable;
+
+public record AuthModel(String email, String password , String username , String profilePicture) implements Serializable {
 }

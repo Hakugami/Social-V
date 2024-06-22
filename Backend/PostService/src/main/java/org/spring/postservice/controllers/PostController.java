@@ -30,6 +30,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping("/api/v1/posts")
 @Slf4j
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class PostController {
 
 	private final PostService postService;
@@ -59,7 +60,7 @@ public class PostController {
 	@ApiResponse(description = "Save video post", responseCode = "201")
 	public DeferredResult<ResponseEntity<EntityModel<PostModel>>> saveVideoPost(
 			@RequestPart("dto") String dtoJson,
-			@RequestPart("video") MultipartFile video
+			@RequestPart("file") MultipartFile video
 	) {
 		DeferredResult<ResponseEntity<EntityModel<PostModel>>> deferredResult = new DeferredResult<>();
 
@@ -91,7 +92,7 @@ public class PostController {
 	@ApiResponse(description = "Save image post", responseCode = "201")
 	public DeferredResult<ResponseEntity<EntityModel<PostModel>>> saveImagePost(
 			@RequestPart("dto") String dtoJson,
-			@RequestPart("images") List<MultipartFile> images
+			@RequestPart("file") List<MultipartFile> images
 	) {
 		DeferredResult<ResponseEntity<EntityModel<PostModel>>> deferredResult = new DeferredResult<>();
 
