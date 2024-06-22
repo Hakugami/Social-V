@@ -24,6 +24,8 @@
         <module>LikeService</module>
         <module>UploadService</module>
         <module>FriendService</module>
+        <module>NotificationService</module>
+
     </modules>
 
 

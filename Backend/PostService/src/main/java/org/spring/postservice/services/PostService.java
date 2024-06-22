@@ -34,7 +34,7 @@ public class PostService {
 		log.info("Saving post: {}", postDto);
 		PostModel postModel = toPostModel(postDto);
 		postRepository.save(postModel);
-		kafkaTemplate.send("post-topic", new PostCreatedEvent(postModel.getId()));
+		kafkaTemplate.send("post-topic", new PostCreatedEvent(postModel.getUsername(), postModel.getUserId()));
 		return postModel;
 	}
 

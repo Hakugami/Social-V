@@ -3,6 +3,7 @@ import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import  {jwtDecode} from 'jwt-decode';
+import {NotificationService} from "./notification.service";
 @Injectable({
   providedIn: 'root'
 })
@@ -11,14 +12,16 @@ export class AuthService {
   private authBaseUrl = environment.authApiUrl;
   private userApiUrl = environment.userApiUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(private notificationService: NotificationService,private http: HttpClient) { }
 
   register(user: any): Observable<any> {
     return this.http.post(`${this.authBaseUrl}/register`, user);
   }
 
   login(credentials: any): Observable<any> {
+    this.notificationService.subscribeToUserQueue(this.getUsername());
     return this.http.post(`${this.authBaseUrl}/login`, credentials);
+
   }
   checkFullName(fullName: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.userApiUrl}/checkFullName`, { params: { fullName } });
