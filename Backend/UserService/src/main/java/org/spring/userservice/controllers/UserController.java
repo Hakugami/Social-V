@@ -105,5 +105,12 @@ public class UserController {
 		return ResponseEntity.ok(users);
 	}
 
+	@GetMapping("/byEmail/{email}")
+	@ApiResponse(description = "Get user by email", responseCode = "200")
+	public ResponseEntity<UserModelDto> getUserDataByEmail(@PathVariable String email) {
+		UserModelDto user = userService.getByEmail(email);
+		return ResponseEntity.ok(user);
+	}
+
 
 }

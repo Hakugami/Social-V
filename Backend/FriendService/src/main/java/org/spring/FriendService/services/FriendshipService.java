@@ -27,4 +27,12 @@ public class FriendshipService {
     }
 
 
+    public boolean deleteFriend(String userId, String friendId) {
+        log.info("Deleting friendship between userId: {} and friendId: {}", userId, friendId);
+        int deleted =friendshipRepository.deleteFriendship(userId, friendId);
+        log.info("Deleted friendship between userId: {} and friendId: {}", userId, friendId);
+        return deleted > 0;
+
+
+    }
 }

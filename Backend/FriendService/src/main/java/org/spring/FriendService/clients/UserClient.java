@@ -18,6 +18,10 @@ public interface UserClient {
 
     @GetMapping("/api/v1/users/byEmail")
     List<UserModelDTO> getUsersByEmailsOrUsernames(@RequestParam List<String> emails);
+
+
+    @GetMapping("/api/v1/users/byEmail/{email}")
+    UserModelDTO getUserDataByEmail(@PathVariable("email") String email);
 }
 
 

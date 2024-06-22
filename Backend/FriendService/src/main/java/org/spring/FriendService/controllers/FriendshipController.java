@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.spring.FriendService.models.dtos.FriendRequestDTO;
+import org.spring.FriendService.models.dtos.FriendRequestNotificationDTO;
 import org.spring.FriendService.models.dtos.UserModelDTO;
 import org.spring.FriendService.services.FriendRequestService;
 import org.spring.FriendService.services.FriendshipService;
@@ -32,8 +33,8 @@ public class FriendshipController {
     }
 
     @GetMapping("/request/{userId}")
-    public ResponseEntity<List<FriendRequestDTO>> getFriendRequest(@PathVariable String userId) {
-        List<FriendRequestDTO> friendRequest = friendRequestService.getFriendRequests(userId);
+    public ResponseEntity<List<FriendRequestNotificationDTO>> getFriendRequest(@PathVariable String userId) {
+        List<FriendRequestNotificationDTO> friendRequest = friendRequestService.getFriendRequests(userId);
         return ResponseEntity.ok(friendRequest);
     }
 
@@ -52,4 +53,22 @@ public class FriendshipController {
         List<UserModelDTO> friends = friendshipService.getFriends(userId, page, size);
         return ResponseEntity.ok(friends);
     }
+
+    @DeleteMapping("/request/{requestId}")
+    @ApiResponse(description = "delete a friend request",responseCode = "200")
+    public ResponseEntity<Void> deleteFriendRequest(@PathVariable String requestId) {
+        friendRequestService.deleteFriendRequest(requestId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{userId}")
+    @ApiResponse(description = "delete a friend",responseCode = "200")
+    public ResponseEntity<Void> deleteFriend(@PathVariable String userId, @RequestParam String friendId) {
+       if(friendshipService.deleteFriend(userId, friendId)){
+           return ResponseEntity.ok().build();
+         }
+        return ResponseEntity.notFound().build();
+    }
+
+
 }

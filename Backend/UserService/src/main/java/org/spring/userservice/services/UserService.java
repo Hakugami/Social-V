@@ -57,4 +57,8 @@ public class UserService {
     }
 
 	public List<UserModelDto> getUsersByEmails(List<String> emails) { return userModelRepository.findByEmailIn(emails); }
+
+	public UserModelDto getByEmail(String email) {
+		return userModelRepository.findUserByEmail(email);
+	}
 }

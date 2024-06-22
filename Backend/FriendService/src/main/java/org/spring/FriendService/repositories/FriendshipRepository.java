@@ -27,4 +27,9 @@ public interface FriendshipRepository extends Neo4jRepository<Friendship, String
             "WHERE NOT (u)-[:FRIEND_OF]-(:Friendship)-[:FRIEND_OF]-(secondDegreeFriend) AND secondDegreeFriend.id <> u.id " +
             "RETURN DISTINCT secondDegreeFriend.id AS recommendedFriendId LIMIT $limit")
     List<String> findSecondDegreeConnections(@Param("userId") String userId, @Param("limit") int limit);
+
+    @Query("MATCH (u:UserReference {id: $userId})-[r1:FRIEND_OF]-(f:Friendship)-[r2:FRIEND_OF]-(friend:UserReference {id: $friendId}) " +
+            "DELETE r1, r2, f " +
+            "RETURN count(f) as deletedCount")
+    int deleteFriendship(@Param("userId") String userId, @Param("friendId") String friendId);
 }
