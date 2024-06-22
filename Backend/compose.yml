@@ -19,7 +19,7 @@ services:
       - ./db-init/data.sql:/docker-entrypoint-initdb.d/data.sql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MYSQL_ROOT_PASSWORD"]
-      interval: 5s
+      interval: 10s
       timeout: 5s
       retries: 20
     networks:
@@ -39,7 +39,7 @@ services:
       - ./mongo-data:/data/mongo/db
     healthcheck:
       test: ["CMD", "mongo", "localhost:27017", "--eval", "db.adminCommand('ping')"]
-      interval: 2s
+      interval: 10s
       retries: 10
       timeout: 2s
     networks:
@@ -58,7 +58,7 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
-      interval: 2s
+      interval: 10s
       retries: 10
       timeout: 2s
 
@@ -78,7 +78,7 @@ services:
         condition: service_healthy  # Wait until service-discovery is healthy
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8082/actuator/health" ]
-      interval: 2s
+      interval: 10s
       retries: 10
       timeout: 2s
 
@@ -103,7 +103,7 @@ services:
         condition: service_healthy  # Wait until api-gateway is healthy
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
-      interval: 2s
+      interval: 10s
       retries: 10
       timeout: 2s
 
@@ -146,7 +146,7 @@ services:
         condition: service_healthy  # Wait until api-gateway is healthy
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
-      interval: 2s
+      interval: 10s
       retries: 10
       timeout: 2s
 
