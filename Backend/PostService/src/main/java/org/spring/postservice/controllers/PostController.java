@@ -1,7 +1,6 @@
 package org.spring.postservice.controllers;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -211,23 +210,9 @@ public class PostController {
 
 	@GetMapping("/")
 	@ApiResponse(description = "Get all posts", responseCode = "200")
-	public ResponseEntity<EntityModel<List<PostResponse>>> getAllPosts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+	public ResponseEntity<List<PostResponse>> getAllPosts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 		List<PostResponse> postDto = postService.getAllPosts(page, size);
-		EntityModel<List<PostResponse>> resource = EntityModel.of(postDto);
-
-		WebMvcLinkBuilder linkToSelf = WebMvcLinkBuilder.linkTo(methodOn(this.getClass()).getAllPosts(page, size));
-		resource.add(linkToSelf.withRel("self"));
-
-		if (postDto.size() == size) { // if this page is full, there is likely a next page
-			WebMvcLinkBuilder linkToNext = WebMvcLinkBuilder.linkTo(methodOn(this.getClass()).getAllPosts(page + 1, size));
-			resource.add(linkToNext.withRel("next"));
-		}
-
-		if (page > 0) { // if not the first page, there is a previous page
-			WebMvcLinkBuilder linkToPrev = WebMvcLinkBuilder.linkTo(methodOn(this.getClass()).getAllPosts(page - 1, size));
-			resource.add(linkToPrev.withRel("prev"));
-		}
-
-		return ResponseEntity.ok(resource);
+		return ResponseEntity.ok(postDto);
 	}
+
 }

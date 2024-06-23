@@ -6,10 +6,10 @@ import org.spring.userservice.mappers.RegisterMapper;
 import org.spring.userservice.models.Dtos.AuthModelDto;
 import org.spring.userservice.models.Dtos.RegisterDto;
 import org.spring.userservice.models.Dtos.UserModelDto;
+import org.spring.userservice.models.Dtos.PictureDto;
 import org.spring.userservice.repositories.UserModelRepository;
 import org.spring.userservice.utils.SecurityUtil;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,21 +44,31 @@ public class UserService {
 		return userModelRepository.findByUsername(username);
 	}
 
-    public boolean isFullNameTaken(String fullName) {
+	public boolean isFullNameTaken(String fullName) {
 		return userModelRepository.existsByUsername(fullName);
-    }
+	}
 
 	public boolean isEmailTaken(String email) {
 		return userModelRepository.existsByEmail(email);
 	}
 
-    public AuthModelDto getUserByEmail(String email) {
+	public AuthModelDto getUserByEmail(String email) {
 		return userModelRepository.findByEmail(email);
-    }
+	}
 
-	public List<UserModelDto> getUsersByEmails(List<String> emails) { return userModelRepository.findByEmailIn(emails); }
+	public List<UserModelDto> getUsersByEmails(List<String> emails) {
+		return userModelRepository.findByEmailIn(emails);
+	}
 
 	public UserModelDto getByEmail(String email) {
 		return userModelRepository.findUserByEmail(email);
+	}
+
+	public UserModelDto getByUsername(String username) {
+		return userModelRepository.getByUsername(username);
+	}
+
+	public PictureDto getProfilePicture(String username) {
+		return userModelRepository.findProfilePictureByUsername(username);
 	}
 }

@@ -1,12 +1,22 @@
 import {CommentModel} from "./comment.model";
+import {LikesModel} from "./likes.model";
 
 export interface PostModel {
-  id: number;
-  userImg: string;
-  userName: string;
-  postTime: string;
-  postImg: string;
-  likes: number;
-  comments: CommentModel[];
-  shares: number;
+  id:        string;
+  userId:    string;
+  username:  string;
+  content:   string;
+  createdAt: Date;
+  likes:     LikesModel;
+  comments:  CommentModel[];
+  videoUrl:  string;
+  imagesUrl: string[];
+  profilePicture: string;
 }
+
+
+
+
+
+
+

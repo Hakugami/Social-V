@@ -1,12 +1,8 @@
 package org.spring.likeservice.models.Dtos;
 
-import lombok.Data;
+import org.spring.likeservice.models.Emotion;
 
-import java.util.List;
+import java.io.Serializable;
 
-@Data
-public class LikeRequest {
-    Integer numberOfLikes;
-    List<String> usernames;
-    String postId;
+public record LikeRequest(String postId, String userId, String username , Emotion emotion) implements Serializable {
 }

@@ -1,16 +1,13 @@
 
 <div class="d-flex flex-wrap">
   <div class="user-img">
-    <img src="{{ comment?.userImg }}" alt="userimg" class="avatar-35 rounded-circle img-fluid">
+    <img src="{{ comment?.profilePicture }}" alt="userimg" class="avatar-35 rounded-circle img-fluid">
   </div>
   <div class="comment-data-block ms-3">
-    <h6>{{ comment?.name }}</h6>
-    <p class="mb-0">{{ comment?.text }}</p>
+    <h6>{{ comment?.username }}</h6>
+    <p class="mb-0">{{ comment?.content }}</p>
     <div class="d-flex flex-wrap align-items-center comment-activity">
-      <a href="#" (click)="comment && likeComment(comment)">like</a>
-      <a href="#" (click)="comment && replyToComment(comment)">reply</a>
-      <a href="#" (click)="comment && translateComment(comment)">translate</a>
-      <span> {{ comment?.timestamp }} </span>
+<!--      <span> {{ comment?.timestamp }} </span>-->
     </div>
   </div>
 </div>

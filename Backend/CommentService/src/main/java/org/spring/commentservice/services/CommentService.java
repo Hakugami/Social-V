@@ -22,11 +22,11 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
 
-    public CommentRequest addComment(CommentRequest commentRequest) {
+    public CommentModel addComment(CommentRequest commentRequest) {
         CommentModel commentModel = commentMapper.toEntity(commentRequest);
         log.info("Adding comment: {}", commentModel);
-        commentRepository.save(commentModel);
-        return commentRequest;
+        return commentRepository.save(commentModel);
+
     }
 
     public List<CommentDto> getAllComments(int page, int size){
@@ -43,9 +43,11 @@ public class CommentService {
         return commentModel.map(commentMapper::toDto).orElse(null);
     }
 
-    public CommentDto getCommentByPostId(String postId){
-        CommentModel commentModel = commentRepository.getByPostId(postId);
-        return commentMapper.toDto(commentModel);
+    public List<CommentDto> getCommentByPostId(String postId , int page, int size){
+        List<CommentModel> commentModel = commentRepository.getByPostId(postId, PageRequest.of(page, size));
+        return commentModel.stream()
+                .map(commentMapper::toDto)
+                .toList();
     }
 
     public void deleteComment(String commentId){

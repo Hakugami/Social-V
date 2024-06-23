@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.spring.postservice.models.enums.ContentType;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
@@ -25,7 +26,7 @@ public class PostModel {
 	private List<String> imageUrl;
 	private String videoUrl;
 	private LocalDateTime createdAt;
-	private String type;
+	private ContentType type;
 
 
 
