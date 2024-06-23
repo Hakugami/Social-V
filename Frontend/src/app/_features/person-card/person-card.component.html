@@ -1,0 +1,15 @@
+<li class="d-flex align-items-center flex-wrap">
+    <div class="user-img img-fluid flex-shrink-0">
+      <img [src]="person.profilePicture" alt="User image" defaultImage="../../assets/images/user/11.jpg" class="rounded-circle avatar-40">
+    </div>
+    <div class="flex-grow-1 ms-3">
+      <h6>{{ person.firstName +" "+ person.lastName}}</h6>
+      <!-- <p class="mb-0">{{ person.mutualFriends }} friends</p> -->  <!-- will change later -->
+    </div>
+    <div class="d-flex align-items-center mt-2 mt-md-0">
+      <a  class="me-3 btn btn-primary rounded" (click)="addFriend()">
+        <i class="ri-user-add-line me-1"></i>Add Friend
+      </a>
+      <a  class="btn btn-secondary rounded" (click)="removeSuggestion()">Remove</a>
+    </div>
+  </li>
