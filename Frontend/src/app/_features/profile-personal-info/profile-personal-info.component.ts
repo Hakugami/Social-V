@@ -49,7 +49,7 @@ export class ProfilePersonalInfoComponent implements OnInit {
     const updatedUserData = {...this.userData}; // Make a copy of userData to avoid direct mutation
 
     // Make the PUT request to update the profile info
-    this.http.put(`http://localhost:8081/profile/update`, updatedUserData).subscribe({
+    this.http.put(`http://localhost:8081/profile/edit`, updatedUserData).subscribe({
       next: (response) => {
         console.log(response);
         // Handle successful update (e.g., show success message)

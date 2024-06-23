@@ -1,9 +1,11 @@
 package org.spring.userservice.controllers;
 
 
+import jakarta.validation.Valid;
 import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.PathParam;
 import org.apache.catalina.User;
+import org.spring.userservice.mappers.UserModelMapper;
 import org.spring.userservice.models.Dtos.AuthModelDto;
 import org.spring.userservice.models.Dtos.UserModelDto;
 import org.spring.userservice.models.UserModel;
@@ -19,41 +21,61 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("profile/edit")
-@CrossOrigin(origins = "http://localhost:4200") // Replace with your Angular app's URL
+@CrossOrigin(origins = "http://localhost:4200",methods = {RequestMethod.GET, RequestMethod.PUT},allowedHeaders = "*") // Replace with your Angular app's URL
 public class UpdateProfileInfoController {
-    private UserModelRepository userModelRepo;
+    private final UserModelRepository userModelRepo;
 
     @GetMapping("{email}")
-    public ResponseEntity<Object> getUserData(@PathVariable String email){
-        try{
+    public ResponseEntity<Object> getUserData(@PathVariable String email) {
+        try {
             UserModelDto userModelDto = userModelRepo.findUserByEmail(email);
-            System.out.println(userModelDto.email());
+            if (userModelDto == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There is no user with this email");
+            }
             return ResponseEntity.ok(userModelDto);
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There is no user with this email");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while fetching user data");
         }
     }
 
     @PutMapping
-    public ResponseEntity<Object> updateProfileInfo(@RequestBody UserModelDto comingUserModelDto) {
-        /**
-         * 1. Get user Model from DB .
-         * 2. Check if there is any thing Changed .
-         */
-        UserModelDto userModelDto = userModelRepo.findUserByEmail(comingUserModelDto.email());
-        try{
-            userModelRepo.save(comingUserModelDto);
-            return ResponseEntity.ok("Profile updated successfully");
+    public ResponseEntity<Object> updateProfileInfo(@RequestBody @Valid UserModelDto comingUserModelDto) {
+        try {
+            UserModelDto existingUserDto = userModelRepo.findUserByEmail(comingUserModelDto.email());
+            if (existingUserDto == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            }
 
-        }catch (Exception e){
-            return ResponseEntity.badRequest().build();
+            // Update the existing user with new data
+            UserModel updatedUser = UserModelMapper.fromDtoToModel(existingUserDto);
+            updateUserFields(updatedUser, comingUserModelDto);
+
+            userModelRepo.save(updatedUser);
+            return ResponseEntity.ok("Profile updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the profile");
         }
+    }
+
+    private void updateUserFields(UserModel user, UserModelDto updatedDto) {
+        if (updatedDto.username() != null) user.setUsername(updatedDto.username());
+        if (updatedDto.email() != null) user.setEmail(updatedDto.email());
+        if (updatedDto.status() != null) user.setStatus(updatedDto.status());
+        if (updatedDto.firstName() != null) user.setFirstName(updatedDto.firstName());
+        if (updatedDto.lastName() != null) user.setLastName(updatedDto.lastName());
+        if (updatedDto.address() != null) user.setAddress(updatedDto.address());
+        if (updatedDto.gender() != null) user.setGender(updatedDto.gender());
+        if (updatedDto.country() != null) user.setCountry(updatedDto.country());
+        if (updatedDto.city() != null) user.setCity(updatedDto.city());
+        if (updatedDto.birthDate() != null) user.setBirthDate(updatedDto.birthDate());
+        if (updatedDto.phoneNumber() != null) user.setPhoneNumber(updatedDto.phoneNumber());
+        if (updatedDto.profilePicture() != null) user.setProfilePicture(updatedDto.profilePicture());
+        if (updatedDto.coverPicture() != null) user.setCoverPicture(updatedDto.coverPicture());
+        if (updatedDto.url() != null) user.setUrl(updatedDto.url());
     }
 
     @Autowired
     public UpdateProfileInfoController(UserModelRepository userModelRepo) {
         this.userModelRepo = userModelRepo;
     }
-
 }
-
