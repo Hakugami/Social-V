@@ -27,14 +27,14 @@ public class PostService {
 	private final UploadService uploadClient;
 	private final LikeServiceClient likeServiceClient;
 	private final CommentServiceClient commentServiceClient;
-	private final KafkaTemplate<String, PostCreatedEvent> kafkaTemplate;
+	private final KafkaTemplate<String, String> kafkaTemplate;
 
 
 	public PostModel savePost(PostDto postDto) {
 		log.info("Saving post: {}", postDto);
 		PostModel postModel = toPostModel(postDto);
 		postRepository.save(postModel);
-		kafkaTemplate.send("post-topic", new PostCreatedEvent(postModel.getUsername(), postModel.getUserId()));
+		kafkaTemplate.send("post-topic", postModel.getUsername());
 		return postModel;
 	}
 

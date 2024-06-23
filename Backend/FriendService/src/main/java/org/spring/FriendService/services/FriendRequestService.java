@@ -4,7 +4,6 @@ package org.spring.FriendService.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.spring.FriendService.clients.UserClient;
-import org.spring.FriendService.events.FriendRequestSentEvent;
 import org.spring.FriendService.exceptions.FriendRequestAlreadyExistsException;
 import org.spring.FriendService.exceptions.FriendRequestNotFoundException;
 import org.spring.FriendService.exceptions.UserNotFoundException;
@@ -16,7 +15,6 @@ import org.spring.FriendService.models.entities.UserReference;
 import org.spring.FriendService.models.enums.FriendRequestStatus;
 import org.spring.FriendService.repositories.FriendRequestRepository;
 import org.spring.FriendService.repositories.FriendshipRepository;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
