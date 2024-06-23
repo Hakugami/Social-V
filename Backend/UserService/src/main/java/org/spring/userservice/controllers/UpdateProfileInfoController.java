@@ -21,7 +21,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("profile/edit")
-//@CrossOrigin(origins = "http://localhost:4200",methods = {RequestMethod.GET, RequestMethod.PUT},allowedHeaders = "*") // Replace with your Angular app's URL
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*", allowCredentials = "true")
 public class UpdateProfileInfoController {
 
     private final UserModelRepository userModelRepo;
