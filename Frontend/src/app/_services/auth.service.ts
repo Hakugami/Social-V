@@ -19,14 +19,14 @@ export class AuthService {
   }
 
   login(credentials: any): Observable<any> {
-    return this.http.post(`${this.authBaseUrl}/login`, credentials).pipe(
-      tap(() => {
-        console.log('logged in in tab');
-        this.notificationService.subscribeToUserQueue(this.getUsername());
-        //this.notificationService.subscribeToPublicQueue();
-        //this.notificationService.sendNotification('/app/user.notifications', {username: this.getUsername()});
-      })
-    );
+    return this.http.post(`${this.authBaseUrl}/login`, credentials);
+  }
+  handleLoginResponse(response: any): void {
+    const jwtToken = response.jwtToken;
+    const refreshToken = response.refreshToken;
+    localStorage.setItem('token', jwtToken);
+    localStorage.setItem('refresh', refreshToken);
+    this.notificationService.subscribeToUserQueue(this.getUsername());
   }
   checkFullName(fullName: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.userApiUrl}/checkFullName`, { params: { fullName } });
@@ -53,7 +53,6 @@ export class AuthService {
     if (decoded.exp) {
       const expirationDate = new Date(0);
       expirationDate.setUTCSeconds(decoded.exp);
-      console.log(expirationDate);
       return expirationDate < new Date();
     }
     return false;
@@ -61,11 +60,8 @@ export class AuthService {
 
   getUsername(): string {
     const token = this.getToken();
-    console.log('token inside getUserName', token);
     if (token) {
-      console.log('before decoding the jwt');
       const decoded: any = jwtDecode(token);
-      console.log('decoded username', decoded.username);
       return decoded.username;
     }
     return '';
