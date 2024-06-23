@@ -30,7 +30,6 @@ public class PostService {
 	private final UploadService uploadClient;
 	private final LikeServiceClient likeServiceClient;
 	private final CommentServiceClient commentServiceClient;
-	private final UserServiceClient userServiceClient;
 	private final KafkaTemplate<String, PostCreatedEvent> kafkaTemplate;
 
 
