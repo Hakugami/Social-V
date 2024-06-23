@@ -2,6 +2,7 @@ package org.spring.userservice.repositories;
 
 import org.spring.userservice.models.Dtos.AuthModelDto;
 import org.spring.userservice.models.Dtos.UserModelDto;
+import org.spring.userservice.models.Dtos.PictureDto;
 import org.spring.userservice.models.UserModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,11 @@ public interface UserModelRepository extends JpaRepository<UserModel, Long> {
 	List<UserModelDto> findByEmailIn(List<String> emails);
 
 	UserModelDto findUserByEmail(String email);
+
+	PictureDto findProfilePictureByUsername(String username);
+
+	UserModelDto getByUsername(String username);
+
 
 
 }

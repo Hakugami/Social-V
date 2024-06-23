@@ -31,7 +31,12 @@ export const routes: Routes = [
       { path: 'register', component: RegisterComponent },
     ]
   },
-  {path:'friend-request',component: FriendRequestPageComponent }
+  {
+    path:'friend-request',component: FriendRequestPageComponent
+  },
+  {
+    path: 'profile/:username', component: ProfilePageComponent
+  }
 
 
 

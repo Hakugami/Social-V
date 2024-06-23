@@ -19,11 +19,13 @@ constructor(private http: HttpClient) {}
   }
 
   getFriendRequests(userId: string): Observable<FriendRequest[]> {
-    return this.http.get<FriendRequest[]>(`${environment.friendApiUrl}/request/${userId}`);
+    // return this.http.get<FriendRequest[]>(`${environment.friendApiUrl}/request/${userId}`);
+    return new Observable<FriendRequest[]>();
   }
 
   acceptFriendRequest(requestId: string): Observable<void> {
-    return this.http.post<void>(`${environment.friendApiUrl}/accept`, null, { params: { requestId } });
+    // return this.http.post<void>(`${environment.friendApiUrl}/accept`, null, { params: { requestId } });
+    return new Observable<void>();
   }
 
   getFriends(userId: string, page: number = 0, size: number = 10): Observable<UserModelDTO[]> {

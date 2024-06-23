@@ -3,12 +3,19 @@ import {Observable} from 'rxjs';
 import {HttpClient, HttpEvent, HttpRequest} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {CreatePostModel} from "../_models/create-post.model";
+import {PostModel} from "../_models/post.model";
+import {LikeRequestModel} from "../_models/like-request.model";
+import {LikesModel} from "../_models/likes.model";
+import {CommentRequestModel} from "../_models/comment-request.model";
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostService {
   private apiBaseUrl: string = environment.postApiUrl;
+  private likeApiBaseUrl: string = environment.likeApiUrl;
+  private commentApiBaseUrl: string = environment.commentApiUrl;
 
   constructor(private httpClient: HttpClient) {
   }
@@ -31,9 +38,24 @@ export class PostService {
     return this.httpClient.request(req);
   }
 
-  getPosts(): Observable<any> {
-    // return this.httpClient.get<any>(`${this.apiBaseUrl}`);
-    //return empty array for now
-    return new Observable<any>();
+  getPosts(): Observable<PostModel[]> {
+    return this.httpClient.get<PostModel[]>(`${this.apiBaseUrl}/`,);
+  }
+
+  likePost(likeRequestModel: LikeRequestModel): Observable<LikesModel> {
+    return this.httpClient.post<LikesModel>(`${this.likeApiBaseUrl}/`, likeRequestModel);
+  }
+
+  removeLike(likeId: string): Observable<LikesModel> {
+    return this.httpClient.delete<LikesModel>(`${this.likeApiBaseUrl}/${likeId}`);
+  }
+
+  addComment(commentRequest: CommentRequestModel ): Observable<any> {
+    return this.httpClient.post<any>(`${this.commentApiBaseUrl}/`, commentRequest);
+
+  }
+
+  updateLike(likeId: string, emotion: string): Observable<LikesModel> {
+    return this.httpClient.put<LikesModel>(`${this.likeApiBaseUrl}/${likeId}`, {emotion});
   }
 }
