@@ -11,4 +11,6 @@ public class LikeModel {
     private String id;
     private String postId;
     private String userId;
+    private String username;
+    private Emotion emotion;
 }

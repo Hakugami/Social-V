@@ -7,6 +7,7 @@ import org.spring.FriendService.clients.UserClient;
 import org.spring.FriendService.exceptions.FriendRequestAlreadyExistsException;
 import org.spring.FriendService.exceptions.FriendRequestNotFoundException;
 import org.spring.FriendService.exceptions.UserNotFoundException;
+import org.spring.FriendService.models.dtos.FriendRequestDTO;
 import org.spring.FriendService.models.dtos.FriendRequestNotificationDTO;
 import org.spring.FriendService.models.dtos.UserModelDTO;
 import org.spring.FriendService.models.entities.FriendRequest;
@@ -85,5 +86,14 @@ public class FriendRequestService {
 
     public void deleteFriendRequest(String requestId) {
         friendRequestRepository.deleteById(requestId);
+    }
+
+    public List<FriendRequestDTO> getFriendRequestsByRequesterId(String requesterId) {
+        List<FriendRequest> requests= friendRequestRepository.findByRequesterId(requesterId);
+        List<FriendRequestDTO> friendRequestDTOs = new ArrayList<>();
+        for (FriendRequest request : requests) {
+            friendRequestDTOs.add(new FriendRequestDTO(request.getRecipient().getId(),request.getRequester().getId()));
+        }
+        return friendRequestDTOs;
     }
 }

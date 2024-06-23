@@ -2,21 +2,21 @@
   <div class="user-post-data py-3">
     <div class="d-flex  justify-content-between">
       <div class="me-3">
-        <img [src]="post.userImg" alt="" class="rounded-circle  avatar-60">
+        <img [src]="post.profilePicture" alt="" class="rounded-circle  avatar-60">
       </div>
       <div class="w-100">
         <div class="d-flex justify-content-between">
           <div class="">
             <h5 class="mb-0 d-inline-block me-1">
-              <a class="" href="#">{{ post.userName }}</a>
-            </h5>
-            <p class="mb-0 d-inline-block">Share Anna Mull's Post</p>
-            <p class="mb-0">{{ post.postTime }}</p>
+              <a class="" [routerLink]="['/profile', post.username]">{{ post.username }}</a></h5>
+            <p class="mb-0 d-inline-block"> has posted</p>
+            <p class="mb-0">{{ post.createdAt }}</p>
           </div>
           <div class="card-post-toolbar">
             <div class="dropdown">
                                                    <span aria-expanded="false" aria-haspopup="true"
                                                          class="dropdown-toggle" data-bs-toggle="dropdown"
+
                                                          role="button">
                                                    <i class="ri-more-fill"></i>
                                                    </span>
@@ -74,97 +74,134 @@
     </div>
   </div>
   <div class="user-post">
-    <a href="#"><img [src]="post.postImg" alt="post-image" class="img-fluid w-100"/></a>
+
+    <!-- Display text content if neither images nor video are available -->
+    <ng-container>
+      <div class="text-content">
+        <p>{{ post.content }}</p>
+      </div>
+    </ng-container>
+    <!-- Display images if available -->
+    <ng-container *ngIf="post.imagesUrl && post.imagesUrl.length > 0">
+      <div *ngFor="let imageUrl of post.imagesUrl">
+        <a href="#"><img [src]="imageUrl" alt="post-image" class="img-fluid w-100"/></a>
+      </div>
+    </ng-container>
+
+    <!-- Display video if available -->
+    <ng-container *ngIf="post.videoUrl">
+      <div class="video-container">
+        <video controls class="img-fluid w-100">
+          <source [src]="post.videoUrl" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </ng-container>
+
 
   </div>
+
   <div class="comment-area mt-3">
     <div class="d-flex justify-content-between align-items-center flex-wrap">
       <div class="like-block position-relative d-flex align-items-center">
         <div class="d-flex align-items-center">
           <div class="like-data">
             <div class="dropdown">
-                                                   <span aria-expanded="false" aria-haspopup="true"
-                                                         class="dropdown-toggle" data-bs-toggle="dropdown"
-                                                         role="button">
-                                                   <img alt="" class="img-fluid"
-                                                        src="../../../assets/images/icon/01.png">
-                                                   </span>
+            <span aria-expanded="false" aria-haspopup="true"
+                  class="dropdown-toggle"
+                  role="button"
+            (click)="toggleLike(); closeDropdown()">
+        <img [src]="selectedIconSrc" alt="" class="img-fluid">
+
+    </span>
               <div class="dropdown-menu py-2">
                 <a class="ms-2 me-2" data-bs-placement="top" data-bs-toggle="tooltip" href="#"
-                   title="Like"><img alt="" class="img-fluid"
-                                     src="../../../assets/images/icon/01.png"></a>
+                   title="Like" (click)="selectEmotion(Emotion.LIKE, '../../../assets/images/icon/01.png'); closeDropdown() "><img alt=""
+                                                                                                                 class="img-fluid"
+                                                                                                                 src="../../../assets/images/icon/01.png"></a>
                 <a class="me-2" data-bs-placement="top" data-bs-toggle="tooltip" href="#"
-                   title="Love"><img alt="" class="img-fluid"
-                                     src="../../../assets/images/icon/02.png"></a>
+                   title="Love" (click)="selectEmotion(Emotion.LOVE, '../../../assets/images/icon/02.png'); closeDropdown()"><img alt=""
+                                                                                                                 class="img-fluid"
+                                                                                                                 src="../../../assets/images/icon/02.png"></a>
                 <a class="me-2" data-bs-placement="top" data-bs-toggle="tooltip" href="#"
-                   title="Happy"><img
-                  alt="" class="img-fluid" src="../../../assets/images/icon/03.png"></a>
+                   title="Happy" (click)="selectEmotion(Emotion.HAPPY, '../../../assets/images/icon/03.png'); closeDropdown()"><img
+                  alt="" class="img-fluid"
+                  src="../../../assets/images/icon/03.png"></a>
                 <a class="me-2" data-bs-placement="top" data-bs-toggle="tooltip" href="#"
-                   title="HaHa"><img alt="" class="img-fluid"
-                                     src="../../../assets/images/icon/04.png"></a>
+                   title="HaHa" (click)="selectEmotion(Emotion.HAHA, '../../../assets/images/icon/04.png'); closeDropdown()"><img alt=""
+                                                                                                                 class="img-fluid"
+                                                                                                                 src="../../../assets/images/icon/04.png"></a>
                 <a class="me-2" data-bs-placement="top" data-bs-toggle="tooltip" href="#"
-                   title="Think"><img
-                  alt="" class="img-fluid" src="../../../assets/images/icon/05.png"></a>
+                   title="Think" (click)="selectEmotion(Emotion.THINK, '../../../assets/images/icon/05.png'); closeDropdown()"><img
+                  alt="" class="img-fluid"
+                  src="../../../assets/images/icon/05.png"></a>
                 <a class="me-2" data-bs-placement="top" data-bs-toggle="tooltip" href="#"
-                   title="Sade"><img alt="" class="img-fluid"
-                                     src="../../../assets/images/icon/06.png"></a>
+                   title="Sade" (click)="selectEmotion(Emotion.SAD, '../../../assets/images/icon/06.png'); closeDropdown()"><img alt=""
+                                                                                                                class="img-fluid"
+                                                                                                                src="../../../assets/images/icon/06.png"></a>
                 <a class="me-2" data-bs-placement="top" data-bs-toggle="tooltip" href="#"
-                   title="Lovely"><img alt="" class="img-fluid"
-                                       src="../../../assets/images/icon/07.png"></a>
+                   title="Lovely" (click)="selectEmotion(Emotion.LOVELY, '../../../assets/images/icon/07.png'); closeDropdown()"><img alt="" class="img-fluid"
+                                                                                                                     src="../../../assets/images/icon/07.png"></a>
+
               </div>
             </div>
           </div>
           <div class="total-like-block ms-2 me-3">
             <div class="dropdown">
-              <span aria-expanded="false" aria-haspopup="true"
-                    class="dropdown-toggle" data-bs-toggle="dropdown" role="button">
-                {{ post.likes }} Likes
-              </span>
+  <span class="dropdown-toggle" [class.active]="isLiked" data-bs-toggle="dropdown" role="button" (click)="toggleLike()">
+  {{ post.likes.numberOfLikes }} Like{{ post.likes.numberOfLikes !== 1 ? 's' : '' }}
+</span>
               <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Max Emum</a>
-                <a class="dropdown-item" href="#">Bill Yerds</a>
-                <a class="dropdown-item" href="#">Hap E. Birthday</a>
-                <a class="dropdown-item" href="#">Tara Misu</a>
-                <a class="dropdown-item" href="#">Midge Itz</a>
-                <a class="dropdown-item" href="#">Sal Vidge</a>
-                <a class="dropdown-item" href="#">Other</a>
+                <ng-container *ngIf="post.likes.likes.length > 0; else noLikes">
+                  <a class="dropdown-item" href="#" *ngFor="let like of getDisplayedLikes(5)">
+                    {{ like.username }}
+                  </a>
+                  <a class="dropdown-item" href="#" *ngIf="post.likes.likes.length > 5">
+                    And {{ post.likes.likes.length - 5 }} more...
+                  </a>
+                </ng-container>
+                <ng-template #noLikes>
+                  <span class="dropdown-item">No likes yet</span>
+                </ng-template>
               </div>
             </div>
           </div>
         </div>
         <div class="total-comment-block">
           <div class="dropdown">
-            <span aria-expanded="false" aria-haspopup="true"
-                  class="dropdown-toggle" data-bs-toggle="dropdown" role="button">
-              {{ post.comments.length }} Comment
-            </span>
+    <span aria-expanded="false" aria-haspopup="true"
+          class="dropdown-toggle" data-bs-toggle="dropdown" role="button">
+      {{ post.comments.length }} Comment{{ post.comments.length !== 1 ? 's' : '' }}
+    </span>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">Max Emum</a>
-              <a class="dropdown-item" href="#">Bill Yerds</a>
-              <a class="dropdown-item" href="#">Hap E. Birthday</a>
-              <a class="dropdown-item" href="#">Tara Misu</a>
-              <a class="dropdown-item" href="#">Midge Itz</a>
-              <a class="dropdown-item" href="#">Sal Vidge</a>
-              <a class="dropdown-item" href="#">Other</a>
+              <ng-container *ngIf="post.comments.length > 0; else noComments">
+                <a class="dropdown-item" href="#" *ngFor="let comment of post.comments">
+                  {{ comment.username }}
+                </a>
+              </ng-container>
+              <ng-template #noComments>
+                <span class="dropdown-item">No comments yet</span>
+              </ng-template>
             </div>
           </div>
         </div>
       </div>
       <div class="share-block d-flex align-items-center feather-icon mt-2 mt-md-0">
         <a aria-controls="share-btn" data-bs-target="#share-btn" data-bs-toggle="offcanvas" href="#">
-          <i class="ri-share-line"></i>
-          <span class="ms-1">{{ post.shares }} Share</span>
+          <!--          <i class="ri-share-line"></i>-->
+          <!--          <span class="ms-1">{{ post.shares }} Share</span>-->
         </a>
       </div>
     </div>
     <hr>
     <ul class="post-comments p-0 m-0">
-      <li *ngFor="let comment of comments" class="mb-2">
+      <li *ngFor="let comment of post.comments" class="mb-2">
         <app-comment-item [comment]="comment"></app-comment-item>
       </li>
     </ul>
-    <form action="javascript:void(0);" class="comment-text d-flex align-items-center mt-3">
-      <input class="form-control rounded" placeholder="Enter Your Comment" type="text">
+    <form (submit)="submitComment()" class="comment-text d-flex align-items-center mt-3">
+      <input [(ngModel)]="commentText" name="commentText" class="form-control rounded" placeholder="Enter Your Comment"
+             type="text">
       <div class="comment-attagement d-flex">
         <a href="#"><i class="ri-link me-3"></i></a>
         <a href="#"><i class="ri-user-smile-line me-3"></i></a>

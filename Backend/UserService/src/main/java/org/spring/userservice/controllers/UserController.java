@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.spring.userservice.models.Dtos.AuthModelDto;
 import org.spring.userservice.models.Dtos.RegisterDto;
 import org.spring.userservice.models.Dtos.UserModelDto;
+import org.spring.userservice.models.Dtos.PictureDto;
 import org.spring.userservice.services.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -92,7 +93,7 @@ public class UserController {
 
 	@GetMapping("/exists/{email}")
 	@ApiResponse(description = "check if user exists")
-	public ResponseEntity<Boolean> doesUserExist(@PathVariable String email){
+	public ResponseEntity<Boolean> doesUserExist(@PathVariable String email) {
 		AuthModelDto user = userService.getUserByEmail(email);
 		boolean exists = user != null;
 		return ResponseEntity.ok(exists);
@@ -113,4 +114,17 @@ public class UserController {
 	}
 
 
+	@GetMapping("/loadPicAndName/{username}")
+	@ApiResponse(description = "Get user's profile picture and full name", responseCode = "200")
+	public ResponseEntity<PictureDto> getProfilePicture(@PathVariable String username) {
+		PictureDto picture = userService.getProfilePicture(username);
+		return ResponseEntity.ok(picture);
+	}
+
+	@GetMapping("/loadProfile/{username}")
+	@ApiResponse(description = "Get user's profile picture and full name", responseCode = "200")
+	public ResponseEntity<UserModelDto> getProfile(@PathVariable String username) {
+		UserModelDto user = userService.getByUsername(username);
+		return ResponseEntity.ok(user);
+	}
 }

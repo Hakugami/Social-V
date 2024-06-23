@@ -9,5 +9,4 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PostCreatedEvent {
     private String postId;
-    private String username;
 }

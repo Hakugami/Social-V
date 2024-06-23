@@ -22,6 +22,7 @@ import {NgIf} from "@angular/common";
 })
 export class AppComponent {
   showNavbars: boolean = true;
+  title = 'SocialNetworkV2';
 
   constructor(private router: Router) {
     this.router.events.subscribe(event => {

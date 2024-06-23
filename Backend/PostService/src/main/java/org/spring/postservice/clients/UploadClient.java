@@ -1,12 +1,13 @@
 package org.spring.postservice.clients;
 
+import org.spring.postservice.configs.FeignClientConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
-@FeignClient(name = "upload-service")
+@FeignClient(name = "upload-service", configuration = FeignClientConfiguration.class)
 public interface UploadClient {
 
 	@PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

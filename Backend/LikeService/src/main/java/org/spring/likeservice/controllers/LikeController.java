@@ -1,11 +1,11 @@
 package org.spring.likeservice.controllers;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.spring.likeservice.models.Dtos.LikeDto;
+import org.spring.likeservice.models.Dtos.LikeRequest;
 import org.spring.likeservice.services.LikeService;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,48 +14,48 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/likes")
 @Slf4j
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class LikeController {
 
-    private final LikeService likeService;
+	private final LikeService likeService;
 
-    @PostMapping
-    public ResponseEntity<EntityModel<LikeDto>> addLike(@RequestParam String userId, @RequestParam String postId){
-        log.info("Received request to add like by user: {} for post: {}", userId, postId);
-        LikeDto likeDto = likeService.addLike(userId, postId);
-
-        EntityModel<LikeDto> entityModel = EntityModel.of(likeDto,
-                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(LikeController.class).getLikesByPostId(postId)).withRel("likes-by-post")
-        );
+	@PostMapping("/")
+	@ApiResponse(description = "Add like to post", responseCode = "201")
+	public ResponseEntity<LikeDto> addLike(@RequestBody LikeRequest likeRequest) {
+		log.info("Received request to add like by user: {} for post: {}", likeRequest.userId(), likeRequest.postId());
+		LikeDto likeDto = likeService.addLike(likeRequest);
+		return ResponseEntity.ok(likeDto);
 
 
-        return ResponseEntity.ok(entityModel);
+	}
+
+	@GetMapping("/{postId}")
+	@ApiResponse(description = "Get likes by post id", responseCode = "200")
+	public ResponseEntity<LikeDto> getLikesByPostId(@PathVariable String postId) {
+		log.info("Received request to get likes for post id: {}", postId);
+		LikeDto likeDto = likeService.getLikesByPostId(postId);
+		return ResponseEntity.ok(likeDto);
 
 
-    }
+	}
 
-    @GetMapping("/posts/{postId}")
-    public ResponseEntity<EntityModel<LikeDto>> getLikesByPostId(@PathVariable String postId) {
-        log.info("Received request to get likes for post id: {}", postId);
-        LikeDto likeDto = likeService.getLikesByPostId(postId);
-        EntityModel<LikeDto> entityModel = EntityModel.of(likeDto,
-                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(LikeController.class).getLikesByPostId(postId)).withSelfRel());
-        return ResponseEntity.ok(entityModel);
-
-
-    }
-
-    @DeleteMapping("/{likeId}")
-    public ResponseEntity<Void> removeLike(@PathVariable String likeId) {
-        log.info("Received request to remove like with id: {}", likeId);
-        likeService.removeLike(likeId);
-        return ResponseEntity.noContent().build();
+	@DeleteMapping("/{likeId}")
+	@ApiResponse(description = "Remove like by like id", responseCode = "200")
+	public ResponseEntity<Boolean> removeLike(@PathVariable String likeId) {
+		log.info("Received request to remove like with id: {}", likeId);
+		boolean status = likeService.removeLike(likeId);
+		return ResponseEntity.ok(status);
 
 
-    }
+	}
 
-
-
-
+	@PutMapping("/{likeId}")
+	@ApiResponse(description = "Update like by like id", responseCode = "200")
+	public ResponseEntity<Boolean> updateLike(@PathVariable String likeId, @RequestBody LikeRequest likeRequest) {
+		log.info("Received request to update like with id: {}", likeId);
+		boolean status = likeService.updateLike(likeId, likeRequest);
+		return ResponseEntity.ok(status);
+	}
 
 
 }
