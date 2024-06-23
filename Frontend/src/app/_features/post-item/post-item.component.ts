@@ -49,12 +49,7 @@ export class PostItemComponent implements OnInit {
       this.selectedEmotion = emotion;
       this.selectedIconSrc = iconSrc;
       this.updateLike();
-    }else if(this.isLiked && this.selectedEmotion === emotion) {
-      this.selectedEmotion = Emotion.LIKE;
-      this.selectedIconSrc = this.EmotionIconMap[Emotion.LIKE];
-      this.removeLike();
-    }
-    else{
+    }else {
       this.selectedEmotion = emotion;
       this.selectedIconSrc = iconSrc;
       this.toggleLike();
