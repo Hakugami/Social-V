@@ -31,6 +31,7 @@ public class PostService {
 	private final LikeServiceClient likeServiceClient;
 	private final CommentServiceClient commentServiceClient;
 	private final KafkaTemplate<String, PostCreatedEvent> kafkaTemplate;
+	private final UserServiceClient userServiceClient;
 
 
 	public PostModel savePost(PostDto postDto) {
