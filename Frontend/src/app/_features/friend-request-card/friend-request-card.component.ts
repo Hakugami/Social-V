@@ -13,7 +13,7 @@ import { FriendRequestsService } from '../../_services/friend-request.service';
 })
 export class FriendRequestCardComponent {
   constructor(private authService:AuthService,private friendRequestService:FriendRequestsService) { }
-  
+
   @Input()
   request!: FriendRequest;
   @Output() requestHandled = new EventEmitter<string>();
@@ -36,7 +36,7 @@ deleteRequest(request: FriendRequest) {
     (data) => {
       console.log('Friend request deleted:', request.id);
       this.requestHandled.emit(request.id);
-      
+
     },
     (error) => {
       console.error('Error deleting friend request:', error);

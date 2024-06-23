@@ -38,6 +38,6 @@ export class RightNavbarComponent implements OnInit{
     }
   }
   friends!: UserModelDTO[];
-    
+
 
 }

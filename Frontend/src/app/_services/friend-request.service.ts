@@ -23,7 +23,7 @@ constructor(private http: HttpClient) {}
 
   getFriendRequests(userId: string): Observable<FriendRequest[]> {
     return this.http.get<FriendRequest[]>(`${environment.friendApiUrl}/request/${userId}`);
-    
+
   }
 
   acceptFriendRequest(requestId: string): Observable<void> {

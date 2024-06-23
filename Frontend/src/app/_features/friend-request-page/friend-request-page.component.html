@@ -10,8 +10,8 @@
                 </div>
                 <div class="card-body">
                     <ul class="request-list list-inline m-0 p-0">
-                        <app-friend-request-card 
-                          *ngFor="let friend of friendRequests" 
+                        <app-friend-request-card
+                          *ngFor="let friend of friendRequests"
                           [request]="friend"
                           (requestHandled)="onRequestHandled($event)"
                         ></app-friend-request-card>

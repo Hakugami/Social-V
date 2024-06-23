@@ -56,7 +56,7 @@ export class FriendRequestDropdownComponent implements OnInit {
           }
         );
       }
-      
+
       deleteRequest(request: FriendRequest) {
         // Implement deletion logic here
         this.friendRequestService.deleteFriendRequest(request.id).subscribe(

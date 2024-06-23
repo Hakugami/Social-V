@@ -53,6 +53,7 @@ export class AuthService {
     if (decoded.exp) {
       const expirationDate = new Date(0);
       expirationDate.setUTCSeconds(decoded.exp);
+      console.log(expirationDate);
       return expirationDate < new Date();
     }
     return false;

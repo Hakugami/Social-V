@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import {PostItemComponent} from "./_features/post-item/post-item.component";
 import {CommentItemComponent} from "./_features/comment-item/comment-item.component";
 import {ProfilePageComponent} from "./_features/profile-page/profile-page.component";
