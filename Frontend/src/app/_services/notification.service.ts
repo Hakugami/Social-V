@@ -23,14 +23,14 @@ export class NotificationService {
         console.log('subscribed to public queue');
         this.subscribeToPublicQueue();
         //this.subscribeToPrivateQueue(username);
-        this.sendNotification('/app/user.notifications', {username});
+        this.sendNotification('/app/public.notifications', {username});
       };
       this.stompClient.activate();
     }
   }
 
   subscribeToPublicQueue() {
-    this.stompClient?.subscribe('/user/public', (message: IMessage) => {
+    this.stompClient?.subscribe('/topic/public', (message: IMessage) => {
       console.log(message.body);
     });
   }

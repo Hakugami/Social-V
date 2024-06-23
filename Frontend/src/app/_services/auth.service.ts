@@ -61,8 +61,11 @@ export class AuthService {
 
   getUsername(): string {
     const token = this.getToken();
+    console.log('token inside getUserName', token);
     if (token) {
+      console.log('before decoding the jwt');
       const decoded: any = jwtDecode(token);
+      console.log('decoded username', decoded.username);
       return decoded.username;
     }
     return '';

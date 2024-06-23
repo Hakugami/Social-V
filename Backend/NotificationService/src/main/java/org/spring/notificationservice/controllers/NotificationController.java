@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @Controller
 @Slf4j
 public class NotificationController {
-    @MessageMapping("/user.notifications")
-    @SendTo("/user/public")
+    @MessageMapping("/public.notifications")
+    @SendTo("/topic/public")
     public String postCreated(@Payload String userName) throws Exception {
         log.info("User {} logged in successfully " , userName);
         return "User " + userName + " logged in successfully";
