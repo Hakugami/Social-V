@@ -6,6 +6,7 @@ import org.spring.userservice.mappers.RegisterMapper;
 import org.spring.userservice.models.Dtos.AuthModelDto;
 import org.spring.userservice.models.Dtos.RegisterDto;
 import org.spring.userservice.models.Dtos.UserModelDto;
+import org.spring.userservice.models.UserModel;
 import org.spring.userservice.repositories.UserModelRepository;
 import org.spring.userservice.utils.SecurityUtil;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -51,7 +53,7 @@ public class UserService {
 		return userModelRepository.existsByEmail(email);
 	}
 
-    public AuthModelDto getUserByEmail(String email) {
+    public Optional<UserModel> getUserByEmail(String email) {
 		return userModelRepository.findByEmail(email);
     }
 

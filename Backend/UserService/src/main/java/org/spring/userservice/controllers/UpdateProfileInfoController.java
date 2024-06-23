@@ -23,6 +23,7 @@ import java.util.Optional;
 @RequestMapping("profile/edit")
 @CrossOrigin(origins = "http://localhost:4200",methods = {RequestMethod.GET, RequestMethod.PUT},allowedHeaders = "*") // Replace with your Angular app's URL
 public class UpdateProfileInfoController {
+
     private final UserModelRepository userModelRepo;
 
     @GetMapping("{email}")
@@ -39,22 +40,15 @@ public class UpdateProfileInfoController {
     }
 
     @PutMapping
-    public ResponseEntity<Object> updateProfileInfo(@RequestBody @Valid UserModelDto comingUserModelDto) {
-        try {
-            UserModelDto existingUserDto = userModelRepo.findUserByEmail(comingUserModelDto.email());
-            if (existingUserDto == null) {
+    public ResponseEntity<Object> updateProfileInfo(@RequestBody UserModelDto comingUserModelDto) {
+         Optional<UserModel> userModel =   userModelRepo.findByEmail(comingUserModelDto.email());
+            if (userModel.isPresent()) {
+                updateUserFields(userModel.get(), comingUserModelDto);
+                userModelRepo.save(userModel.get());
+                return ResponseEntity.ok("Profile updated successfully");
+            }else{
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
             }
-
-            // Update the existing user with new data
-            UserModel updatedUser = UserModelMapper.fromDtoToModel(existingUserDto);
-            updateUserFields(updatedUser, comingUserModelDto);
-
-            userModelRepo.save(updatedUser);
-            return ResponseEntity.ok("Profile updated successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the profile");
-        }
     }
 
     private void updateUserFields(UserModel user, UserModelDto updatedDto) {

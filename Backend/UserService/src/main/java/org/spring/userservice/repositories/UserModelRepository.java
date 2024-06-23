@@ -20,11 +20,11 @@ public interface UserModelRepository extends JpaRepository<UserModel, Long> {
 
 	boolean existsByEmail(String email);
 
-	AuthModelDto findByEmail(String email);
+//	AuthModelDto findByEmail(String email);
 
 	List<UserModelDto> findByEmailIn(List<String> emails);
 
 	UserModelDto findUserByEmail(String email);
 
-
+	Optional<UserModel> findByEmail(String email);
 }

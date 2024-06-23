@@ -4,9 +4,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.spring.userservice.mappers.UserModelMapper;
 import org.spring.userservice.models.Dtos.AuthModelDto;
 import org.spring.userservice.models.Dtos.RegisterDto;
 import org.spring.userservice.models.Dtos.UserModelDto;
+import org.spring.userservice.models.UserModel;
 import org.spring.userservice.services.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -65,14 +68,14 @@ public class UserController {
 
 	@GetMapping("/auth/email/{email}")
 	@ApiResponse(description = "Get user by email", responseCode = "200")
-	public ResponseEntity<AuthModelDto> getUserByEmail(@PathVariable String email) {
+	public ResponseEntity<UserModelDto> getUserByEmail(@PathVariable String email) {
 		log.info("Received request to get user by email: {}", email);
 
-		AuthModelDto user = userService.getUserByEmail(email);
+		Optional<UserModel> userModel = userService.getUserByEmail(email);
 //		EntityModel<AuthModelDto> resource = EntityModel.of(user);
 //		WebMvcLinkBuilder linkTo = WebMvcLinkBuilder.linkTo(methodOn(this.getClass()).getUserByEmail(email));
 //		resource.add(linkTo.withRel("self"));
-		return ResponseEntity.ok(user);
+		return ResponseEntity.ok(UserModelMapper.fromModelToDto(userModel.get()));
 	}
 
 
@@ -93,9 +96,12 @@ public class UserController {
 	@GetMapping("/exists/{email}")
 	@ApiResponse(description = "check if user exists")
 	public ResponseEntity<Boolean> doesUserExist(@PathVariable String email){
-		AuthModelDto user = userService.getUserByEmail(email);
-		boolean exists = user != null;
-		return ResponseEntity.ok(exists);
+		Optional<UserModel> userModel = userService.getUserByEmail(email);
+		if(userModel.isPresent()){
+			return ResponseEntity.ok(true);
+		}else{
+			return ResponseEntity.notFound().build();
+		}
 	}
 
 	@GetMapping("/byEmail")
