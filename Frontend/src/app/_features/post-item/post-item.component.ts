@@ -121,7 +121,8 @@ export class PostItemComponent implements OnInit {
       postId: postId,
       userId: null,
       username: this.authService.getUsername(),
-      emotion: this.selectedEmotion
+      emotion: this.selectedEmotion,
+      postOwnerUsername: this.post.username
     }
     this.postService.likePost(likeRequest).subscribe({
       next: (response: any) => {

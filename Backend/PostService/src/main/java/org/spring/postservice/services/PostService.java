@@ -19,6 +19,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -32,22 +34,24 @@ public class PostService {
 	private final LikeServiceClient likeServiceClient;
 	private final CommentServiceClient commentServiceClient;
 	private final KafkaTemplate<String, Notification> kafkaTemplate;
-	private final KafkaTemplate<String, PostCreatedEvent> kafkaTemplate;
 	private final UserServiceClient userServiceClient;
 
 
 	public PostModel savePost(PostDto postDto) {
 		log.info("Saving post: {}", postDto);
 		PostModel postModel = toPostModel(postDto);
-		postModel.setCreatedAt(LocalDateTime.from(Instant.now()));
+		ZonedDateTime zdt = Instant.now().atZone(ZoneId.systemDefault());
+		LocalDateTime localDateTime = zdt.toLocalDateTime();
+		postModel.setCreatedAt(LocalDateTime.from(localDateTime));
 		postModel.setType(ContentType.TEXT);
 		postRepository.save(postModel);
 		Notification notification = Notification.builder()
+				.id(postModel.getId())
 				.senderUsername(postModel.getUsername())
-				.receiverUsername(postModel.getUsername())
 				.message("Post created")
+				.notificationType("POST")
 				.build();
-		kafkaTemplate.send("post-topic",notification);
+		kafkaTemplate.send("notifications-topic",notification);
 		return postModel;
 	}
 

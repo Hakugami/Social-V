@@ -14,9 +14,9 @@ public class NotificationService {
 
     private final SimpMessagingTemplate messagingTemplate;
 
-    @KafkaListener(topics = "post-topic", groupId = "notification-service")
+    @KafkaListener(topics = "notifications-topic", groupId = "notification-service")
     public void listen(Notification notification) {
-        messagingTemplate.convertAndSendToUser(notification.getReceiverUsername(), "/queue/messages", notification);
+        messagingTemplate.convertAndSendToUser(notification.getReceiverUsername(), "/queue/notifications", notification);
     }
 
 

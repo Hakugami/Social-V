@@ -17,7 +17,11 @@ export class NotificationDropdownComponent {
             title: 'New Friend Request',
             description: 'John Doe has sent you a friend request.',
             image: "assets/images/icon/01.png",
-            time: 'now'
+            time: 'now',
+            senderUsername: 'John Doe',
+            receiverUsername: 'Jane',
+            message: 'John Doe has sent you a friend request.',
+            notificationType: 'friend request',
         },
     ];
 number: number = this.notifications.length;

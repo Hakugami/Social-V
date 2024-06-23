@@ -4,4 +4,8 @@ export interface Notification {
     description: string;
     image: string;
     time: string;
+    senderUsername: string;
+    receiverUsername: string;
+    message: string;
+    notificationType: string;
 }

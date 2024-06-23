@@ -10,8 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Notification {
+    private String id;
     private String senderUsername;
     private String receiverUsername;
+    private String notificationType;
     private String message;
     private enum NotificationType {
         MESSAGE, FRIEND_REQUEST, LIKE, COMMENT
