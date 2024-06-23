@@ -24,7 +24,6 @@ import {LikesModel} from "../../_models/likes.model";
   styleUrl: './post-item.component.css'
 })
 export class PostItemComponent implements OnInit {
-  @ViewChild('emotionDropdown') emotionDropdown!: ElementRef;
   comments: CommentModel[] = [];
   @Input() post!: PostModel;
   commentText: string = '';
@@ -181,9 +180,9 @@ export class PostItemComponent implements OnInit {
   }
 
   closeDropdown() {
-    if (this.emotionDropdown) {
-      this.emotionDropdown.nativeElement.click(); // Close the dropdown
-    }
+    // Close the dropdown menu when the user clicks outside of it
+    document.getElementById('dropdown')?.classList.remove('show');
+
   }
 
 
