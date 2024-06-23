@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {CommentItemComponent} from "../comment-item/comment-item.component";
 import {CommentModel} from "../../_models/comment.model";
 import {CommonModule} from "@angular/common";
@@ -10,6 +10,7 @@ import {FormsModule} from "@angular/forms";
 import {Emotion} from "../../_models/_enums/Emotion";
 import {LikeRequestModel} from "../../_models/like-request.model";
 import {LikesModel} from "../../_models/likes.model";
+import {DefaultImageDirective} from "../../_directives/default-image.directive";
 
 @Component({
   selector: 'app-post-item',
@@ -18,13 +19,14 @@ import {LikesModel} from "../../_models/likes.model";
     CommentItemComponent,
     CommonModule,
     RouterLink,
-    FormsModule
+    FormsModule,
+    DefaultImageDirective
   ],
   templateUrl: './post-item.component.html',
   styleUrl: './post-item.component.css'
 })
 export class PostItemComponent implements OnInit {
-  @ViewChild('emotionDropdown') emotionDropdown!: ElementRef;
+  isPostOwner: boolean = false;
   comments: CommentModel[] = [];
   @Input() post!: PostModel;
   commentText: string = '';
@@ -43,13 +45,12 @@ export class PostItemComponent implements OnInit {
   }
 
 
-
   selectEmotion(emotion: Emotion, iconSrc: string) {
-    if(this.isLiked && !(this.selectedEmotion === emotion)){
+    if (this.isLiked && !(this.selectedEmotion === emotion)) {
       this.selectedEmotion = emotion;
       this.selectedIconSrc = iconSrc;
       this.updateLike();
-    }else {
+    } else {
       this.selectedEmotion = emotion;
       this.selectedIconSrc = iconSrc;
       this.toggleLike();
@@ -128,8 +129,10 @@ export class PostItemComponent implements OnInit {
       next: (response: any) => {
         console.log('Received response:', response);
         this.post.likes = response;
-        const likeModel : LikesModel = response;
-        this.selectedEmotion = response.likes.find((like: { username: string; }) => like.username === this.authService.getUsername())?.emotion!;
+        const likeModel: LikesModel = response;
+        this.selectedEmotion = response.likes.find((like: {
+          username: string;
+        }) => like.username === this.authService.getUsername())?.emotion!;
 
       },
       error: (error) => {
@@ -149,8 +152,8 @@ export class PostItemComponent implements OnInit {
       next: (response: any) => {
         console.log('Received response:', response);
         // Add the new comment to the post's comments list
-        const commentModel : CommentModel = response;
-        commentModel.profilePicture = this.post.profilePicture;
+        const commentModel: CommentModel = response;
+        commentModel.profilePicture = this.authService.getProfilePicUrl();
         this.post.comments.push(response);
         // Clear the comment text field
         this.commentText = '';
@@ -168,9 +171,36 @@ export class PostItemComponent implements OnInit {
     // Check if the current user's username is in the likes list
     const username = this.authService.getUsername();
     this.isLiked = this.post.likes.likes.some(like => like.username === username);
+    this.checkPostOwner();
+
+    // Create a frequency map and a last occurrence map of the emotions in the likes list
+    const emotionFrequency: { [emotion: string]: number } = {};
+    const lastOccurrence: { [emotion: string]: number } = {};
+    this.post.likes.likes.forEach((like, index) => {
+      if (emotionFrequency[like.emotion]) {
+        emotionFrequency[like.emotion]++;
+      } else {
+        emotionFrequency[like.emotion] = 1;
+      }
+      lastOccurrence[like.emotion] = index;
+    });
+
+    // Find the emotion with the highest frequency and most recent occurrence
+    let mostUsedEmotion = Emotion.LIKE;
+    let maxFrequency = 0;
+    let latestOccurrence = -1;
+    for (const emotion in emotionFrequency) {
+      if (emotionFrequency[emotion] > maxFrequency ||
+        (emotionFrequency[emotion] === maxFrequency && lastOccurrence[emotion] > latestOccurrence)) {
+        maxFrequency = emotionFrequency[emotion];
+        mostUsedEmotion = emotion as Emotion;
+        latestOccurrence = lastOccurrence[emotion];
+      }
+    }
+
+    // If the user has liked the post, set the selected emotion to the most used and most recent emotion
     if (this.isLiked) {
-      // If the user has liked the post, set the selected emotion to the one they used
-      this.selectedEmotion = this.post.likes.likes.find((like: { username: string; }) => like.username === this.authService.getUsername())?.emotion!;
+      this.selectedEmotion = mostUsedEmotion;
       this.selectedIconSrc = this.EmotionIconMap[this.selectedEmotion];
       console.log('Selected emotion:', this.selectedEmotion);
     }
@@ -181,11 +211,14 @@ export class PostItemComponent implements OnInit {
   }
 
   closeDropdown() {
-    if (this.emotionDropdown) {
-      this.emotionDropdown.nativeElement.click(); // Close the dropdown
-    }
+    // Close the dropdown menu when the user clicks outside of it
+    document.getElementById('dropdown')?.classList.remove('show');
+
   }
 
+  checkPostOwner() {
+    this.isPostOwner = this.post.username === this.authService.getUsername();
+  }
 
 
 }
