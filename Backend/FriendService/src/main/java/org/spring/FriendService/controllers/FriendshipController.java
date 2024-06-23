@@ -54,6 +54,15 @@ public class FriendshipController {
         return ResponseEntity.ok(friends);
     }
 
+    @GetMapping("/pending/{userId}")
+    @ApiResponse(description = "get all the pending friend requests of a user",responseCode = "200")
+    public ResponseEntity<List<FriendRequestDTO>> getPendingFriendRequests(@PathVariable String userId) {
+        List<FriendRequestDTO> friends = friendRequestService.getFriendRequestsByRequesterId(userId);
+        return ResponseEntity.ok(friends);
+    }
+
+
+
     @DeleteMapping("/request/{requestId}")
     @ApiResponse(description = "delete a friend request",responseCode = "200")
     public ResponseEntity<Void> deleteFriendRequest(@PathVariable String requestId) {

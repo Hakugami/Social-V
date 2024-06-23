@@ -4,13 +4,14 @@ import { FriendRequest } from '../../_models/friend-request.model';
 import { FriendRequestCardComponent } from "../friend-request-card/friend-request-card.component";
 import { NgFor } from '@angular/common';
 import { AuthService } from '../../_services/auth.service';
+import { PeopleYouMayKnowComponent } from "../people-you-might-know/people-you-might-know.component";
 
 @Component({
     selector: 'app-friend-request-page',
     standalone: true,
     templateUrl: './friend-request-page.component.html',
     styleUrl: './friend-request-page.component.css',
-    imports: [FriendRequestCardComponent, NgFor]
+    imports: [FriendRequestCardComponent, NgFor, PeopleYouMayKnowComponent]
 })
 export class FriendRequestPageComponent implements OnInit {
     friendRequests: FriendRequest[] = [];
@@ -68,15 +69,15 @@ export class FriendRequestPageComponent implements OnInit {
         );
     }
 
-    deleteRequest(request: FriendRequest) {
-        // Implement deletion logic here
-        // You'll need to add a method in your service to handle this
-        console.log('Delete request:', request);
-    }
 
     loadMoreRequests() {
         if (this.hasMoreRequests) {
             this.loadFriendRequests(true);
         }
     }
+
+    onRequestHandled(requestId: string) {
+        console.log('Request handled: delete the card ', requestId);
+        this.friendRequests = this.friendRequests.filter(request => request.id !== requestId);
+      }
 }

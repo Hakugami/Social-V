@@ -10,6 +10,9 @@ import {environment} from '../../environments/environment';
 providedIn: 'root'
 })
 export class FriendRequestsService {
+  deleteFriendRequest(id: string) :Observable<void> {
+    return this.http.delete<void>(`${environment.friendApiUrl}/request/${id}`);
+  }
 
 
 constructor(private http: HttpClient) {}
@@ -19,13 +22,12 @@ constructor(private http: HttpClient) {}
   }
 
   getFriendRequests(userId: string): Observable<FriendRequest[]> {
-    // return this.http.get<FriendRequest[]>(`${environment.friendApiUrl}/request/${userId}`);
-    return new Observable<FriendRequest[]>();
+    return this.http.get<FriendRequest[]>(`${environment.friendApiUrl}/request/${userId}`);
+    
   }
 
   acceptFriendRequest(requestId: string): Observable<void> {
-    // return this.http.post<void>(`${environment.friendApiUrl}/accept`, null, { params: { requestId } });
-    return new Observable<void>();
+    return this.http.post<void>(`${environment.friendApiUrl}/accept`, null, { params: { requestId } });
   }
 
   getFriends(userId: string, page: number = 0, size: number = 10): Observable<UserModelDTO[]> {
@@ -33,4 +35,9 @@ constructor(private http: HttpClient) {}
       params: { page: page.toString(), size: size.toString() }
     });
   }
+
+  getPendingFriendRequests(userId: string): Observable<FriendRequestDTO[]> {
+    return this.http.get<FriendRequestDTO[]>(`${environment.friendApiUrl}/pending/${userId}`);
+  }
+
 }

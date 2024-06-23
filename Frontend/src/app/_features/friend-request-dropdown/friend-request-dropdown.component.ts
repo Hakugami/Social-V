@@ -59,10 +59,17 @@ export class FriendRequestDropdownComponent implements OnInit {
       
       deleteRequest(request: FriendRequest) {
         // Implement deletion logic here
-        // You'll need to add a method in your service to handle this
+        this.friendRequestService.deleteFriendRequest(request.id).subscribe(
+            () => {
+                this.friendRequests = this.friendRequests.filter(r => r.id !== request.id);
+                this.number = this.friendRequests.length;
+                console.log('Friend request deleted:', request);
+            },
+            (error) => {
+                console.error('Error deleting friend request:', error);
+            }
+            );
         console.log('Delete request:', request);
-        // After successful deletion:
-        // this.friendRequests = this.friendRequests.filter(r => r.id !== request.id);
-        // this.number = this.friendRequests.length;
+
       }
 }

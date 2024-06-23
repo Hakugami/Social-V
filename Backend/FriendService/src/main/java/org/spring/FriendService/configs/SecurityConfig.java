@@ -26,7 +26,6 @@ public class SecurityConfig {
 	}
 
 	private static void configureUrlBasedCors(HttpSecurity http) throws Exception {
-		//TODO: Remember to change the port number!!
 		http.cors(c -> {
 			UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 			CorsConfiguration config = new CorsConfiguration();
@@ -35,7 +34,7 @@ public class SecurityConfig {
 			config.addAllowedHeader("*");
 			config.addAllowedMethod("*");
 			source.registerCorsConfiguration("/**", config);
-			c.configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
+			c.configurationSource(source); // Use the source we just configured
 		});
 	}
 
