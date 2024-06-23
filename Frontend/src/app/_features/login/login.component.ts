@@ -28,9 +28,11 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if (this.loginForm.valid) {
+      console.log(`email : ${this.loginForm.get('email')?.value}`);
+      console.log(`password : ${this.loginForm.get('password')?.value}`);
       const loginModel: LoginModel = {
         email: this.loginForm.get('email')?.value,
-        password: this.loginForm.get('password')?.value
+        password: this.loginForm.get('password')?.value // Corrected typo here
       };
       this.authService.login(loginModel).subscribe(response => {
         console.log(response);

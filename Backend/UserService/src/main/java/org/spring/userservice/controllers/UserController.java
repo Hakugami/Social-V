@@ -15,6 +15,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,14 +69,14 @@ public class UserController {
 
 	@GetMapping("/auth/email/{email}")
 	@ApiResponse(description = "Get user by email", responseCode = "200")
-	public ResponseEntity<UserModelDto> getUserByEmail(@PathVariable String email) {
+	public ResponseEntity<AuthModelDto> getUserByEmail(@PathVariable String email) {
 		log.info("Received request to get user by email: {}", email);
 
-		Optional<UserModel> userModel = userService.getUserByEmail(email);
+		AuthModelDto authModelDto = userService.getUserByEmail(email);
 //		EntityModel<AuthModelDto> resource = EntityModel.of(user);
 //		WebMvcLinkBuilder linkTo = WebMvcLinkBuilder.linkTo(methodOn(this.getClass()).getUserByEmail(email));
 //		resource.add(linkTo.withRel("self"));
-		return ResponseEntity.ok(UserModelMapper.fromModelToDto(userModel.get()));
+		return ResponseEntity.ok(authModelDto);
 	}
 
 
@@ -96,12 +97,11 @@ public class UserController {
 	@GetMapping("/exists/{email}")
 	@ApiResponse(description = "check if user exists")
 	public ResponseEntity<Boolean> doesUserExist(@PathVariable String email){
-		Optional<UserModel> userModel = userService.getUserByEmail(email);
-		if(userModel.isPresent()){
+		AuthModelDto userModel = userService.getUserByEmail(email);
+		if(userModel!=null)
 			return ResponseEntity.ok(true);
-		}else{
-			return ResponseEntity.notFound().build();
-		}
+			else
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
 	}
 
 	@GetMapping("/byEmail")
@@ -113,8 +113,8 @@ public class UserController {
 
 	@GetMapping("/byEmail/{email}")
 	@ApiResponse(description = "Get user by email", responseCode = "200")
-	public ResponseEntity<UserModelDto> getUserDataByEmail(@PathVariable String email) {
-		UserModelDto user = userService.getByEmail(email);
+	public ResponseEntity<AuthModelDto> getUserDataByEmail(@PathVariable String email) {
+		AuthModelDto user = userService.getByEmail(email);
 		return ResponseEntity.ok(user);
 	}
 

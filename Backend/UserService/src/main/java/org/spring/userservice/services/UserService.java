@@ -53,13 +53,13 @@ public class UserService {
 		return userModelRepository.existsByEmail(email);
 	}
 
-    public Optional<UserModel> getUserByEmail(String email) {
+    public AuthModelDto getUserByEmail(String email) {
 		return userModelRepository.findByEmail(email);
     }
 
 	public List<UserModelDto> getUsersByEmails(List<String> emails) { return userModelRepository.findByEmailIn(emails); }
 
-	public UserModelDto getByEmail(String email) {
-		return userModelRepository.findUserByEmail(email);
+	public AuthModelDto getByEmail(String email) {
+		return userModelRepository.findByEmail(email);
 	}
 }

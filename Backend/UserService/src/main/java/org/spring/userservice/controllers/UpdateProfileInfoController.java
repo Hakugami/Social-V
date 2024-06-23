@@ -21,29 +21,23 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("profile/edit")
-@CrossOrigin(origins = "http://localhost:4200",methods = {RequestMethod.GET, RequestMethod.PUT},allowedHeaders = "*") // Replace with your Angular app's URL
+//@CrossOrigin(origins = "http://localhost:4200",methods = {RequestMethod.GET, RequestMethod.PUT},allowedHeaders = "*") // Replace with your Angular app's URL
 public class UpdateProfileInfoController {
 
     private final UserModelRepository userModelRepo;
 
     @GetMapping("{email}")
     public ResponseEntity<Object> getUserData(@PathVariable String email) {
-        try {
-            UserModelDto userModelDto = userModelRepo.findUserByEmail(email);
-            if (userModelDto == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There is no user with this email");
-            }
-            return ResponseEntity.ok(userModelDto);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while fetching user data");
-        }
+            Optional<UserModelDto> userModelDto = userModelRepo.findUserModelDtoByEmail(email);
+            if (userModelDto.isPresent()) return ResponseEntity.ok(userModelDto.get());
+            else return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There is no user with this email");
     }
 
     @PutMapping
     public ResponseEntity<Object> updateProfileInfo(@RequestBody UserModelDto comingUserModelDto) {
-         Optional<UserModel> userModel =   userModelRepo.findByEmail(comingUserModelDto.email());
+         Optional<UserModel> userModel =   userModelRepo.findUserModelByEmail(comingUserModelDto.email());
             if (userModel.isPresent()) {
-                updateUserFields(userModel.get(), comingUserModelDto);
+                updateUserModelFields(userModel.get(), comingUserModelDto);
                 userModelRepo.save(userModel.get());
                 return ResponseEntity.ok("Profile updated successfully");
             }else{
@@ -51,7 +45,7 @@ public class UpdateProfileInfoController {
             }
     }
 
-    private void updateUserFields(UserModel user, UserModelDto updatedDto) {
+    private void updateUserModelFields(UserModel user, UserModelDto updatedDto) {
         if (updatedDto.username() != null) user.setUsername(updatedDto.username());
         if (updatedDto.email() != null) user.setEmail(updatedDto.email());
         if (updatedDto.status() != null) user.setStatus(updatedDto.status());
