@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {Observable, tap} from "rxjs";
 import  {jwtDecode} from 'jwt-decode';
 import {NotificationService} from "./notification.service";
 @Injectable({
@@ -15,13 +15,18 @@ export class AuthService {
   constructor(private notificationService: NotificationService,private http: HttpClient) { }
 
   register(user: any): Observable<any> {
-    return this.http.post(`${this.authBaseUrl}/register`, user);
+    return this.http.post(`${this.userApiUrl}/register`, user);
   }
 
   login(credentials: any): Observable<any> {
-    this.notificationService.subscribeToUserQueue(this.getUsername());
-    return this.http.post(`${this.authBaseUrl}/login`, credentials);
-
+    return this.http.post(`${this.authBaseUrl}/login`, credentials).pipe(
+      tap(() => {
+        console.log('logged in in tab');
+        this.notificationService.subscribeToUserQueue(this.getUsername());
+        //this.notificationService.subscribeToPublicQueue();
+        //this.notificationService.sendNotification('/app/user.notifications', {username: this.getUsername()});
+      })
+    );
   }
   checkFullName(fullName: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.userApiUrl}/checkFullName`, { params: { fullName } });
