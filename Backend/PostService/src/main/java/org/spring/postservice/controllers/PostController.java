@@ -215,4 +215,18 @@ public class PostController {
 		return ResponseEntity.ok(postDto);
 	}
 
+	@PutMapping("/{id}")
+	@ApiResponse(description = "Update post by id", responseCode = "200")
+	public ResponseEntity<PostModel> updatePost(@PathVariable("id") String id, @RequestBody PostDto postDto) {
+		PostModel postModel = postService.updatePost(id, postDto);
+		return ResponseEntity.ok(postModel);
+	}
+
+	@DeleteMapping("/{id}")
+	@ApiResponse(description = "Delete post by id", responseCode = "204")
+	public ResponseEntity<Void> deletePost(@PathVariable("id") String id) {
+		postService.deletePost(id);
+		return ResponseEntity.noContent().build();
+	}
+
 }
