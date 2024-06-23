@@ -26,14 +26,13 @@ export class NotificationService {
 
   subscribeToPublicQueue() {
     this.stompClient?.subscribe('/topic/public', (message: IMessage) => {
-
+      console.log('received from public queue' + message.body);
     });
   }
 
   subscribeToPrivateQueue(username: string) {
-    console.log(username);
     this.stompClient?.subscribe(`/user/${username}/queue/messages`, (message: IMessage) => {
-      console.log(message.body);
+      console.log('received from private queue' + message.body);
     });
   }
 
