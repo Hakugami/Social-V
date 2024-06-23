@@ -35,4 +35,10 @@ public interface UserModelRepository extends JpaRepository<UserModel, Long> {
 
 	@Query("select u from UserModel u where u.email=:email")
 	Optional<UserModelDto> findUserModelDtoByEmail(@Param("email") String email);
+
+	UserModelDto findUserByEmail(String email);
+
+	UserModelDto getByUsername(String username);
+
+	PictureDto findProfilePictureByUsername(String username);
 }
