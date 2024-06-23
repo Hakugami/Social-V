@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -24,8 +26,17 @@ public class SecurityConfig {
 	}
 
 	private static void configureUrlBasedCors(HttpSecurity http) throws Exception {
+		//TODO: Remember to change the port number!!
 		http.cors(c -> {
-		}); // Disable CORS
+			UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+			CorsConfiguration config = new CorsConfiguration();
+			config.setAllowCredentials(true);
+			config.addAllowedOrigin("http://localhost:3000"); // Angular app url
+			config.addAllowedHeader("*");
+			config.addAllowedMethod("*");
+			source.registerCorsConfiguration("/**", config);
+			c.configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
+		});
 	}
 
 	private static void configurePermits(HttpSecurity http) throws Exception {

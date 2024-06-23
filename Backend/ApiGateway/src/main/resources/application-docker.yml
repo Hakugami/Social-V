@@ -1,0 +1,13 @@
+server:
+  port:
+    8082
+
+eureka:
+  client:
+    service-url:
+        defaultZone: http://service-discovery:8761/eureka
+
+
+app:
+  eureka-server:
+    service-discovery

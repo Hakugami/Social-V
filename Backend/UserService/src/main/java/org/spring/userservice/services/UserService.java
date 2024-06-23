@@ -35,13 +35,29 @@ public class UserService {
 		}
 	}
 
-
 	public Page<UserModelDto> getAllUsers(int page, int size) {
-		return userModelRepository.findAllBy(PageRequest.of(page, size));
-
+		return null;
 	}
 
 	public AuthModelDto getUserByUsername(String username) {
 		return userModelRepository.findByUsername(username);
+	}
+
+    public boolean isFullNameTaken(String fullName) {
+		return userModelRepository.existsByUsername(fullName);
+    }
+
+	public boolean isEmailTaken(String email) {
+		return userModelRepository.existsByEmail(email);
+	}
+
+    public AuthModelDto getUserByEmail(String email) {
+		return userModelRepository.findByEmail(email);
+    }
+
+	public List<UserModelDto> getUsersByEmails(List<String> emails) { return userModelRepository.findByEmailIn(emails); }
+
+	public UserModelDto getByEmail(String email) {
+		return userModelRepository.findUserByEmail(email);
 	}
 }
