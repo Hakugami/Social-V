@@ -1,10 +1,13 @@
 import {Component, Input} from '@angular/core';
 import {CommentModel} from '../../_models/comment.model';
+import {DefaultImageDirective} from "../../_directives/default-image.directive";
 
 @Component({
   selector: 'app-comment-item',
   standalone: true,
-  imports: [],
+  imports: [
+    DefaultImageDirective
+  ],
   templateUrl: './comment-item.component.html',
   styleUrl: './comment-item.component.css'
 })

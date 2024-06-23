@@ -2,7 +2,7 @@
   <div class="user-post-data py-3">
     <div class="d-flex  justify-content-between">
       <div class="me-3">
-        <img [src]="post.profilePicture" alt="" class="rounded-circle  avatar-60">
+        <img [src]="post.profilePicture" alt="" defaultImage="assets/images/user/11.jpg" class="rounded-circle  avatar-60">
       </div>
       <div class="w-100">
         <div class="d-flex justify-content-between">
@@ -12,7 +12,7 @@
             <p class="mb-0 d-inline-block"> has posted</p>
             <p class="mb-0">{{ post.createdAt }}</p>
           </div>
-          <div class="card-post-toolbar">
+          <div class="card-post-toolbar" *ngIf="isPostOwner">
             <div class="dropdown">
                                                    <span aria-expanded="false" aria-haspopup="true"
                                                          class="dropdown-toggle" data-bs-toggle="dropdown"
@@ -20,16 +20,7 @@
                                                          role="button">
                                                    <i class="ri-more-fill"></i>
                                                    </span>
-              <div class="dropdown-menu m-0 p-0">
-                <a class="dropdown-item p-3" href="#">
-                  <div class="d-flex align-items-top">
-                    <i class="ri-save-line h4"></i>
-                    <div class="data ms-2">
-                      <h6>Save Post</h6>
-                      <p class="mb-0">Add this to your saved items</p>
-                    </div>
-                  </div>
-                </a>
+              <div class="dropdown-menu m-0 p-0" >
                 <a class="dropdown-item p-3" href="#">
                   <div class="d-flex align-items-top">
                     <i class="ri-pencil-line h4"></i>
@@ -41,31 +32,14 @@
                 </a>
                 <a class="dropdown-item p-3" href="#">
                   <div class="d-flex align-items-top">
-                    <i class="ri-close-circle-line h4"></i>
-                    <div class="data ms-2">
-                      <h6>Hide From Timeline</h6>
-                      <p class="mb-0">See fewer posts like this.</p>
-                    </div>
-                  </div>
-                </a>
-                <a class="dropdown-item p-3" href="#">
-                  <div class="d-flex align-items-top">
                     <i class="ri-delete-bin-7-line h4"></i>
                     <div class="data ms-2">
                       <h6>Delete</h6>
-                      <p class="mb-0">Remove thids Post on Timeline</p>
+                      <p class="mb-0">Remove this Post on Timeline</p>
                     </div>
                   </div>
                 </a>
-                <a class="dropdown-item p-3" href="#">
-                  <div class="d-flex align-items-top">
-                    <i class="ri-notification-line h4"></i>
-                    <div class="data ms-2">
-                      <h6>Notifications</h6>
-                      <p class="mb-0">Turn on notifications for this post</p>
-                    </div>
-                  </div>
-                </a>
+
               </div>
             </div>
           </div>
@@ -203,9 +177,7 @@
       <input [(ngModel)]="commentText" name="commentText" class="form-control rounded" placeholder="Enter Your Comment"
              type="text">
       <div class="comment-attagement d-flex">
-        <a href="#"><i class="ri-link me-3"></i></a>
         <a href="#"><i class="ri-user-smile-line me-3"></i></a>
-        <a href="#"><i class="ri-camera-line me-3"></i></a>
       </div>
     </form>
   </div>
