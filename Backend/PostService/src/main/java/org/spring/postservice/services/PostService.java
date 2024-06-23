@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.spring.postservice.clients.CommentServiceClient;
 import org.spring.postservice.clients.LikeServiceClient;
+import org.spring.postservice.events.Notification;
 import org.spring.postservice.events.PostCreatedEvent;
 import org.spring.postservice.models.Dtos.ImagePostDto;
 import org.spring.postservice.models.Dtos.PostDto;
@@ -27,14 +28,19 @@ public class PostService {
 	private final UploadService uploadClient;
 	private final LikeServiceClient likeServiceClient;
 	private final CommentServiceClient commentServiceClient;
-	private final KafkaTemplate<String, String> kafkaTemplate;
+	private final KafkaTemplate<String, Notification> kafkaTemplate;
 
 
 	public PostModel savePost(PostDto postDto) {
 		log.info("Saving post: {}", postDto);
 		PostModel postModel = toPostModel(postDto);
 		postRepository.save(postModel);
-		kafkaTemplate.send("post-topic", postModel.getUsername());
+		Notification notification = Notification.builder()
+				.senderUsername(postModel.getUsername())
+				.receiverUsername(postModel.getUsername())
+				.message("Post created")
+				.build();
+		kafkaTemplate.send("post-topic",notification);
 		return postModel;
 	}
 

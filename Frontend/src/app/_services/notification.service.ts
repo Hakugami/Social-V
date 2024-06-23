@@ -31,6 +31,7 @@ export class NotificationService {
   }
 
   subscribeToPrivateQueue(username: string) {
+    console.log(username);
     this.stompClient?.subscribe(`/user/${username}/queue/messages`, (message: IMessage) => {
       console.log('received from private queue' + message.body);
     });

@@ -2,10 +2,12 @@ package org.spring.likeservice.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.spring.likeservice.events.Notification;
 import org.spring.likeservice.mappers.LikeMapper;
 import org.spring.likeservice.models.Dtos.LikeDto;
 import org.spring.likeservice.models.LikeModel;
 import org.spring.likeservice.repositories.LikeRepository;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 public class LikeService {
     private final LikeRepository likeRepository;
     private final LikeMapper likeMapper;
+    private final KafkaTemplate<String, Notification> kafkaTemplate;
 
     public LikeDto addLike(String userId, String postId) {
         LikeModel likeModel = new LikeModel();
@@ -24,6 +27,7 @@ public class LikeService {
         likeModel.setPostId(postId);
         log.info("Adding like: {}", likeModel);
         likeRepository.save(likeModel);
+
         return getAggregatedLikes(postId);
     }
 
