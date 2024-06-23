@@ -21,6 +21,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("profile/edit")
+@CrossOrigin(origins = "http://localhost:4200")
 //@CrossOrigin(origins = "http://localhost:4200",methods = {RequestMethod.GET, RequestMethod.PUT},allowedHeaders = "*") // Replace with your Angular app's URL
 public class UpdateProfileInfoController {
 
@@ -28,38 +29,24 @@ public class UpdateProfileInfoController {
 
     @GetMapping("{email}")
     public ResponseEntity<Object> getUserData(@PathVariable String email) {
-            Optional<UserModelDto> userModelDto = userModelRepo.findUserModelDtoByEmail(email);
-            if (userModelDto.isPresent()) return ResponseEntity.ok(userModelDto.get());
-            else return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There is no user with this email");
+        try{
+           UserModel userModel = userModelRepo.findUserModelByEmail(email);
+           UserModelDto userModelDto = UserModelMapper.fromModelToDto(userModel);
+            return ResponseEntity.ok(userModelDto);
+        } catch (Exception e){
+              return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There is no user with this email");
+          }
     }
 
     @PutMapping
     public ResponseEntity<Object> updateProfileInfo(@RequestBody UserModelDto comingUserModelDto) {
-         Optional<UserModel> userModel =   userModelRepo.findUserModelByEmail(comingUserModelDto.email());
-            if (userModel.isPresent()) {
-                updateUserModelFields(userModel.get(), comingUserModelDto);
-                userModelRepo.save(userModel.get());
+          try {
+         UserModel userModel =   userModelRepo.findUserModelByEmail(comingUserModelDto.email());
+                userModelRepo.save(userModel);
                 return ResponseEntity.ok("Profile updated successfully");
-            }else{
+            }catch (Exception e){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
             }
-    }
-
-    private void updateUserModelFields(UserModel user, UserModelDto updatedDto) {
-        if (updatedDto.username() != null) user.setUsername(updatedDto.username());
-        if (updatedDto.email() != null) user.setEmail(updatedDto.email());
-        if (updatedDto.status() != null) user.setStatus(updatedDto.status());
-        if (updatedDto.firstName() != null) user.setFirstName(updatedDto.firstName());
-        if (updatedDto.lastName() != null) user.setLastName(updatedDto.lastName());
-        if (updatedDto.address() != null) user.setAddress(updatedDto.address());
-        if (updatedDto.gender() != null) user.setGender(updatedDto.gender());
-        if (updatedDto.country() != null) user.setCountry(updatedDto.country());
-        if (updatedDto.city() != null) user.setCity(updatedDto.city());
-        if (updatedDto.birthDate() != null) user.setBirthDate(updatedDto.birthDate());
-        if (updatedDto.phoneNumber() != null) user.setPhoneNumber(updatedDto.phoneNumber());
-        if (updatedDto.profilePicture() != null) user.setProfilePicture(updatedDto.profilePicture());
-        if (updatedDto.coverPicture() != null) user.setCoverPicture(updatedDto.coverPicture());
-        if (updatedDto.url() != null) user.setUrl(updatedDto.url());
     }
 
     @Autowired

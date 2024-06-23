@@ -1,9 +1,11 @@
+// profile-personal-info.component.ts
+
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { UserModel } from '../../_models/usermodel.model';
+import {HttpClient, HttpClientModule, HttpHeaders} from '@angular/common/http';
 import { AuthService } from '../../_services/auth.service';
+import {UserModel,Gender,Status} from "../../_models/usermodel.model";
 
 @Component({
   selector: 'app-profile-personal-info',
@@ -33,7 +35,7 @@ export class ProfilePersonalInfoComponent implements OnInit {
   fetchAdditionalUserData(email: string) {
     this.http.get<UserModel>(`http://localhost:8081/profile/edit/${email}`).subscribe({
       next: (data) => {
-        this.userData = {...this.userData,...data };
+        this.userData = {...this.userData, ...data};
         console.log("Data Binded to UI");
         // Manually trigger change detection
         this.cdr.detectChanges();
@@ -49,7 +51,7 @@ export class ProfilePersonalInfoComponent implements OnInit {
     const updatedUserData = {...this.userData}; // Make a copy of userData to avoid direct mutation
 
     // Make the PUT request to update the profile info
-    this.http.put(`http://localhost:8081/profile/edit`, updatedUserData).subscribe({
+    this.http.put(`http://localhost:8081/profile/edit`, updatedUserData,).subscribe({
       next: (response) => {
         console.log(response);
         // Handle successful update (e.g., show success message)
