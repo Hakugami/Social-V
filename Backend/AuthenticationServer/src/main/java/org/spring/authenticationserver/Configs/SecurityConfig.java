@@ -5,6 +5,7 @@ import org.spring.authenticationserver.filters.JwtRequestFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
@@ -36,19 +38,19 @@ public class SecurityConfig {
 		);
 	}
 
-	private static void configureUrlBasedCors(HttpSecurity http) throws Exception {
-		//TODO: Remember to change the port number!!
-		http.cors(c -> {
-			UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-			CorsConfiguration config = new CorsConfiguration();
-			config.setAllowCredentials(true);
-			config.addAllowedOrigin("http://localhost:4200"); // Angular app url
-			config.addAllowedHeader("*");
-			config.addAllowedMethod("*");
-			source.registerCorsConfiguration("/**", config);
-			c.configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
-		});
-	}
+//	private static void configureUrlBasedCors(HttpSecurity http) throws Exception {
+//		//TODO: Remember to change the port number!!
+//		http.cors(c -> {
+//			UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//			CorsConfiguration config = new CorsConfiguration();
+//			config.setAllowCredentials(true);
+//			config.addAllowedOrigin("http://localhost:4200"); // Angular app url
+//			config.addAllowedHeader("*");
+//			config.addAllowedMethod("*");
+//			source.registerCorsConfiguration("/**", config);
+//			c.configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
+//		});
+//	}
 
 	private static void configurePermits(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests(authorizeRequests ->
@@ -62,8 +64,8 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		configurePermits(http);
 		configureCsrf(http);
-		configureUrlBasedCors(http);
 		configureSessionManagement(http);
+		http.cors(Customizer.withDefaults());
 
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 

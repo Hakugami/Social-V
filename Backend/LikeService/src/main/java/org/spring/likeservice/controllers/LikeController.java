@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/likes")
 @Slf4j
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class LikeController {
 
 	private final LikeService likeService;

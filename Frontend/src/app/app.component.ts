@@ -5,18 +5,14 @@ import {CommentItemComponent} from "./_features/comment-item/comment-item.compon
 import {ProfilePageComponent} from "./_features/profile-page/profile-page.component";
 import {TopNavbarComponent} from "./_features/top-navbar/top-navbar.component";
 import {RightNavbarComponent} from "./_features/right-navbar/right-navbar.component";
-import {HTTP_INTERCEPTORS} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./_interceptors/auth.interceptor";
 import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, PostItemComponent, CommentItemComponent, ProfilePageComponent, TopNavbarComponent, RightNavbarComponent, NgIf],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-
-  ],
+  imports: [RouterOutlet, PostItemComponent, CommentItemComponent, ProfilePageComponent, TopNavbarComponent, RightNavbarComponent, NgIf,HttpClientModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
