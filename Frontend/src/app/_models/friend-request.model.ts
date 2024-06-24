@@ -1,6 +1,8 @@
 export interface FriendRequest {
     id: string;
-    name: string;
+    firstname: string;
+    lastname: string;
     image: string;
+    username: string;
     friendCount: number;
 }
