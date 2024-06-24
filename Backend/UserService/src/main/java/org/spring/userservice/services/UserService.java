@@ -126,4 +126,10 @@ public class UserService {
 
 		return currentUserModel;
 	}
+
+	public UserModel updateProfileInfo(UserModelDto comingUserModelDto) {
+		UserModel userModel = userModelRepository.findUserModelByEmail(comingUserModelDto.email());
+		userModel = updateCurrentUserModel(comingUserModelDto, userModel);
+		return userModelRepository.save(userModel);
+	}
 }

@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FriendRequestDTO } from '../_models/request-dto.model';
 import { FriendRequest } from '../_models/friend-request.model';
-import { UserModelDTO } from '../_models/userdto.model';
 import {GatewayEnvironment} from "../../environments/gateway.environment";
+import {UserModelDTO} from "../_models/usermodel.model";
 
 
 @Injectable({
@@ -13,7 +13,7 @@ providedIn: 'root'
 export class FriendRequestsService {
 
   removeFriend(currentUser: string, email: string) {
-    return this.http.delete<void>(`${environment.friendApiUrl}/${currentUser}?friendId=${email}`);
+    return this.http.delete<void>(`${GatewayEnvironment.friendApiUrl}/${currentUser}?friendId=${email}`);
   }
   deleteFriendRequest(id: string) :Observable<void> {
     return this.http.delete<void>(`${GatewayEnvironment.friendApiUrl}/request/${id}`);
