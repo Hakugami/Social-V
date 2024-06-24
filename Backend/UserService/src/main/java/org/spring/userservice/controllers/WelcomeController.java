@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/")
 @Slf4j
-@CrossOrigin(origins = "*")
 public class WelcomeController {
 
 	@RequestMapping("/")

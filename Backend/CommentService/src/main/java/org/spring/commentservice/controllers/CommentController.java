@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/comments")
 @Slf4j
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+
 public class CommentController {
 
 	private final CommentService commentService;
