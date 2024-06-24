@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { UserModelDTO } from '../_models/userdto.model';
+import { UserModelDTO } from '../_models/usermodel.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({

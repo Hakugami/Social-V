@@ -1,10 +1,11 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { UserModelDTO } from '../../_models/userdto.model';
+
 import { FriendRequestsService } from '../../_services/friend-request.service';
 import { AuthService } from '../../_services/auth.service';
 import { FriendRequestDTO } from '../../_models/request-dto.model';
 import { DefaultImageDirective } from '../../_directives/default-image.directive';
 import { CommonModule, NgIf } from '@angular/common';
+import { UserModelDTO } from '../../_models/usermodel.model';
 
 @Component({
   selector: 'app-person-card',

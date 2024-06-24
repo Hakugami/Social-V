@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { UserModelDTO } from '../../_models/userdto.model';
+
 import { PersonCardComponent } from "../person-card/person-card.component";
 import { NgFor } from '@angular/common';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SearchStateService } from '../../_services/search-state.service';
+import { UserModelDTO } from '../../_models/usermodel.model';
 
 @Component({
   selector: 'app-search-results',

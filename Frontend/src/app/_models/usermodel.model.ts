@@ -1,17 +1,7 @@
-// Gender enum
-export enum Gender {
-  MALE = 'MALE',
-  FEMALE = 'FEMALE'
-}
+import { Gender } from "./_enums/Gender.model";
+import { Status } from "./_enums/Status.model";
 
-// Status enum
-export enum Status {
-  SINGLE = 'SINGLE',
-  MARRIED = 'MARRIED',
-  DIVORCED = 'DIVORCED',
-  WIDOWED = 'WIDOWED',
-  SEPARATED = 'SEPARATED'
-}
+
 
 // UserModelDto interface
 export interface UserModelDTO {

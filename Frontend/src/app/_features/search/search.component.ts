@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { UserSearchService } from '../../_services/search.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UserModelDTO } from '../../_models/userdto.model';
 import { SearchResultsComponent } from '../search-results/search-results.component';
 import { Router } from '@angular/router';
 import { SearchStateService } from '../../_services/search-state.service';
+import { UserModelDTO } from '../../_models/usermodel.model';
 
 @Component({
   selector: 'app-user-search',
