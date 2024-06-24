@@ -26,4 +26,5 @@ public class RegisterDto implements Serializable {
 	String password;
 	@Email
 	String email;
+
 }

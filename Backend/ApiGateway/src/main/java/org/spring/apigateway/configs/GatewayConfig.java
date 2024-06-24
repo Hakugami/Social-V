@@ -3,6 +3,7 @@ package org.spring.apigateway.configs;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.spring.apigateway.filters.JwtValidationFilter;
 import org.springframework.cloud.gateway.server.mvc.handler.GatewayRouterFunctions;
 import org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions;
@@ -16,6 +17,7 @@ import static org.springframework.cloud.gateway.server.mvc.filter.BeforeFilterFu
 import static org.springframework.cloud.gateway.server.mvc.filter.LoadBalancerFilterFunctions.lb;
 
 
+@Slf4j
 @Configuration
 @RequiredArgsConstructor
 public class GatewayConfig {
@@ -27,7 +29,6 @@ public class GatewayConfig {
 		return GatewayRouterFunctions.route("user-service")
 				.route(RequestPredicates.path("/users/**"), HandlerFunctions.http())
 				.before(rewritePath("/users/(?<segment>.*)", "/${segment}"))
-				.before(jwtValidationFilter) // remove this filter if you don't want to validate JWT
 				.filter(lb("user-service"))
 				.build();
 	}
