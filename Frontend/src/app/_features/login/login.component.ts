@@ -7,6 +7,7 @@ import {RegisterDTO} from "../../_models/register.model";
 import {LoginModel} from "../../_models/login.model";
 import {AuthService} from "../../_services/auth.service";
 import {NotificationService} from "../../_services/notification.service";
+import {PublicUserModel} from "../../shared/PublicUserModel";
 
 @Component({
   selector: 'app-login',
@@ -34,6 +35,9 @@ export class LoginComponent implements OnInit {
         password: this.loginForm.get('password')?.value
       };
       this.authService.login(loginModel).subscribe(response => {
+        // this email field must be assigned to display all user data all over the application
+        // like user image , user name , etc ....
+        PublicUserModel.email = this.loginForm.get('email')?.value;
         this.authService.handleLoginResponse(response);
         this.router.navigate(['home']);
       }, error => {

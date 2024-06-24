@@ -3,8 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FriendRequestDTO } from '../_models/request-dto.model';
 import { FriendRequest } from '../_models/friend-request.model';
-import { UserModelDTO } from '../_models/userdto.model';
+
 import {environment} from '../../environments/environment';
+import {UserModelDTO} from "../_models/usermodel.model";
 
 @Injectable({
 providedIn: 'root'
@@ -23,7 +24,7 @@ constructor(private http: HttpClient) {}
 
   getFriendRequests(userId: string): Observable<FriendRequest[]> {
     return this.http.get<FriendRequest[]>(`${environment.friendApiUrl}/request/${userId}`);
-    
+
   }
 
   acceptFriendRequest(requestId: string): Observable<void> {

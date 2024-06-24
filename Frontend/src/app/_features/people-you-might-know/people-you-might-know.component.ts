@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { RecommendationService } from '../../_services/recommendation.service';
-import { UserModelDTO } from '../../_models/userdto.model';
+
 import { FriendRequestsService } from '../../_services/friend-request.service';
 import { AuthService } from '../../_services/auth.service';
 import { NgFor, NgIf } from '@angular/common';
 import { PersonCardComponent } from '../person-card/person-card.component';
+import {UserModelDTO} from "../../_models/usermodel.model";
 
 @Component({
   selector: 'app-people-you-may-know',

@@ -14,19 +14,19 @@ export enum Status {
 }
 
 // UserModelDto interface
-export interface UserModel {
+export interface UserModelDTO {
   username: string;
   email: string;
-  status: Status;
-  firstName: string;
-  lastName: string;
-  address: string;
-  gender: Gender;
-  country: string;
-  city: string;
-  birthDate: string;  // Using string for date to match JSON serialization
-  phoneNumber: string;
-  profilePicture: string;
-  coverPicture: string;
-  url: string;
+  status: Status | null;
+  firstName: string | null;
+  lastName: string | null;
+  address: string | null;
+  gender: Gender | null;
+  country: string | null;
+  city: string | null;
+  birthDate: string | null;  // Using string for date to match JSON serialization
+  phoneNumber: string | null;
+  profilePicture: string | null;
+  coverPicture: string | null;
+  url: string | null;
 }

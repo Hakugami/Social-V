@@ -5,7 +5,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {HttpClient, HttpClientModule, HttpHeaders} from '@angular/common/http';
 import { AuthService } from '../../_services/auth.service';
-import {UserModel,Gender,Status} from "../../_models/usermodel.model";
+import {UserModelDTO} from "../../_models/usermodel.model";
+import {PublicUserModel} from "../../shared/PublicUserModel";
 
 @Component({
   selector: 'app-profile-personal-info',
@@ -15,7 +16,7 @@ import {UserModel,Gender,Status} from "../../_models/usermodel.model";
   styleUrls: ['./profile-personal-info.component.css']
 })
 export class ProfilePersonalInfoComponent implements OnInit {
-  userData: UserModel = {} as UserModel;
+  userData: UserModelDTO = {} as UserModelDTO;
 
   constructor(private http: HttpClient, private authService: AuthService, private cdr: ChangeDetectorRef) {}
 
@@ -26,18 +27,17 @@ export class ProfilePersonalInfoComponent implements OnInit {
   loadUserData() {
     const userInfo = this.authService.getUserInfoFromToken();
     if (userInfo) {
-      this.fetchAdditionalUserData(userInfo.email);
+      this.fetchAdditionalUserData(userInfo.username);
     } else {
       console.error('No user information available');
     }
   }
 
-  fetchAdditionalUserData(email: string) {
-    this.http.get<UserModel>(`http://localhost:8081/profile/edit/${email}`).subscribe({
+  fetchAdditionalUserData(username: string) {
+    this.http.get<UserModelDTO>(`http://localhost:8081/profile/edit/${username}`).subscribe({
       next: (data) => {
         this.userData = {...this.userData, ...data};
-        console.log("Data Binded to UI");
-        // Manually trigger change detection
+        PublicUserModel.user_model = this.userData;
         this.cdr.detectChanges();
       },
       error: (error) => {
@@ -51,14 +51,10 @@ export class ProfilePersonalInfoComponent implements OnInit {
     const updatedUserData = {...this.userData}; // Make a copy of userData to avoid direct mutation
 
     // Make the PUT request to update the profile info
-    this.http.put(`http://localhost:8081/profile/edit`, updatedUserData,).subscribe({
+    this.http.put(`http://localhost:8081/profile/edit`, updatedUserData).subscribe({
       next: (response) => {
         console.log(response);
         // Handle successful update (e.g., show success message)
-      },
-      error: (error) => {
-        console.error('Error updating user data:', error);
-        // Handle error (e.g., show error message)
       }
     });
   }

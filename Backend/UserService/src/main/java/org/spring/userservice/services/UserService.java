@@ -80,4 +80,50 @@ public class UserService {
 	public PictureDto getProfilePicture(String username) {
 		return userModelRepository.findProfilePictureByUsername(username);
 	}
+
+	public UserModel updateCurrentUserModel(UserModelDto userModelDto, UserModel currentUserModel) {
+		if (userModelDto.username() != null)
+			currentUserModel.setUsername(userModelDto.username());
+
+		if (userModelDto.email() != null)
+			currentUserModel.setEmail(userModelDto.email());
+
+		if (userModelDto.status() != null)
+			currentUserModel.setStatus(userModelDto.status());
+
+		if (userModelDto.firstName() != null)
+			currentUserModel.setFirstName(userModelDto.firstName());
+
+		if (userModelDto.lastName() != null)
+			currentUserModel.setLastName(userModelDto.lastName());
+
+		if (userModelDto.address() != null)
+			currentUserModel.setAddress(userModelDto.address());
+
+		if (userModelDto.gender() != null)
+			currentUserModel.setGender(userModelDto.gender());
+
+		if (userModelDto.country() != null)
+			currentUserModel.setCountry(userModelDto.country());
+
+		if (userModelDto.city() != null)
+			currentUserModel.setCity(userModelDto.city());
+
+		if (userModelDto.birthDate() != null)
+			currentUserModel.setBirthDate(userModelDto.birthDate());
+
+		if (userModelDto.phoneNumber() != null)
+			currentUserModel.setPhoneNumber(userModelDto.phoneNumber());
+
+		if (userModelDto.profilePicture() != null)
+			currentUserModel.setProfilePicture(userModelDto.profilePicture());
+
+		if (userModelDto.coverPicture() != null)
+			currentUserModel.setCoverPicture(userModelDto.coverPicture());
+
+		if (userModelDto.url() != null)
+			currentUserModel.setUrl(userModelDto.url());
+
+		return currentUserModel;
+	}
 }

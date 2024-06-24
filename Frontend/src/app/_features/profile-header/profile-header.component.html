@@ -2,7 +2,7 @@
   <div class="profile-header">
     <div class="position-relative">
       <img
-        src="assets/images/page-img/profile-bg1.jpg"
+        [src]="userModel?.coverPicture || 'assets/images/page-img/profile-bg1.jpg'"
         alt="profile-bg"
         class="rounded img-fluid"
       />
@@ -20,13 +20,13 @@
     <div class="user-detail text-center mb-3">
       <div class="profile-img">
         <img
-          src="assets/images/user/11.png"
+          [src]="userModel?.profilePicture || 'assets/images/user/11.png'"
           alt="profile-img"
           class="avatar-130 img-fluid"
         />
       </div>
       <div class="profile-detail">
-        <h3 class="">Bni Cyst</h3>
+        <h3>{{ userModel?.firstName }} {{ userModel?.lastName }}</h3>
       </div>
     </div>
     <div

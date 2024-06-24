@@ -4,7 +4,7 @@ import { NgFor } from '@angular/common';
 import { FriendStatusComponent } from "../friend-status/friend-status.component";
 import { FriendRequestsService } from '../../_services/friend-request.service';
 import { AuthService } from '../../_services/auth.service';
-import { UserModelDTO } from '../../_models/userdto.model';
+import {UserModelDTO} from "../../_models/usermodel.model";
 
 @Component({
     selector: 'app-right-navbar',
@@ -38,6 +38,6 @@ export class RightNavbarComponent implements OnInit{
     }
   }
   friends!: UserModelDTO[];
-    
+
 
 }
