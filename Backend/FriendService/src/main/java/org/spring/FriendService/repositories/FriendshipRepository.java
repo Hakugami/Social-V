@@ -33,4 +33,8 @@ public interface FriendshipRepository extends Neo4jRepository<Friendship, String
             "DELETE r1, r2, f " +
             "RETURN count(f) as deletedCount")
     int deleteFriendship(@Param("userId") String userId, @Param("friendId") String friendId);
+
+    @Query("MATCH (u1:UserReference {id: $userId1})-[:FRIEND_OF]-(f:Friendship)-[:FRIEND_OF]-(u2:UserReference {id: $userId2}) " +
+            "RETURN COUNT(f) > 0 AS areFriends")
+    boolean areFriends(@Param("userId1") String userId1, @Param("userId2") String userId2);
 }

@@ -20,7 +20,7 @@ export class FriendRequestDropdownComponent implements OnInit {
 
     constructor(
         private friendRequestService: FriendRequestsService,
-        private authService: AuthService
+        private authService: AuthService,
     ) {}
 
     ngOnInit(): void {
