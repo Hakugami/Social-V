@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SendToUser;
 
 @SpringBootApplication
 @RequiredArgsConstructor
@@ -17,13 +18,6 @@ public class NotificationServiceApplication {
         SpringApplication.run(NotificationServiceApplication.class, args);
     }
 
-    @KafkaListener(topics = "post-topic", groupId = "notification-service")
-    public void listen(String username) {
-        System.out.println("Received event: " + username);
 
-        messagingTemplate.convertAndSendToUser(username, "/queue/messages", "post created by this user" + username);
-        System.out.println("Message sent to user: " + username);
-
-    }
 
 }

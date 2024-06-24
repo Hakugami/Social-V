@@ -3,8 +3,10 @@ package org.spring.postservice.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.spring.postservice.clients.CommentServiceClient;
+import org.spring.postservice.clients.FriendServiceClient;
 import org.spring.postservice.clients.LikeServiceClient;
 import org.spring.postservice.clients.UserServiceClient;
+import org.spring.postservice.events.Notification;
 import org.spring.postservice.events.PostCreatedEvent;
 import org.spring.postservice.models.Dtos.*;
 import org.spring.postservice.models.PostModel;
@@ -17,6 +19,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -30,8 +33,10 @@ public class PostService {
 	private final UploadService uploadClient;
 	private final LikeServiceClient likeServiceClient;
 	private final CommentServiceClient commentServiceClient;
+	private final KafkaTemplate<String, Notification> kafkaTemplate;
 	private final UserServiceClient userServiceClient;
-	private final KafkaTemplate<String, PostCreatedEvent> kafkaTemplate;
+	private final FriendServiceClient friendServiceClient;
+
 	private static final Sort DEFAULT_SORT = Sort.by(Sort.Order.desc("createdAt"));
 
 
@@ -41,7 +46,18 @@ public class PostService {
 		postModel.setCreatedAt(LocalDateTime.now());
 		postModel.setType(ContentType.TEXT);
 		postRepository.save(postModel);
-		kafkaTemplate.send("post-topic", new PostCreatedEvent(postModel.getId()));
+
+
+
+			Notification notification = Notification.builder()
+					.id(postModel.getId())
+					.receiverUsername(postModel.getUsername())
+					.message("Post created")
+					.notificationType("POST")
+					.build();
+			kafkaTemplate.send("notifications-topic",notification);
+
+
 		return postModel;
 	}
 

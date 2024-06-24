@@ -5,4 +5,5 @@ export interface LikeRequestModel {
     userId: string | null;
     username: string;
     emotion: Emotion;
+    postOwnerUsername: string;
 }

@@ -8,4 +8,5 @@ export const environment = {
   commentApiUrl: 'http://localhost:8084/api/v1/comments',
   recommendApiUrl: 'http://localhost:8098/api/v1/recommendations',
   searchApiUrl: 'http://localhost:8087/api/v1/search',
+  notificationApiUrl: 'http://localhost:8089/api/v1/notifications',
 };

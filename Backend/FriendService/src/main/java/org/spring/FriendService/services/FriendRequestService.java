@@ -4,6 +4,7 @@ package org.spring.FriendService.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.spring.FriendService.clients.UserClient;
+import org.spring.FriendService.events.Notification;
 import org.spring.FriendService.exceptions.FriendRequestAlreadyExistsException;
 import org.spring.FriendService.exceptions.FriendRequestNotFoundException;
 import org.spring.FriendService.exceptions.UserNotFoundException;
@@ -16,6 +17,7 @@ import org.spring.FriendService.models.entities.UserReference;
 import org.spring.FriendService.models.enums.FriendRequestStatus;
 import org.spring.FriendService.repositories.FriendRequestRepository;
 import org.spring.FriendService.repositories.FriendshipRepository;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +36,7 @@ public class FriendRequestService {
     private final FriendRequestRepository friendRequestRepository;
     private final UserClient userClient;
     private final FriendshipRepository friendshipRepository;
+    private final KafkaTemplate<String, Notification> kafkaTemplate;
 
 
 
@@ -62,6 +65,13 @@ public class FriendRequestService {
                 new UserReference(requesterId),
                 new UserReference(recipientId)
         );
+        kafkaTemplate.send("notifications-topic", Notification.builder()
+                .id(friendRequest.getId())
+                .senderUsername(requesterId)
+                .receiverUsername(recipientId)
+                .message("Friend request")
+                .notificationType("FRIEND_REQUEST")
+                .build());
         friendRequestRepository.save(friendRequest);
     }
 
