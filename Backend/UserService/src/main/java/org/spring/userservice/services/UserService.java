@@ -130,6 +130,10 @@ public class UserService {
 	public UserModel updateProfileInfo(UserModelDto comingUserModelDto) {
 		UserModel userModel = userModelRepository.findUserModelByEmail(comingUserModelDto.email());
 		userModel = updateCurrentUserModel(comingUserModelDto, userModel);
-		return userModelRepository.save(userModel);
+		UserModel saved = userModelRepository.save(userModel);
+		log.info("User updated successfully : {}", saved.getUsername());
+		kafkaTemplate.send(USER_TOPIC, new UserRegistrationEvent(saved.getId().toString(), saved.getUsername(),
+				saved.getEmail(), saved.getProfilePicture(), saved.getFirstName(), saved.getLastName()));
+		return saved;
 	}
 }
