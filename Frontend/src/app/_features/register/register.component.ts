@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
 import {RegisterDTO} from "../../_models/register.model";
-import {ActivatedRoute, RouterLink} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {NgIf} from "@angular/common";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import { debounceTime } from 'rxjs/operators';
@@ -21,7 +21,7 @@ import {passwordValidator} from "../../_utils/password.validator";
 export class RegisterComponent implements OnInit{
   registerForm: FormGroup = {} as FormGroup;
 
-  constructor(private authService: AuthService,private formBuilder: FormBuilder, private route: ActivatedRoute, private http: HttpClient) { }
+  constructor(private authService: AuthService,private formBuilder: FormBuilder, private route: ActivatedRoute, private http: HttpClient ,private router: Router) { }
 
 
   ngOnInit(): void {
@@ -66,6 +66,7 @@ export class RegisterComponent implements OnInit{
       //console.log(registerDTO);
       this.authService.register(registerDTO).subscribe(response => {
         console.log(response);
+        this.router.navigate(['/auth/login']);
         // Handle the response here
       }, error => {
         console.log(error);
