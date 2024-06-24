@@ -8,6 +8,8 @@ import { AuthenticationComponent } from "./_features/authentication/authenticati
 import { FriendRequestPageComponent } from './_features/friend-request-page/friend-request-page.component';
 import {authGuard} from "./_guards/auth.guard";
 import { ChatHeaderComponent } from "./_features/chat-header/chat-header.component";
+import {ChatPageComponent} from "./_features/chat-page/chat-page.component";
+import {ChatWindowComponent} from "./_features/chat-window/chat-window.component";
 // import { ChatMessageComponent } from "./_features/chat-message/chat-message.component";
 // import { ChatPageComponent } from "./_features/chat-page/chat-page.component";
 // import { ChatWindowComponent } from "./_features/chat-window/chat-window.component";
@@ -46,7 +48,9 @@ export const routes: Routes = [
   },
   {
     path: 'chat',
-    component: ChatHeaderComponent
-  }
+    component: ChatPageComponent
+  },
+  { path: 'chat/:id', component: ChatWindowComponent },
+
 
 ];
