@@ -7,15 +7,16 @@ import {PostModel} from "../_models/post.model";
 import {LikeRequestModel} from "../_models/like-request.model";
 import {LikesModel} from "../_models/likes.model";
 import {CommentRequestModel} from "../_models/comment-request.model";
+import {GatewayEnvironment} from "../../environments/gateway.environment";
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostService {
-  private apiBaseUrl: string = environment.postApiUrl;
-  private likeApiBaseUrl: string = environment.likeApiUrl;
-  private commentApiBaseUrl: string = environment.commentApiUrl;
+  private apiBaseUrl: string = GatewayEnvironment.postApiUrl;
+  private likeApiBaseUrl: string = GatewayEnvironment.likeApiUrl;
+  private commentApiBaseUrl: string = GatewayEnvironment.commentApiUrl;
 
   constructor(private httpClient: HttpClient) {
   }
