@@ -7,6 +7,7 @@ import {HttpClient, HttpClientModule, HttpHeaders} from '@angular/common/http';
 import { AuthService } from '../../_services/auth.service';
 import {UserModelDTO} from "../../_models/usermodel.model";
 import {PublicUserModel} from "../../shared/PublicUserModel";
+import { ProfileService } from '../../_services/profile.service';
 
 @Component({
   selector: 'app-profile-personal-info',
@@ -16,35 +17,37 @@ import {PublicUserModel} from "../../shared/PublicUserModel";
   styleUrls: ['./profile-personal-info.component.css']
 })
 export class ProfilePersonalInfoComponent implements OnInit {
-  userData: UserModelDTO = {} as UserModelDTO;
+  userData: UserModelDTO = PublicUserModel.user_model;
 
   constructor(private http: HttpClient, private authService: AuthService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.loadUserData();
+    // this.loadUserData();
   }
 
-  loadUserData() {
-    const userInfo = this.authService.getUserInfoFromToken();
-    if (userInfo) {
-      this.fetchAdditionalUserData(userInfo.username);
-    } else {
-      console.error('No user information available');
-    }
-  }
+  // loadUserData() {
+  //   const userInfo = this.authService.getUsername();
+  //   console.log(userInfo+ " -------------------------------");
+  //   if (userInfo) {
+  //     console.log(userInfo);
+  //     this.fetchAdditionalUserData(userInfo);
+  //   } else {
+  //     console.error('No user information available');
+  //   }
+  // }
 
-  fetchAdditionalUserData(username: string) {
-    this.http.get<UserModelDTO>(`http://localhost:8081/profile/edit/${username}`).subscribe({
-      next: (data) => {
-        this.userData = {...this.userData, ...data};
-        PublicUserModel.user_model = this.userData;
-        this.cdr.detectChanges();
-      },
-      error: (error) => {
-        console.error('Error fetching user data:', error);
-      }
-    });
-  }
+  // fetchAdditionalUserData(username: string) {
+  //   this.http.get<UserModelDTO>(`http://localhost:8081/profile/edit/${username}`).subscribe({
+  //     next: (data) => {
+  //       this.userData = {...this.userData, ...data};
+  //       PublicUserModel.user_model = this.userData;
+  //       this.cdr.detectChanges();
+  //     },
+  //     error: (error) => {
+  //       console.error('Error fetching user data:', error);
+  //     }
+  //   });
+  // }
 
   onSubmit() {
     // Prepare the data for submission

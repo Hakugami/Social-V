@@ -20,13 +20,13 @@
     <div class="user-detail text-center mb-3">
       <div class="profile-img">
         <img
-          [src]="userModel?.profilePicture || 'assets/images/user/11.png'"
+          [src]="userModel?.profilePicture || 'assets/images/user/user.jpg'"
           alt="profile-img"
           class="avatar-130 img-fluid"
         />
       </div>
       <div class="profile-detail">
-        <h3>{{ userModel?.firstName }} {{ userModel?.lastName }}</h3>
+        <h3>{{ (userModel?.firstName ?? '') + ' ' + (userModel?.lastName ?? '') || userModel?.username }}</h3>
       </div>
     </div>
     <div
@@ -90,18 +90,7 @@
         <ul
           class="social-data-block d-flex align-items-center justify-content-between list-inline p-0 m-0"
         >
-          <li class="text-center ps-3">
-            <h6>Posts</h6>
-            <p class="mb-0">690</p>
-          </li>
-          <li class="text-center ps-3">
-            <h6>Followers</h6>
-            <p class="mb-0">206</p>
-          </li>
-          <li class="text-center ps-3">
-            <h6>Following</h6>
-            <p class="mb-0">100</p>
-          </li>
+
         </ul>
       </div>
     </div>

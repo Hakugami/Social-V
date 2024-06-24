@@ -4,12 +4,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { UserModelDTO } from '../_models/usermodel.model';
 import { environment } from '../../environments/environment';
+import { GatewayEnvironment } from '../../environments/gateway.environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserSearchService {
-  private apiUrl = environment.searchApiUrl;
+  private apiUrl = GatewayEnvironment.searchApiUrl;
   private searchTerms = new BehaviorSubject<string>('');
   users$: Observable<any[]>;
 
@@ -27,7 +28,7 @@ export class UserSearchService {
 
   searchUsers(term: string): Observable<UserModelDTO[]> {
     const body = new HttpParams().set('query', term);
-    
+
     return this.http.get<UserModelDTO[]>(`${this.apiUrl}/autocomplete`, {
       params: body,
       observe: 'body',
