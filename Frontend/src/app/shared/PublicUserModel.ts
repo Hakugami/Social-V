@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {UserModelDTO} from "../_models/usermodel.model";
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -25,22 +26,29 @@ export class PublicUserModel {
     url: null
   };
 
+    private userModelSubject = new BehaviorSubject<UserModelDTO | null>(null);
+  userModel$ = this.userModelSubject.asObservable();
+
+  setUserModel(user: UserModelDTO) {
+    this.userModelSubject.next(user);
+  }
+
+  getUserModel() {
+    return this.userModelSubject.getValue();
+  }
+
   constructor() { }
 
-  // Optionally, you can add methods to manipulate the object
-  getUserModel() {
-    return PublicUserModel.user_model;
-  }
+
 
   getEmail(){
     return PublicUserModel.email;
-  }
-
-  setUserModel(newModel: UserModelDTO) {
-    PublicUserModel.user_model = newModel;
   }
 
   setEmail(newEmail:string){
     PublicUserModel.email=newEmail;
   }
 }
+
+
+

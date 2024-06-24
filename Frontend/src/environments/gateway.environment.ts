@@ -8,5 +8,5 @@ export const GatewayEnvironment = {
   commentApiUrl: 'http://localhost:8082/comments/api/v1/comments',
   recommendApiUrl: 'http://localhost:8082/recommendations/api/v1/recommendations',
   searchApiUrl: 'http://localhost:8082/search/api/v1/search',
-  profileApiUrl: 'http://localhost:8082/users/profile/edit',
+  profileApiUrl: 'http://localhost:8082/users/api/v1/profile',
 }

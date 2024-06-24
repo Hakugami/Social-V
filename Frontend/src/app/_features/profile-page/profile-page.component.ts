@@ -12,6 +12,7 @@ import { UserModelDTO } from '../../_models/usermodel.model';
 import { ProfileService } from '../../_services/profile.service';
 import { AuthService } from '../../_services/auth.service';
 import { PublicUserModel } from '../../shared/PublicUserModel';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-profile-page',
@@ -31,14 +32,20 @@ import { PublicUserModel } from '../../shared/PublicUserModel';
   styleUrl: './profile-page.component.css'
 })
 export class ProfilePageComponent implements OnInit{
-  constructor() {
+  constructor(    private publicUserModel: PublicUserModel) {
 
    }
-   user!: UserModelDTO;
+   user: UserModelDTO | null = null;
+   private userModelSubscription: Subscription | undefined;
 
   ngOnInit(): void {
 
-    this.user = PublicUserModel.user_model;
+   this.userModelSubscription = this.publicUserModel.userModel$.subscribe(
+      (user) => {
+        this.user = user;
+      }
+    );
+
   }
 
 

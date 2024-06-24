@@ -10,6 +10,7 @@ import {authGuard} from "./_guards/auth.guard";
 import { SearchResultsComponent } from './_features/search-results/search-results.component';
 
 
+
 export const routes: Routes = [
   { path: 'profile',
     canActivate: [authGuard],
@@ -22,7 +23,8 @@ export const routes: Routes = [
     component:NewsFeedComponent},
   {path:'home',
     canActivate: [authGuard],
-    component:NewsFeedComponent},
+    component:NewsFeedComponent
+  },
   {
     path: 'auth',
     component: AuthenticationComponent,

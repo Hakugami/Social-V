@@ -6,6 +6,10 @@ import { Observable } from "rxjs";
 
 @Injectable({providedIn: 'root'})
 export class ProfileService {
+    updateProfile(updatedUserData: Partial<UserModelDTO>): Observable<UserModelDTO> {
+        return this.httpclient.put<UserModelDTO>(`${this.apiUrl}`, updatedUserData);
+      }
+
 
     apiUrl = GatewayEnvironment.profileApiUrl;
   constructor(private httpclient:HttpClient) {

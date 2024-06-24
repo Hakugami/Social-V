@@ -3,11 +3,12 @@ import { UserModelDTO } from '../../_models/usermodel.model';
 import { FriendRequestsService } from '../../_services/friend-request.service';
 import { AuthService } from '../../_services/auth.service';
 import { NgFor } from '@angular/common';
+import { DefaultImageDirective } from '../../_directives/default-image.directive';
 
 @Component({
   selector: 'app-friend-mini-card-item',
   standalone: true,
-  imports: [NgFor],
+  imports: [NgFor,DefaultImageDirective],
   templateUrl: './friend-mini-card-item.component.html',
   styleUrl: './friend-mini-card-item.component.css'
 })

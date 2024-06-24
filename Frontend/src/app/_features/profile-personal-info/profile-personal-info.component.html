@@ -5,14 +5,15 @@
       <h4 class="card-title">Personal Information</h4>
     </div>
   </div>
-  <div class="card-body">
+  <div class="card-body" *ngIf="userData">
     <form #userForm="ngForm" (ngSubmit)="onSubmit()">
       <div class="form-group row align-items-center">
         <div class="col-md-12">
           <div class="profile-img-edit">
             <img
               class="profile-pic"
-              [src]="userData.profilePicture || '../assets/images/user/user.jpg'"
+              [src]="userData.profilePicture"
+              defaultImage="assets/images/user/11.jpg"
               alt="profile-pic"
             />
             <div class="p-image">
