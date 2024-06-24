@@ -23,4 +23,5 @@ public class PostResponse {
 	List<CommentDto> comments;
 	String videoUrl;
 	List<String> imagesUrl;
+	LocalDateTime updatedAt;
 }

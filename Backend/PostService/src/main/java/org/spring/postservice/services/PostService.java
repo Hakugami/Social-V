@@ -11,12 +11,12 @@ import org.spring.postservice.models.PostModel;
 import org.spring.postservice.models.enums.ContentType;
 import org.spring.postservice.repositories.PostRepository;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -32,12 +32,13 @@ public class PostService {
 	private final CommentServiceClient commentServiceClient;
 	private final UserServiceClient userServiceClient;
 	private final KafkaTemplate<String, PostCreatedEvent> kafkaTemplate;
+	private static final Sort DEFAULT_SORT = Sort.by(Sort.Order.desc("createdAt"));
 
 
 	public PostModel savePost(PostDto postDto) {
 		log.info("Saving post: {}", postDto);
 		PostModel postModel = toPostModel(postDto);
-		postModel.setCreatedAt(LocalDateTime.from(Instant.now()));
+		postModel.setCreatedAt(LocalDateTime.now());
 		postModel.setType(ContentType.TEXT);
 		postRepository.save(postModel);
 		kafkaTemplate.send("post-topic", new PostCreatedEvent(postModel.getId()));
@@ -48,7 +49,9 @@ public class PostService {
 		log.info("Saving video post: {}", videoPostDto);
 		CompletableFuture<List<String>> futureUrl = uploadClient.uploadFile(List.of(videoPostDto.getVideo()));
 		PostModel postModel = toPostModel(videoPostDto);
+		postModel.setCreatedAt(LocalDateTime.now());
 		postModel.setType(ContentType.VIDEO);
+
 
 		return futureUrl
 				.thenApply(urls -> {
@@ -70,6 +73,7 @@ public class PostService {
 		CompletableFuture<List<String>> futureUrls = uploadClient.uploadFile(imagePostDto.getImages());
 		PostModel postModel = toPostModel(imagePostDto);
 		postModel.setType(ContentType.IMAGE);
+		postModel.setCreatedAt(LocalDateTime.now());
 
 		return futureUrls
 				.thenApply(urls -> {
@@ -91,13 +95,14 @@ public class PostService {
 
 	public List<PostResponse> getPostsByUserId(String userId, int page, int size) {
 		log.info("Getting all posts by user id: {}", userId);
-		List<PostModel> postModels = postRepository.findByUserId(userId, PageRequest.of(page, size));
+		List<PostModel> postModels = postRepository.findByUserId(userId, PageRequest.of(page, size,DEFAULT_SORT));
 		return toPostResponses(userId, postModels);
 	}
 
 	public List<PostResponse> getAllPosts(int page, int size) {
 		log.info("Getting all posts");
-		return postRepository.findAllBy(PageRequest.of(page, size)).stream()
+
+		return postRepository.findAllBy(PageRequest.of(page, size, DEFAULT_SORT)).stream()
 				.map(this::toPostResponse)
 				.map(this::populateLikesAndComments)
 				.toList();
@@ -140,6 +145,7 @@ public class PostService {
 				.username(postDto.getUsername())
 				.content(postDto.getContent())
 				.createdAt(postDto.getCreatedAt())
+				.updatedAt(postDto.getUpdatedAt())
 				.build();
 	}
 
@@ -153,6 +159,7 @@ public class PostService {
 				.imagesUrl(postModel.getImageUrl())
 				.videoUrl(postModel.getVideoUrl())
 				.profilePicture(loadPostProfilePicture(postModel.getUsername()))
+				.updatedAt(postModel.getUpdatedAt())
 				.build();
 	}
 
@@ -181,4 +188,20 @@ public class PostService {
 		}
 	}
 
+	public PostModel updatePost(String id, PostDto postDto) {
+		log.info("Updating post: {}", postDto);
+		Optional<PostModel> postModel = postRepository.findById(id);
+		if (postModel.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found");
+		}
+		PostModel updatedPost = postModel.get();
+		updatedPost.setContent(postDto.getContent());
+		updatedPost.setUpdatedAt(LocalDateTime.now());
+		return postRepository.save(updatedPost);
+	}
+
+	public void deletePost(String id) {
+		log.info("Deleting post with id: {}", id);
+		postRepository.deleteById(id);
+	}
 }

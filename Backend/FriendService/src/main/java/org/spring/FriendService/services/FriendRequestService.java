@@ -36,6 +36,7 @@ public class FriendRequestService {
     private final FriendshipRepository friendshipRepository;
 
 
+
     public void sendFriendRequest(String requesterId, String recipientId) {
         if (!userClient.doesUserExist(requesterId).getBody() || !userClient.doesUserExist(recipientId).getBody()) {
             throw new UserNotFoundException("User not found");
