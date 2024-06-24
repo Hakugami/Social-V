@@ -41,6 +41,7 @@ public class LikeService {
 				.receiverUsername(likeRequest.postOwnerUsername())
 				.senderUsername(likeRequest.username())
 				.id(likeRequest.postId())
+				.notificationType("LIKE")
 				.message("You have a new like").build();
 		kafkaTemplate.send("notifications-topic", notification);
 		return getAggregatedLikes(likeRequest.postId());

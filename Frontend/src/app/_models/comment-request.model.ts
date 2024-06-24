@@ -3,4 +3,5 @@ export interface CommentRequestModel {
   userId: string | null;
   username: string;
   content: string;
+  postOwnerUsername: string;
 }

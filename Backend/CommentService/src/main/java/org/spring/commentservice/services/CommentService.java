@@ -2,12 +2,14 @@ package org.spring.commentservice.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.spring.commentservice.events.Notification;
 import org.spring.commentservice.mappers.CommentMapper;
 import org.spring.commentservice.models.CommentModel;
 import org.spring.commentservice.models.Dtos.CommentDto;
 import org.spring.commentservice.models.Dtos.CommentRequest;
 import org.spring.commentservice.repositories.CommentRepository;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,11 +23,19 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
+    private final KafkaTemplate<String, Notification> kafkaTemplate;
 
     public CommentModel addComment(CommentRequest commentRequest) {
         CommentModel commentModel = commentMapper.toEntity(commentRequest);
         log.info("Adding comment: {}", commentModel);
-        return commentRepository.save(commentModel);
+        commentModel = commentRepository.save(commentModel);
+        kafkaTemplate.send("notifications-topic", Notification.builder()
+                .receiverUsername(commentRequest.getPostOwnerUsername())
+                .senderUsername(commentRequest.getUsername())
+                .id(commentRequest.getPostId())
+                .notificationType("COMMENT")
+                .message("You have a new comment").build());
+        return commentModel;
 
     }
 

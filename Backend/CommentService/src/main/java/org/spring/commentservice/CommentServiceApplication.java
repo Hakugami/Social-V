@@ -1,6 +1,7 @@
 package org.spring.commentservice;
 
 import lombok.extern.slf4j.Slf4j;
+import org.spring.commentservice.events.Notification;
 import org.spring.commentservice.events.PostCreatedEvent;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,9 +15,9 @@ public class CommentServiceApplication {
 		SpringApplication.run(CommentServiceApplication.class, args);
 	}
 
-	@KafkaListener(topics = "post-topic")
-	public void handlePostCreatedEvent(PostCreatedEvent postCreatedEvent) {
-		log.info("Received post created event: {}", postCreatedEvent.getPostId());
+	@KafkaListener(topics = "notifications-topic")
+	public void handlePostCreatedEvent(Notification notification) {
+		log.info("Received notification event: {}", notification);
 	}
 
 }

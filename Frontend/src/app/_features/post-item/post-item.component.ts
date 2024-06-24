@@ -147,7 +147,8 @@ export class PostItemComponent implements OnInit {
       postId: this.post.id,
       userId: null, // replace with actual user id
       username: this.authService.getUsername(),
-      content: this.commentText
+      content: this.commentText,
+      postOwnerUsername: this.post.username
     }
     this.postService.addComment(commentRequest).subscribe({
       next: (response: any) => {

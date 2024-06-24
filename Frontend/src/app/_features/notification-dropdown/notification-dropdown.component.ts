@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NotificationItemComponent } from "../notification-item/notification-item.component";
 import { Notification } from '../../_models/notification.model';
 import { NgFor } from '@angular/common';
+import {NotificationService} from "../../_services/notification.service";
 
 @Component({
     selector: 'app-notification-dropdown',
@@ -11,19 +12,16 @@ import { NgFor } from '@angular/common';
     imports: [NotificationItemComponent,NgFor]
 })
 export class NotificationDropdownComponent {
-    notifications: Notification[] = [
-        {
-            id: 1,
-            title: 'New Friend Request',
-            description: 'John Doe has sent you a friend request.',
-            image: "assets/images/icon/01.png",
-            time: 'now',
-            senderUsername: 'John Doe',
-            receiverUsername: 'Jane',
-            message: 'John Doe has sent you a friend request.',
-            notificationType: 'friend request',
-        },
-    ];
-number: number = this.notifications.length;
+  notifications: Notification[] = [];
+  number: number = 0;
+
+  constructor(private notificationService: NotificationService) { }
+
+  ngOnInit() {
+    this.notificationService.newNotificationEvent.subscribe((notification: Notification) => {
+      this.notifications.push(notification);
+      this.number = this.notifications.length;
+    });
+  }
 
 }

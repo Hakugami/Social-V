@@ -34,7 +34,7 @@ public class PostService {
 	private final CommentServiceClient commentServiceClient;
 	private final KafkaTemplate<String, Notification> kafkaTemplate;
 	private final UserServiceClient userServiceClient;
-	private final KafkaTemplate<String, PostCreatedEvent> kafkaTemplate;
+
 	private static final Sort DEFAULT_SORT = Sort.by(Sort.Order.desc("createdAt"));
 
 
