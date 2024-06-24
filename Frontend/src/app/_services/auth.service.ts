@@ -26,7 +26,7 @@ export class AuthService {
     const refreshToken = response.refreshToken;
     localStorage.setItem('token', jwtToken);
     localStorage.setItem('refresh', refreshToken);
-    this.notificationService.subscribeToUserQueue(this.getUsername());
+    this.notificationService.initializeWebSocketConnection(this.getUsername());
   }
   checkFullName(fullName: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.userApiUrl}/checkFullName`, { params: { fullName } });

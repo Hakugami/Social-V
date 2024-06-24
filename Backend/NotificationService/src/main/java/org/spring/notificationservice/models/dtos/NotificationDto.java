@@ -1,4 +1,4 @@
-package org.spring.notificationservice.events;
+package org.spring.notificationservice.models.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Notification {
+public class NotificationDto {
     private String id;
     private String senderUsername;
     private String receiverUsername;
     private String message;
-    private String notificationType; // e.g. "LIKE", "COMMENT"
+    private String notificationType;
 }

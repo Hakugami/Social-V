@@ -7,4 +7,5 @@ export const environment = {
   likeApiUrl: 'http://localhost:8085/api/v1/likes',
   commentApiUrl: 'http://localhost:8084/api/v1/comments',
   recommendApiUrl: 'http://localhost:8098/api/v1/recommendations',
+  notificationApiUrl: 'http://localhost:8089/api/v1/notifications',
 };

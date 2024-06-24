@@ -3,6 +3,7 @@ package org.spring.postservice.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.spring.postservice.clients.CommentServiceClient;
+import org.spring.postservice.clients.FriendServiceClient;
 import org.spring.postservice.clients.LikeServiceClient;
 import org.spring.postservice.clients.UserServiceClient;
 import org.spring.postservice.events.Notification;
@@ -34,6 +35,7 @@ public class PostService {
 	private final CommentServiceClient commentServiceClient;
 	private final KafkaTemplate<String, Notification> kafkaTemplate;
 	private final UserServiceClient userServiceClient;
+	private final FriendServiceClient friendServiceClient;
 
 	private static final Sort DEFAULT_SORT = Sort.by(Sort.Order.desc("createdAt"));
 
@@ -44,13 +46,18 @@ public class PostService {
 		postModel.setCreatedAt(LocalDateTime.now());
 		postModel.setType(ContentType.TEXT);
 		postRepository.save(postModel);
-		Notification notification = Notification.builder()
-				.id(postModel.getId())
-				.senderUsername(postModel.getUsername())
-				.message("Post created")
-				.notificationType("POST")
-				.build();
-		kafkaTemplate.send("notifications-topic",notification);
+
+
+
+			Notification notification = Notification.builder()
+					.id(postModel.getId())
+					.receiverUsername(postModel.getUsername())
+					.message("Post created")
+					.notificationType("POST")
+					.build();
+			kafkaTemplate.send("notifications-topic",notification);
+
+
 		return postModel;
 	}
 

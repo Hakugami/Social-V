@@ -1,4 +1,4 @@
-package org.spring.notificationservice.events;
+package org.spring.FriendService.events;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,5 +14,5 @@ public class Notification {
     private String senderUsername;
     private String receiverUsername;
     private String message;
-    private String notificationType; // e.g. "LIKE", "COMMENT"
+    private String notificationType;
 }

@@ -15,9 +15,6 @@ public class CommentServiceApplication {
 		SpringApplication.run(CommentServiceApplication.class, args);
 	}
 
-	@KafkaListener(topics = "notifications-topic")
-	public void handlePostCreatedEvent(Notification notification) {
-		log.info("Received notification event: {}", notification);
-	}
+
 
 }
