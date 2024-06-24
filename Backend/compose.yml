@@ -150,6 +150,52 @@ services:
       retries: 10
       timeout: 2s
 
+  like-service:
+    build:
+      context: ./LikeService  # Adjust this path to the directory containing the Dockerfile
+      dockerfile: Dockerfile  # Optional if the file is named Dockerfile
+    container_name: like-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATA_MONGODB_HOST=mongo
+    ports:
+      - "8084:8084"
+    networks:
+      - my-network
+    depends_on:
+      service-discovery:
+        condition: service_healthy  # Wait until service-discovery is healthy
+      api-gateway:
+        condition: service_healthy  # Wait until api-gateway is healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8084/actuator/health" ]
+      interval: 10s
+      retries: 10
+      timeout: 2s
+
+  comment-service:
+    build:
+      context: ./CommentService  # Adjust this path to the directory containing the Dockerfile
+      dockerfile: Dockerfile  # Optional if the file is named Dockerfile
+    container_name: comment-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATA_MONGODB_HOST=mongo
+    ports:
+      - "8085:8085"
+    networks:
+      - my-network
+    depends_on:
+      service-discovery:
+        condition: service_healthy  # Wait until service-discovery is healthy
+      api-gateway:
+        condition: service_healthy  # Wait until api-gateway is healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8085/actuator/health" ]
+      interval: 10s
+      retries: 10
+      timeout: 2s
+
 
 networks:
   my-network:
