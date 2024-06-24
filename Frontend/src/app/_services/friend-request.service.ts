@@ -11,6 +11,10 @@ import {UserModelDTO} from "../_models/usermodel.model";
 providedIn: 'root'
 })
 export class FriendRequestsService {
+  
+  removeFriend(currentUser: string, email: string) {
+    return this.http.delete<void>(`${environment.friendApiUrl}/${currentUser}?friendId=${email}`);
+  }
   deleteFriendRequest(id: string) :Observable<void> {
     return this.http.delete<void>(`${environment.friendApiUrl}/request/${id}`);
   }

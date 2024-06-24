@@ -46,6 +46,15 @@ public class FriendRequestService {
             throw new FriendRequestAlreadyExistsException("Friend request already exists");
         }
 
+        if(friendshipRepository.areFriends(requesterId, recipientId))
+        {
+            throw new FriendRequestAlreadyExistsException("Friendship already exists");
+        }
+
+
+
+
+
         FriendRequest friendRequest = new FriendRequest(
                 UUID.randomUUID().toString(),
                 FriendRequestStatus.PENDING,
@@ -79,7 +88,7 @@ public class FriendRequestService {
         List<FriendRequestNotificationDTO> friendRequestDTOs = new ArrayList<>();
         for (FriendRequest friendRequest : friendRequests) {
             UserModelDTO requester = userClient.getUserDataByEmail(friendRequest.getRequester().getId());
-            friendRequestDTOs.add(new FriendRequestNotificationDTO(friendRequest.getId(),friendRequest.getRequester().getId(), requester.firstName()+" "+requester.lastName(), requester.profilePicture()));
+            friendRequestDTOs.add(new FriendRequestNotificationDTO(friendRequest.getId(),friendRequest.getRequester().getId(), requester.firstName(),requester.lastName(), requester.profilePicture(), requester.username()));
         }
         return friendRequestDTOs;
     }
@@ -96,4 +105,7 @@ public class FriendRequestService {
         }
         return friendRequestDTOs;
     }
+
+
+
 }

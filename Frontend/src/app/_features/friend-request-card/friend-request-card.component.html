@@ -1,7 +1,7 @@
 <div class="card mb-3">
     <div class="card-header d-flex justify-content-between">
         <div class="header-title">
-            <h5 class="card-title">{{ request.name }}</h5>
+            <h5 class="card-title">{{ ((request.firstname ?? '') + ' ' + (request.lastname ?? '')).trim() || request.username }}</h5>
         </div>
     </div>
     <div class="card-body d-flex align-items-center">

@@ -7,6 +7,7 @@ import { RegisterComponent } from "./_features/register/register.component";
 import { AuthenticationComponent } from "./_features/authentication/authentication.component";
 import { FriendRequestPageComponent } from './_features/friend-request-page/friend-request-page.component';
 import {authGuard} from "./_guards/auth.guard";
+import { SearchResultsComponent } from './_features/search-results/search-results.component';
 
 
 export const routes: Routes = [
@@ -37,6 +38,8 @@ export const routes: Routes = [
   {
     path: 'profile/:username', component: ProfilePageComponent
   }
+,
+  { path: 'search-results', component: SearchResultsComponent},
 
 
 
