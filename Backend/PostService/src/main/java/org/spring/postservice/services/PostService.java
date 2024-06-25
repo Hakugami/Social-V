@@ -204,4 +204,10 @@ public class PostService {
 		log.info("Deleting post with id: {}", id);
 		postRepository.deleteById(id);
 	}
+
+	public List<PostResponse> getPostsByUsername(String username, int page, int size) {
+		log.info("Getting all posts by username: {}", username);
+		List<PostModel> postModels = postRepository.findByUsername(username, PageRequest.of(page, size, DEFAULT_SORT));
+		return toPostResponses(username, postModels);
+	}
 }
