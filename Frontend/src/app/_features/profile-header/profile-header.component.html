@@ -2,7 +2,7 @@
   <div class="profile-header">
     <div class="position-relative">
       <img
-        src="assets/images/page-img/profile-bg1.jpg"
+        [src]="usermodel?.coverPicture" defaultImage="assets/images/page-img/profile-bg1.jpg"
         alt="profile-bg"
         class="rounded img-fluid"
       />
@@ -20,13 +20,14 @@
     <div class="user-detail text-center mb-3">
       <div class="profile-img">
         <img
-          src="assets/images/user/11.png"
+          [src]="usermodel?.profilePicture"
+          defaultImage="assets/images/user/11.jpg"
           alt="profile-img"
           class="avatar-130 img-fluid"
         />
       </div>
       <div class="profile-detail">
-        <h3 class="">Bni Cyst</h3>
+        <h3>{{ (usermodel?.firstName ?? '') + ' ' + (usermodel?.lastName ?? '') || usermodel?.username }}</h3>
       </div>
     </div>
     <div
@@ -90,18 +91,7 @@
         <ul
           class="social-data-block d-flex align-items-center justify-content-between list-inline p-0 m-0"
         >
-          <li class="text-center ps-3">
-            <h6>Posts</h6>
-            <p class="mb-0">690</p>
-          </li>
-          <li class="text-center ps-3">
-            <h6>Followers</h6>
-            <p class="mb-0">206</p>
-          </li>
-          <li class="text-center ps-3">
-            <h6>Following</h6>
-            <p class="mb-0">100</p>
-          </li>
+
         </ul>
       </div>
     </div>

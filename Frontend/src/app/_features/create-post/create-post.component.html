@@ -6,7 +6,7 @@
 <div class="card-body">
   <div class="d-flex align-items-center">
     <div class="user-img">
-      <img ngSrc="assets/images/user/1.jpg" alt="userimg" class="avatar-60 rounded-circle" height="100" width="100">
+      <img [src]="userImage" defaultImage="assets/images/user/11.jpg" alt="userimg" class="avatar-60 rounded-circle" height="100" width="100">
     </div>
     <form class="post-text ms-3 w-100" data-bs-toggle="modal" data-bs-target="#post-modal" action="#">
       <input type="text" class="form-control rounded" placeholder="Write something here..." [(ngModel)]="newPostContent"

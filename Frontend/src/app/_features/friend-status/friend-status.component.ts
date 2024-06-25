@@ -1,8 +1,8 @@
 import { NgClass } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Friend } from '../../_models/friend.model';
-import { UserModelDTO } from '../../_models/userdto.model';
 import { DefaultImageDirective } from '../../_directives/default-image.directive';
+import {UserModelDTO} from "../../_models/usermodel.model";
 
 @Component({
   selector: 'app-friend-status',

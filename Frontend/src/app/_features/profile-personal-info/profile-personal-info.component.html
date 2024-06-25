@@ -5,14 +5,15 @@
       <h4 class="card-title">Personal Information</h4>
     </div>
   </div>
-  <div class="card-body">
+  <div class="card-body" *ngIf="userData">
     <form #userForm="ngForm" (ngSubmit)="onSubmit()">
       <div class="form-group row align-items-center">
         <div class="col-md-12">
           <div class="profile-img-edit">
             <img
               class="profile-pic"
-              [src]="userData.profilePicture || '../assets/images/user/11.png'"
+              [src]="userData.profilePicture"
+              defaultImage="assets/images/user/11.jpg"
               alt="profile-pic"
             />
             <div class="p-image">
@@ -50,6 +51,7 @@
         <div class="form-group col-sm-6">
           <label for="uname" class="form-label">User Name:</label>
           <input
+            disabled="disabled"
             type="text"
             class="form-control"
             id="uname"
@@ -80,7 +82,7 @@
               name="gender"
               id="inlineRadio10"
               [(ngModel)]="userData.gender"
-              [value]="'Male'"
+              [value]="'MALE'"
             />
             <label class="form-check-label" for="inlineRadio10">Male</label>
           </div>
@@ -91,7 +93,7 @@
               name="gender"
               id="inlineRadio11"
               [(ngModel)]="userData.gender"
-              [value]="'Female'"
+              [value]="'FEMALE'"
             />
             <label class="form-check-label" for="inlineRadio11">Female</label>
           </div>
@@ -114,29 +116,25 @@
             name="status"
             [(ngModel)]="userData.status"
           >
-            <option [value]="'Single'">Single</option>
-            <option [value]="'Married'">Married</option>
-            <option [value]="'Widowed'">Widowed</option>
-            <option [value]="'Divorced'">Divorced</option>
-            <option [value]="'Separated'">Separated</option>
+            <option [value]="'SINGLE'">Single</option>
+            <option [value]="'MARRIED'">Married</option>
+            <option [value]="'WIDOWED'">Widowed</option>
+            <option [value]="'DIVORCED'">Divorced</option>
+            <option [value]="'SEPARATED'">Separated</option>
           </select>
         </div>
         <div class="form-group col-sm-6">
           <label class="form-label">Country:</label>
-          <select
-            class="form-select"
-            aria-label="Default select example"
+          <input
+            type="text"
+            class="form-control"
             name="country"
             [(ngModel)]="userData.country"
-          >
-            <option [value]="'Canada'">Canada</option>
-            <option [value]="'Noida'">Noida</option>
-            <option [value]="'USA'">USA</option>
-            <option [value]="'India'">India</option>
-            <option [value]="'Africa'">Africa</option>
-          </select>
+            placeholder="Enter country"
+          />
         </div>
-<!--        <div class="form-group col-sm-6">-->
+
+        <!--        <div class="form-group col-sm-6">-->
 <!--          <label class="form-label">State:</label>-->
 <!--          <select-->
 <!--            class="form-select"-->

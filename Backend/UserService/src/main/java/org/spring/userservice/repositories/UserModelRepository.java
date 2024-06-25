@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserModelRepository extends JpaRepository<UserModel, Long> {
 	Page<UserModelDto> findAllBy(Pageable pageable);
@@ -31,10 +30,13 @@ public interface UserModelRepository extends JpaRepository<UserModel, Long> {
 	PictureDto findProfilePictureByUsername(String username);
 
 	@Query("select u from UserModel u where u.email=:email")
-	Optional<UserModel> findUserModelByEmail(@Param("email") String email);
+	UserModel findUserModelByEmail(@Param("email") String email);
 
-	@Query("select u from UserModel u where u.email=:email")
-	Optional<UserModelDto> findUserModelDtoByEmail(@Param("email") String email);
+	@Query("select u from UserModel u where u.username=:username")
+	UserModel findUserModelByUsername(@Param("username") String username);
+
+//	@Query("select u from UserModel u where u.email=:email")
+//	Optional<UserModel> findUserModelDtoByEmail(@Param("email") String email);
 
 	UserModelDto getByUsername(String username);
 }

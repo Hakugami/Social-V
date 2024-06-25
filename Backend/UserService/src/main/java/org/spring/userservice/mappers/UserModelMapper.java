@@ -41,5 +41,6 @@ public class UserModelMapper {
         model.setUrl(userModelDto.url()); // Assuming you have a URL field in UserModelDto
         return model;
     }
+
 }
 

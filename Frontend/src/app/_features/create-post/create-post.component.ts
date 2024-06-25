@@ -5,6 +5,8 @@ import {NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {HttpEvent, HttpEventType} from "@angular/common/http";
 import {Observable} from "rxjs";
+import { PublicUserModel } from '../../shared/PublicUserModel';
+import { DefaultImageDirective } from '../../_directives/default-image.directive';
 
 @Component({
   selector: 'app-create-post',
@@ -14,7 +16,8 @@ import {Observable} from "rxjs";
     NgOptimizedImage,
     FormsModule,
     NgIf,
-    NgForOf
+    NgForOf,
+    DefaultImageDirective
   ],
   styleUrls: ['./create-post.component.css']
 })
@@ -24,6 +27,7 @@ export class CreatePostComponent {
   selectedVideo: File | null = null;
   uploadProgress: number = 0;
   isUploading: boolean = false;
+  userImage= PublicUserModel.user_model.profilePicture;
 
   constructor(private postService: PostService, private authService: AuthService) {
   }

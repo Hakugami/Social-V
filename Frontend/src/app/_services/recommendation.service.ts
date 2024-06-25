@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UserModelDTO } from '../_models/userdto.model';
-import { environment } from '../../environments/environment';
+import {GatewayEnvironment} from "../../environments/gateway.environment";
+import {UserModelDTO} from "../_models/usermodel.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecommendationService {
-  private apiUrl = environment.recommendApiUrl;
+  private apiUrl = GatewayEnvironment.recommendApiUrl;
 
   constructor(private http: HttpClient) {}
 

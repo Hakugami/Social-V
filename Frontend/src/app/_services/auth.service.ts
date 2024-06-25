@@ -4,13 +4,14 @@ import {HttpClient} from "@angular/common/http";
 import {Observable, tap} from "rxjs";
 import  {jwtDecode} from 'jwt-decode';
 import {NotificationService} from "./notification.service";
+import {GatewayEnvironment} from "../../environments/gateway.environment";
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private authBaseUrl = environment.authApiUrl;
-  private userApiUrl = environment.userApiUrl;
+  private authBaseUrl = GatewayEnvironment.authApiUrl;
+  private userApiUrl = GatewayEnvironment.userApiUrl;
 
   constructor(private notificationService: NotificationService,private http: HttpClient) { }
 

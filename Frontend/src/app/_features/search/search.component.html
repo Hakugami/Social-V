@@ -1,0 +1,12 @@
+<div class="iq-search-bar device-search">
+  <form class="searchbox" (submit)="$event.preventDefault()">
+    <a class="search-link"><i class="ri-search-line"></i></a>
+    <input type="text" class="text search-input"
+           placeholder="Search users..."
+           [(ngModel)]="searchTerm"
+           (keyup)="onSearch($event)"
+           name="search">
+  </form>
+  <!-- <app-search-results [results]="users"></app-search-results> -->
+</div>
+

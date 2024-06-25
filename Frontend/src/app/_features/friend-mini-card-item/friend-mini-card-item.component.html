@@ -8,42 +8,10 @@
 </div>
 <div class="card-body">
   <ul class="profile-img-gallary p-0 m-0 list-unstyled">
-    <li class="">
-      <a href="#">
-        <img alt="gallary-image" class="img-fluid" src="assets/images/user/05.jpg"/></a>
-      <h6 class="mt-2 text-center">Anna Rexia</h6>
-    </li>
-    <li class="">
-      <a href="#"><img alt="gallary-image" class="img-fluid" src="assets/images/user/06.jpg"/></a>
-      <h6 class="mt-2 text-center">Tara Zona</h6>
-    </li>
-    <li class="">
-      <a href="#"><img alt="gallary-image" class="img-fluid" src="assets/images/user/07.jpg"/></a>
-      <h6 class="mt-2 text-center">Polly Tech</h6>
-    </li>
-    <li class="">
-      <a href="#"><img alt="gallary-image" class="img-fluid" src="assets/images/user/08.jpg"/></a>
-      <h6 class="mt-2 text-center">Bill Emia</h6>
-    </li>
-    <li class="">
-      <a href="#"><img alt="gallary-image" class="img-fluid" src="assets/images/user/09.jpg"/></a>
-      <h6 class="mt-2 text-center">Moe Fugga</h6>
-    </li>
-    <li class="">
-      <a href="#"><img alt="gallary-image" class="img-fluid" src="assets/images/user/10.jpg"/></a>
-      <h6 class="mt-2 text-center">Hal Appeno </h6>
-    </li>
-    <li class="">
-      <a href="#"><img alt="gallary-image" class="img-fluid" src="assets/images/user/07.jpg"/></a>
-      <h6 class="mt-2 text-center">Zack Lee</h6>
-    </li>
-    <li class="">
-      <a href="#"><img alt="gallary-image" class="img-fluid" src="assets/images/user/06.jpg"/></a>
-      <h6 class="mt-2 text-center">Terry Aki</h6>
-    </li>
-    <li class="">
-      <a href="#"><img alt="gallary-image" class="img-fluid" src="assets/images/user/05.jpg"/></a>
-      <h6 class="mt-2 text-center">Greta Life</h6>
+    <li class="" *ngFor="let friend of friends" >
+      <a>
+        <img alt="gallary-image" class="img-fluid" [src]="friend.profilePicture" defaultImage="assets/images/user/11.jpg"/></a>
+      <h6 class="mt-2 text-center">{{friend.firstName+" "+friend.lastName}}</h6>
     </li>
   </ul>
 </div>

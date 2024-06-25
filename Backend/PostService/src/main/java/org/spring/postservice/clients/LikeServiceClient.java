@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "LIKESERVICE", configuration = FeignClientConfiguration.class)
+@FeignClient(name = "like-service", configuration = FeignClientConfiguration.class)
 public interface LikeServiceClient {
 
 	@GetMapping("/api/v1/likes/{postId}")
