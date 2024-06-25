@@ -9,4 +9,5 @@ export const GatewayEnvironment = {
   recommendApiUrl: 'http://localhost:8082/recommendations/api/v1/recommendations',
   searchApiUrl: 'http://localhost:8082/search/api/v1/search',
   profileApiUrl: 'http://localhost:8082/users/api/v1/profile',
+  notificationApiUrl: 'http://localhost:8082/notifications/api/v1/notifications',
 }

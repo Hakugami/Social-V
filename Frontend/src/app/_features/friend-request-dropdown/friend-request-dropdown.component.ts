@@ -8,6 +8,8 @@ import {AuthService} from '../../_services/auth.service'; // Assuming you have t
 import {FriendRequest} from '../../_models/friend-request.model';
 import {SharedFriendRequestService} from "../../_services/shared-friend-request.service";
 import {Subscription} from "rxjs";
+import {Notification} from "../../_models/notification.model";
+import {NotificationService} from "../../_services/notification.service";
 
 @Component({
   selector: 'app-friend-request-dropdown',
@@ -22,12 +24,13 @@ export class FriendRequestDropdownComponent implements OnInit, OnDestroy {
   subscription: Subscription | undefined;
 
 
-  constructor(
-    private friendRequestService: FriendRequestsService,
-    private authService: AuthService,
-    private sharedFriendRequestService: SharedFriendRequestService
-  ) {
-  }
+    constructor(
+        private friendRequestService: FriendRequestsService,
+        private authService: AuthService,
+        private notificationService: NotificationService,
+        private sharedFriendRequestService: SharedFriendRequestService
+
+    ) {}
 
   ngOnInit(): void {
     this.loadFriendRequests();
@@ -37,6 +40,26 @@ export class FriendRequestDropdownComponent implements OnInit, OnDestroy {
         this.number = this.friendRequests.length;
       }
     );
+    this.notificationService.newNotificationEvent.subscribe(
+      (notification: Notification) => {
+
+        if (notification.notificationType === 'FRIEND_REQUEST') {
+          console.log('New friend request:', notification);
+          this.friendRequests.push(this.mapToFriendRequest(notification));
+          this.number = this.friendRequests.length;
+        }
+      }
+    );
+  }
+  private mapToFriendRequest(notification: Notification): FriendRequest {
+    return {
+      id:"",
+      firstname: "",
+      friendCount: 0,
+      image: "",
+      lastname: "",
+      username: notification.senderUsername,
+    };
   }
 
   loadFriendRequests() {

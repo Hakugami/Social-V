@@ -11,6 +11,8 @@ public class CommentModel {
     private String id;
     private String postId;
     private String userId;
+    private String postOwnerUsername;
     private String username;
     private String content;
+
 }

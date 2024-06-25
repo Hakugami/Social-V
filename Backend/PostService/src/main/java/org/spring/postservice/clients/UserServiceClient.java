@@ -11,4 +11,7 @@ public interface UserServiceClient {
 
 	@GetMapping("/api/v1/users/loadPicAndName/{username}")
 	PictureDto loadPicAndName(@PathVariable String username);
+
+
+
 }
