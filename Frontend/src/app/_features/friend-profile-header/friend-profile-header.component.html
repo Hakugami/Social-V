@@ -1,0 +1,36 @@
+<div class="card-body profile-page p-0">
+    <div class="profile-header">
+      <div class="position-relative">
+        <img
+          [src]="friendUser?.coverPicture" defaultImage="assets/images/page-img/profile-bg1.jpg"
+          alt="profile-bg"
+          class="rounded img-fluid"
+        />
+      </div>
+      <div class="user-detail text-center mb-3">
+        <div class="profile-img">
+          <img
+            [src]="friendUser?.profilePicture"
+            defaultImage="assets/images/user/11.jpg"
+            alt="profile-img"
+            class="avatar-130 img-fluid"
+          />
+        </div>
+        <div class="profile-detail">
+          <h3>{{ (friendUser?.firstName ?? '') + ' ' + (friendUser?.lastName ?? '') || friendUser?.username }}</h3>
+        </div>
+      </div>
+      <div class="profile-info p-3 d-flex align-items-center justify-content-between position-relative">
+        <div class="social-links">
+          <ul class="social-data-block d-flex align-items-center justify-content-between list-inline p-0 m-0">
+            <!-- Social media links here -->
+          </ul>
+        </div>
+        <div class="social-info">
+          <ul class="social-data-block d-flex align-items-center justify-content-between list-inline p-0 m-0">
+            <!-- Additional social info here -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>

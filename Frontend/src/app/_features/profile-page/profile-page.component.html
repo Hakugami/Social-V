@@ -59,7 +59,7 @@
       <div class="col-sm-12">
         <div class="tab-content">
           <div class="tab-pane fade show active" id="timeline" role="tabpanel">
-            <app-profile-timeline></app-profile-timeline>
+            <app-profile-timeline [userId]="user?.username ?? ''"></app-profile-timeline>
           </div>
           <div class="tab-pane fade" id="about" role="tabpanel">
             <app-profile-about></app-profile-about>

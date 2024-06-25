@@ -59,4 +59,8 @@ export class PostService {
   updateLike(likeId: string, emotion: string): Observable<LikesModel> {
     return this.httpClient.put<LikesModel>(`${this.likeApiBaseUrl}/${likeId}`, {emotion});
   }
+
+  getPostById(userId: string): Observable<PostModel[]> {
+    return this.httpClient.get<PostModel[]>(`${this.apiBaseUrl}/user/${userId}`);
+  }
 }

@@ -22,19 +22,6 @@ export class ProfileService {
     }
 
 
-    getProfilePosts(username: string){
-        return this.httpclient.get(`http://localhost:3000/api/profile/${username}/posts`);
-    }
-
-
-    editProfile(username: string, profile: UserModelDTO){
-        return this.httpclient.put(`http://localhost:3000/api/profile/${username}`, profile);
-    }
-
-
-
-
-
 
 
 

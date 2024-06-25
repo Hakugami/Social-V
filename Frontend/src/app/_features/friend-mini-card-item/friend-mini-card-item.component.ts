@@ -4,6 +4,7 @@ import { FriendRequestsService } from '../../_services/friend-request.service';
 import { AuthService } from '../../_services/auth.service';
 import { NgFor } from '@angular/common';
 import { DefaultImageDirective } from '../../_directives/default-image.directive';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-friend-mini-card-item',
@@ -16,7 +17,7 @@ export class FriendMiniCardItemComponent {
   friends:UserModelDTO[] = [];
   currentUser: string | null = null;
 
-  constructor(private friendService: FriendRequestsService, private authService: AuthService) {
+  constructor(private friendService: FriendRequestsService, private authService: AuthService,private router: Router) {
     const userInfo = this.authService.getUserInfoFromToken();
     this.currentUser = userInfo?.email || null;
   }
@@ -36,6 +37,10 @@ export class FriendMiniCardItemComponent {
         }
       );
     }
+  }
+
+  navigateToFriendProfile(friendId: string): void {
+    this.router.navigate(['/profile', friendId]);
   }
 
 }

@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {CreatePostComponent} from "../create-post/create-post.component";
 import {FriendMiniCardItemComponent} from "../friend-mini-card-item/friend-mini-card-item.component";
 import {PhotoMiniCardItemComponent} from "../photo-mini-card-item/photo-mini-card-item.component";
@@ -26,24 +26,12 @@ import {AuthService} from "../../_services/auth.service";
 })
 export class ProfileTimelineComponent implements OnInit{
   posts: PostModel[] = [];
+  @Input() userId!: string;
 
-  constructor(private postService: PostService,private http: HttpClient) {}
+  constructor(private postService: PostService,private http: HttpClient,private authService:AuthService) {}
 
   ngOnInit(): void {
-    /**
-     * While loading time line , as it is the home page main component , load first user data to be displayed all over the application
-     * like use email , user name , image , etc ....
-     * *** Note that i made it before loading posts as loading posts is a heavy process .
-     */
-    this.http.get<UserModelDTO>(`http://localhost:8081/profile/edit/${PublicUserModel.email}`).subscribe({
-      next: (data) => {
-        PublicUserModel.user_model = data;
-      },
-      error: (error) => {
-        console.error('Error fetching user data:', error);
-      }
-    });
-    this.postService.getPosts().subscribe(data => {
+    this.postService.getPostById(this.userId).subscribe(data => {
       this.posts = data;
     });
   }

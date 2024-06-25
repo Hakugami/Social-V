@@ -8,7 +8,7 @@
 </div>
 <div class="card-body">
   <ul class="profile-img-gallary p-0 m-0 list-unstyled">
-    <li class="" *ngFor="let friend of friends" >
+    <li class="" *ngFor="let friend of friends" (click)="navigateToFriendProfile(friend.username)">
       <a>
         <img alt="gallary-image" class="img-fluid" [src]="friend.profilePicture" defaultImage="assets/images/user/11.jpg"/></a>
       <h6 class="mt-2 text-center">{{friend.firstName+" "+friend.lastName}}</h6>

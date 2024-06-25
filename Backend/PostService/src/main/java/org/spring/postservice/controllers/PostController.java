@@ -186,24 +186,9 @@ public class PostController {
 
 	@GetMapping("/user/{id}")
 	@ApiResponse(description = "Get all posts by user id", responseCode = "200")
-	public ResponseEntity<EntityModel<List<PostResponse>>> getPostsByUserId(@PathVariable("id") String id, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+	public List<PostResponse> getPostsByUserId(@PathVariable("id") String id, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 		List<PostResponse> postDto = postService.getPostsByUserId(id, page, size);
-		EntityModel<List<PostResponse>> resource = EntityModel.of(postDto);
-
-		WebMvcLinkBuilder linkToSelf = WebMvcLinkBuilder.linkTo(methodOn(this.getClass()).getPostsByUserId(id, page, size));
-		resource.add(linkToSelf.withRel("self"));
-
-		if (postDto.size() == size) { // if this page is full, there is likely a next page
-			WebMvcLinkBuilder linkToNext = WebMvcLinkBuilder.linkTo(methodOn(this.getClass()).getPostsByUserId(id, page + 1, size));
-			resource.add(linkToNext.withRel("next"));
-		}
-
-		if (page > 0) { // if not the first page, there is a previous page
-			WebMvcLinkBuilder linkToPrev = WebMvcLinkBuilder.linkTo(methodOn(this.getClass()).getPostsByUserId(id, page - 1, size));
-			resource.add(linkToPrev.withRel("prev"));
-		}
-
-		return ResponseEntity.ok(resource);
+		return postDto;
 	}
 
 

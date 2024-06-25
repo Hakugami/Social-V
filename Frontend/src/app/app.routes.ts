@@ -8,6 +8,7 @@ import { AuthenticationComponent } from "./_features/authentication/authenticati
 import { FriendRequestPageComponent } from './_features/friend-request-page/friend-request-page.component';
 import {authGuard} from "./_guards/auth.guard";
 import { SearchResultsComponent } from './_features/search-results/search-results.component';
+import { FriendProfilePageComponent } from './_features/friend-profile-page/friend-profile-page.component';
 
 
 
@@ -25,6 +26,8 @@ export const routes: Routes = [
     canActivate: [authGuard],
     component:NewsFeedComponent
   },
+  { path: 'profile/:username', component: FriendProfilePageComponent}
+  ,
   {
     path: 'auth',
     component: AuthenticationComponent,
