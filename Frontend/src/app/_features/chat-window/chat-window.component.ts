@@ -1,10 +1,12 @@
 // chat-window.component.ts
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
-import { ChatMessageComponent } from "../chat-message/chat-message.component";
-import { FormsModule } from "@angular/forms";
-import { ChatHeaderComponent } from "../chat-header/chat-header.component";
+import {ChatMessageComponent} from "../chat-message/chat-message.component";
+import {FormsModule} from "@angular/forms";
+import {ChatHeaderComponent} from "../chat-header/chat-header.component";
 import {MessageModel} from "../../_models/message.model";
+import {AuthService} from "../../_services/auth.service";
+
 
 interface User {
   id: number;
@@ -35,6 +37,9 @@ export class ChatWindowComponent implements OnChanges {
   messages: MessageModel[] = [];
   newMessage: string = '';
 
+  constructor(private authService: AuthService) {
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['selectedUserId']) {
       this.loadUser();
@@ -59,21 +64,26 @@ export class ChatWindowComponent implements OnChanges {
   loadMessages() {
     // Here you would typically load messages from a service based on selectedUserId
     this.messages = [
-      { id: 1, sender: 'User', content: 'Hello!',  isMine: false },
-      { id: 2, sender: 'You', content: 'Hi there!', isMine: true },
+      {
+        senderId: this.authService.getUsername(), content: 'Hello!',
+        recipientId: ''
+      }
     ];
   }
 
   sendMessage() {
     if (this.newMessage.trim()) {
       const newMsg: MessageModel = {
-        id: this.messages.length + 1,
-        sender: 'You',
+        senderId: this.authService.getUsername(),
+        recipientId: this.selectedUserId ? this.selectedUserId.toString() : '',
         content: this.newMessage,
-        isMine: true
       };
       this.messages.push(newMsg);
       this.newMessage = '';
     }
+  }
+
+  checkMine(message: MessageModel): boolean {
+    return message.senderId === this.authService.getUsername();
   }
 }

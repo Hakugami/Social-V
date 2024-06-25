@@ -1,6 +1,5 @@
 export interface MessageModel {
-  id: number;
-  sender: string;
+  senderId: string;
+  recipientId: string;
   content: string;
-  isMine: boolean;
 }

@@ -28,6 +28,7 @@ export class RightNavbarComponent implements OnInit{
         this.friendRequestsService.getFriends(userInfo.email).subscribe(
             (data) => {
                 this.friends = data;
+                this.friendRequestsService.updateFriends(data);
             },
             (error) => {
                 console.error('Error fetching friends:', error);
@@ -38,6 +39,6 @@ export class RightNavbarComponent implements OnInit{
     }
   }
   friends!: UserModelDTO[];
-    
+
 
 }

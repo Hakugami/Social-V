@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import { FriendRequestDTO } from '../_models/request-dto.model';
 import { FriendRequest } from '../_models/friend-request.model';
 import { UserModelDTO } from '../_models/userdto.model';
@@ -10,6 +10,15 @@ import {environment} from '../../environments/environment';
 providedIn: 'root'
 })
 export class FriendRequestsService {
+  private friendSource = new BehaviorSubject<UserModelDTO[]>([]);
+  friends$ = this.friendSource.asObservable();
+
+
+  updateFriends(friends: UserModelDTO[]) {
+    this.friendSource.next(friends);
+  }
+
+
   deleteFriendRequest(id: string) :Observable<void> {
     return this.http.delete<void>(`${environment.friendApiUrl}/request/${id}`);
   }
@@ -23,7 +32,7 @@ constructor(private http: HttpClient) {}
 
   getFriendRequests(userId: string): Observable<FriendRequest[]> {
     return this.http.get<FriendRequest[]>(`${environment.friendApiUrl}/request/${userId}`);
-    
+
   }
 
   acceptFriendRequest(requestId: string): Observable<void> {
