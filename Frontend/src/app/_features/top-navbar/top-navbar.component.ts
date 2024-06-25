@@ -9,6 +9,7 @@ import { PublicUserModel } from '../../shared/PublicUserModel';
 import { ProfileService } from '../../_services/profile.service';
 import { DefaultImageDirective } from '../../_directives/default-image.directive';
 import { Subscription } from 'rxjs';
+import {ProfileNavigationService} from "../../_services/profile-navigation.service";
 
 @Component({
   selector: 'app-top-navbar',
@@ -30,7 +31,8 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private publicUserModel: PublicUserModel,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private profileNavigationService: ProfileNavigationService
   ) {}
 
   ngOnInit() {
@@ -40,6 +42,10 @@ export class TopNavbarComponent implements OnInit, OnDestroy {
         this.usermodel = user;
       }
     );
+  }
+
+  navigateToPersonalProfile() {
+    this.profileNavigationService.navigateToProfile();
   }
 
   ngOnDestroy() {

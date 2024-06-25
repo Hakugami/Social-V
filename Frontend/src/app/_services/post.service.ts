@@ -61,6 +61,6 @@ export class PostService {
   }
 
   getPostById(userId: string): Observable<PostModel[]> {
-    return this.httpClient.get<PostModel[]>(`${this.apiBaseUrl}/user/${userId}`);
+    return this.httpClient.get<PostModel[]>(`${this.apiBaseUrl}/${userId}`);
   }
 }

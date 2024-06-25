@@ -2,7 +2,7 @@
   <div class="profile-header">
     <div class="position-relative">
       <img
-        [src]="usermodel?.coverPicture" defaultImage="assets/images/page-img/profile-bg1.jpg"
+        [src]="user?.coverPicture" defaultImage="assets/images/page-img/profile-bg1.jpg"
         alt="profile-bg"
         class="rounded img-fluid"
       />
@@ -20,14 +20,14 @@
     <div class="user-detail text-center mb-3">
       <div class="profile-img">
         <img
-          [src]="usermodel?.profilePicture"
+          [src]="user?.profilePicture"
           defaultImage="assets/images/user/11.jpg"
           alt="profile-img"
           class="avatar-130 img-fluid"
         />
       </div>
       <div class="profile-detail">
-        <h3>{{ (usermodel?.firstName ?? '') + ' ' + (usermodel?.lastName ?? '') || usermodel?.username }}</h3>
+        <h3>{{ (user?.firstName ?? '') + ' ' + (user?.lastName ?? '') || user?.username }}</h3>
       </div>
     </div>
     <div
