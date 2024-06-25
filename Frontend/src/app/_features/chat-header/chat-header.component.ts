@@ -1,6 +1,7 @@
 // chat-header.component.ts
 import { Component, Input } from '@angular/core';
 import {NgClass, NgIf} from "@angular/common";
+import {UserModelDTO} from "../../_models/usermodel.model";
 
 interface User {
   id: number;
@@ -20,7 +21,7 @@ interface User {
   styleUrls: ['./chat-header.component.css']
 })
 export class ChatHeaderComponent {
-  @Input() selectedUser: User | null = null;
+  @Input() selectedUser: UserModelDTO | null = null;
 
   getStatusClass(status: string): string {
     switch (status) {

@@ -13,9 +13,9 @@ import {ChatWindowComponent} from "../chat-window/chat-window.component";
   styleUrl: './chat-page.component.css'
 })
 export class ChatPageComponent {
-  selectedUserId: number | null = null;
+  selectedUserId: string | null = null;
 
-  onUserSelected(userId: number) {
+  onUserSelected(userId: string) {
     this.selectedUserId = userId;
   }
 }

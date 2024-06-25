@@ -6,7 +6,7 @@
       <button id="chat-start" class="btn bg-white mt-3">Start Conversation!</button>
     </div>
   </div>
-  <div *ngIf="selectedUser" class="tab-pane fade show active" id="chatbox{{selectedUser.id}}" role="tabpanel">
+  <div *ngIf="selectedUser" class="tab-pane fade show active" id="chatbox{{selectedUser.username}}" role="tabpanel">
     <app-chat-header [selectedUser]="selectedUser"></app-chat-header>
     <div class="chat-content scroller">
       <app-chat-message *ngFor="let message of messages"

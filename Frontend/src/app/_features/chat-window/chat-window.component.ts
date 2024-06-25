@@ -6,6 +6,8 @@ import {FormsModule} from "@angular/forms";
 import {ChatHeaderComponent} from "../chat-header/chat-header.component";
 import {MessageModel} from "../../_models/message.model";
 import {AuthService} from "../../_services/auth.service";
+import {UserModelDTO} from "../../_models/usermodel.model";
+import {FriendRequestsService} from "../../_services/friend-request.service";
 
 
 interface User {
@@ -32,12 +34,12 @@ interface User {
   styleUrls: ['./chat-window.component.css']
 })
 export class ChatWindowComponent implements OnChanges {
-  @Input() selectedUserId: number | null = null;
-  selectedUser: User | null = null;
+  @Input() selectedUserId: string | null = null;
+  selectedUser: UserModelDTO | null = null;
   messages: MessageModel[] = [];
   newMessage: string = '';
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private friendRequestsService: FriendRequestsService) {
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -48,17 +50,10 @@ export class ChatWindowComponent implements OnChanges {
   }
 
   loadUser() {
-    // In a real application, you would fetch this data from a service
-    if (this.selectedUserId) {
-      this.selectedUser = {
-        id: this.selectedUserId,
-        name: 'Paul Molive',
-        avatar: 'assets/images/user/10.jpg',
-        status: 'online'
-      };
-    } else {
-      this.selectedUser = null;
-    }
+    this.friendRequestsService.friends$.subscribe(friends => {
+      this.selectedUser = friends.find(friend => friend.username === this.selectedUserId) || null;
+    });
+
   }
 
   loadMessages() {

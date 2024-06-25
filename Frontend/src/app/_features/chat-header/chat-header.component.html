@@ -6,10 +6,10 @@
         <i class="ri-menu-3-line"></i>
       </div>
       <div class="avatar chat-user-profile m-0 me-3">
-        <img [src]="selectedUser.avatar" [alt]="selectedUser.name" class="avatar-50">
-        <span class="avatar-status"><i class="ri-checkbox-blank-circle-fill" [ngClass]="getStatusClass(selectedUser.status)"></i></span>
+        <img [src]="selectedUser.profilePicture" [alt]="selectedUser.profilePicture" class="avatar-50">
+        <span class="avatar-status"><i class="ri-checkbox-blank-circle-fill" [ngClass]="selectedUser.status ? getStatusClass(selectedUser.status) : ''"></i></span>
       </div>
-      <h5 class="mb-0">{{ selectedUser.name }}</h5>
+      <h5 class="mb-0">{{ selectedUser.username }}</h5>
     </div>
   </header>
 </div>
