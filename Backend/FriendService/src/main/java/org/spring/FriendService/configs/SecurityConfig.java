@@ -3,6 +3,7 @@ package org.spring.FriendService.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -25,19 +26,18 @@ public class SecurityConfig {
 		);
 	}
 
-	private static void configureUrlBasedCors(HttpSecurity http) throws Exception {
-		//TODO: Remember to change the port number!!
-		http.cors(c -> {
-			UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-			CorsConfiguration config = new CorsConfiguration();
-			config.setAllowCredentials(true);
-			config.addAllowedOrigin("http://localhost:4200"); // Angular app url
-			config.addAllowedHeader("*");
-			config.addAllowedMethod("*");
-			source.registerCorsConfiguration("/**", config);
-			c.configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
-		});
-	}
+//	private static void configureUrlBasedCors(HttpSecurity http) throws Exception {
+//		http.cors(c -> {
+//			UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//			CorsConfiguration config = new CorsConfiguration();
+//			config.setAllowCredentials(true);
+//			config.addAllowedOrigin("http://localhost:4200"); // Angular app url
+//			config.addAllowedHeader("*");
+//			config.addAllowedMethod("*");
+//			source.registerCorsConfiguration("/**", config);
+//			c.configurationSource(source); // Use the source we just configured
+//		});
+//	}
 
 	private static void configurePermits(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests(authorizeRequests ->
@@ -50,7 +50,7 @@ public class SecurityConfig {
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		configurePermits(http);
 		configureCsrf(http);
-		configureUrlBasedCors(http);
+		http.cors(Customizer.withDefaults());
 		configureSessionManagement(http);
 		return http.build();
 

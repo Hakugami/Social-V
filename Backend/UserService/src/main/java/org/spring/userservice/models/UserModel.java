@@ -28,12 +28,12 @@ public class UserModel implements Serializable {
     @Email
     @Column(name = "email", nullable = false, unique = true)
     private String email;
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Status status;
     private String firstName;
     private String lastName;
     private String address;
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Gender gender;
     private String country;
     private String city;

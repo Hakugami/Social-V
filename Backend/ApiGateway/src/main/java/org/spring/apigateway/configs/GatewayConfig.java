@@ -3,6 +3,7 @@ package org.spring.apigateway.configs;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.spring.apigateway.filters.JwtValidationFilter;
 import org.springframework.cloud.gateway.server.mvc.handler.GatewayRouterFunctions;
 import org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions;
@@ -16,6 +17,7 @@ import static org.springframework.cloud.gateway.server.mvc.filter.BeforeFilterFu
 import static org.springframework.cloud.gateway.server.mvc.filter.LoadBalancerFilterFunctions.lb;
 
 
+@Slf4j
 @Configuration
 @RequiredArgsConstructor
 public class GatewayConfig {
@@ -27,7 +29,6 @@ public class GatewayConfig {
 		return GatewayRouterFunctions.route("user-service")
 				.route(RequestPredicates.path("/users/**"), HandlerFunctions.http())
 				.before(rewritePath("/users/(?<segment>.*)", "/${segment}"))
-				.before(jwtValidationFilter) // remove this filter if you don't want to validate JWT
 				.filter(lb("user-service"))
 				.build();
 	}
@@ -60,5 +61,47 @@ public class GatewayConfig {
 				.filter(lb("FRIENDSERVICE"))
 				.build();
 	}
+
+	@Bean
+	public RouterFunction<ServerResponse> likesRouter() {
+		return GatewayRouterFunctions.route("like-service")
+				.route(RequestPredicates.path("/likes/**"), HandlerFunctions.http())
+				.before(rewritePath("/likes/(?<segment>.*)", "/${segment}"))
+				.before(jwtValidationFilter) // remove this filter if you don't want to validate JWT
+				.filter(lb("like-service"))
+				.build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> searchRouter() {
+		return GatewayRouterFunctions.route("search-service")
+				.route(RequestPredicates.path("/search/**"), HandlerFunctions.http())
+				.before(rewritePath("/search/(?<segment>.*)", "/${segment}"))
+				.before(jwtValidationFilter) // remove this filter if you don't want to validate JWT
+				.filter(lb("SEARCHSERVICE"))
+				.build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> commentsRouter() {
+		return GatewayRouterFunctions.route("comment-service")
+				.route(RequestPredicates.path("/comments/**"), HandlerFunctions.http())
+				.before(rewritePath("/comments/(?<segment>.*)", "/${segment}"))
+				.before(jwtValidationFilter) // remove this filter if you don't want to validate JWT
+				.filter(lb("comment-service"))
+				.build();
+	}
+
+	@Bean
+	public RouterFunction<ServerResponse> recommendationRouter(){
+		return GatewayRouterFunctions.route("recommendation-service")
+				.route(RequestPredicates.path("/recommendations/**"), HandlerFunctions.http())
+				.before(rewritePath("/recommendations/(?<segment>.*)", "/${segment}"))
+				.before(jwtValidationFilter) // remove this filter if you don't want to validate JWT
+				.filter(lb("FRIENDSERVICE"))
+				.build();
+	}
+
+
 
 }

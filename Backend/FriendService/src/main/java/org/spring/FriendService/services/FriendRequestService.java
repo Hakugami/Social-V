@@ -7,6 +7,7 @@ import org.spring.FriendService.clients.UserClient;
 import org.spring.FriendService.exceptions.FriendRequestAlreadyExistsException;
 import org.spring.FriendService.exceptions.FriendRequestNotFoundException;
 import org.spring.FriendService.exceptions.UserNotFoundException;
+import org.spring.FriendService.models.dtos.FriendRequestDTO;
 import org.spring.FriendService.models.dtos.FriendRequestNotificationDTO;
 import org.spring.FriendService.models.dtos.UserModelDTO;
 import org.spring.FriendService.models.entities.FriendRequest;
@@ -35,6 +36,7 @@ public class FriendRequestService {
     private final FriendshipRepository friendshipRepository;
 
 
+
     public void sendFriendRequest(String requesterId, String recipientId) {
         if (!userClient.doesUserExist(requesterId).getBody() || !userClient.doesUserExist(recipientId).getBody()) {
             throw new UserNotFoundException("User not found");
@@ -43,6 +45,15 @@ public class FriendRequestService {
         if (friendRequestRepository.existsByRequesterIdAndRecipientId(requesterId, recipientId)) {
             throw new FriendRequestAlreadyExistsException("Friend request already exists");
         }
+
+        if(friendshipRepository.areFriends(requesterId, recipientId))
+        {
+            throw new FriendRequestAlreadyExistsException("Friendship already exists");
+        }
+
+
+
+
 
         FriendRequest friendRequest = new FriendRequest(
                 UUID.randomUUID().toString(),
@@ -77,7 +88,7 @@ public class FriendRequestService {
         List<FriendRequestNotificationDTO> friendRequestDTOs = new ArrayList<>();
         for (FriendRequest friendRequest : friendRequests) {
             UserModelDTO requester = userClient.getUserDataByEmail(friendRequest.getRequester().getId());
-            friendRequestDTOs.add(new FriendRequestNotificationDTO(friendRequest.getId(),friendRequest.getRequester().getId(), requester.firstName()+" "+requester.lastName(), requester.profilePicture()));
+            friendRequestDTOs.add(new FriendRequestNotificationDTO(friendRequest.getId(),friendRequest.getRequester().getId(), requester.firstName(),requester.lastName(), requester.profilePicture(), requester.username()));
         }
         return friendRequestDTOs;
     }
@@ -85,4 +96,16 @@ public class FriendRequestService {
     public void deleteFriendRequest(String requestId) {
         friendRequestRepository.deleteById(requestId);
     }
+
+    public List<FriendRequestDTO> getFriendRequestsByRequesterId(String requesterId) {
+        List<FriendRequest> requests= friendRequestRepository.findByRequesterId(requesterId);
+        List<FriendRequestDTO> friendRequestDTOs = new ArrayList<>();
+        for (FriendRequest request : requests) {
+            friendRequestDTOs.add(new FriendRequestDTO(request.getRecipient().getId(),request.getRequester().getId()));
+        }
+        return friendRequestDTOs;
+    }
+
+
+
 }

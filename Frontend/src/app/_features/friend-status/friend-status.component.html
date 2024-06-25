@@ -1,9 +1,9 @@
 <div class="d-flex align-items-center mb-4">
     <div class="iq-profile-avatar" [ngClass]="status">
-      <img class="rounded-circle avatar-50" [src]="friend.image" alt="">
+      <img class="rounded-circle avatar-50" [src]="friend.profilePicture" alt="" defaultImage="../../assets/images/user/11.jpg">
     </div>
     <div class="ms-3">
-      <h6 class="mb-0">{{friend.name}}</h6>
+      <h6 class="mb-0">{{ ((friend.firstName ?? '') + ' ' + (friend.lastName ?? '')).trim() || friend.username }}</h6>
       <p class="mb-0">Just Now</p>
     </div>
   </div>

@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-sm-12">
         <div class="card">
-          <app-profile-header></app-profile-header>
+          <app-profile-header [user]="user" [isOwnProfile]="isOwnProfile" ></app-profile-header>
         </div>
         <div class="card">
           <div class="card-body p-0">
@@ -59,7 +59,7 @@
       <div class="col-sm-12">
         <div class="tab-content">
           <div class="tab-pane fade show active" id="timeline" role="tabpanel">
-            <app-profile-timeline></app-profile-timeline>
+            <app-profile-timeline [username]="user?.username ?? ''" [isOwnProfile]="isOwnProfile"></app-profile-timeline>
           </div>
           <div class="tab-pane fade" id="about" role="tabpanel">
             <app-profile-about></app-profile-about>
@@ -76,4 +76,5 @@
       </div>
     </div>
   </div>
+</div>
 

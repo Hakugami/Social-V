@@ -13,12 +13,15 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class PostResponse {
+	String id;
 	String userId;
 	String username;
 	String content;
 	LocalDateTime createdAt;
+	String profilePicture;
 	LikeDto likes;
 	List<CommentDto> comments;
 	String videoUrl;
 	List<String> imagesUrl;
+	LocalDateTime updatedAt;
 }

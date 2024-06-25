@@ -10,7 +10,7 @@
     </div>
 
     <div class="col-lg-8">
-      <div class="card" id="post-modal-data">
+      <div class="card" id="post-modal-data" *ngIf="isOwnProfile">
         <app-create-post></app-create-post>
       </div>
       <!-- Iterate over the posts array -->

@@ -1,9 +1,9 @@
 <div class="iq-friend-request">
   <div class="iq-sub-card iq-sub-card-big d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center">
-      <img class="avatar-40 rounded" [src]="friendRequest.image" alt="">
+      <img class="avatar-40 rounded" [src]="friendRequest.image" alt="" defaultImage="../../assets/images/user/11.jpg">
       <div class="ms-3">
-        <h6 class="mb-0">{{friendRequest.name}}</h6>
+        <h6>{{ ((friendRequest.firstname ?? '') + ' ' + (friendRequest.lastname ?? '')).trim() || friendRequest.username }}</h6>
         <p class="mb-0"></p>
       </div>
     </div>

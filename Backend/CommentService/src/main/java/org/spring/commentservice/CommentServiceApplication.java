@@ -14,9 +14,9 @@ public class CommentServiceApplication {
 		SpringApplication.run(CommentServiceApplication.class, args);
 	}
 
-	@KafkaListener(topics = "post-topic")
-	public void handlePostCreatedEvent(PostCreatedEvent postCreatedEvent) {
-		log.info("Received post created event: {}", postCreatedEvent.getPostId());
-	}
+//	@KafkaListener(topics = "post-topic")
+//	public void handlePostCreatedEvent(PostCreatedEvent postCreatedEvent) {
+//		log.info("Received post created event: {}", postCreatedEvent.getPostId());
+//	}
 
 }

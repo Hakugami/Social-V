@@ -1,7 +1,6 @@
 package org.spring.postservice.controllers;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping("/api/v1/posts")
 @Slf4j
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
 public class PostController {
 
 	private final PostService postService;
@@ -188,46 +186,38 @@ public class PostController {
 
 	@GetMapping("/user/{id}")
 	@ApiResponse(description = "Get all posts by user id", responseCode = "200")
-	public ResponseEntity<EntityModel<List<PostResponse>>> getPostsByUserId(@PathVariable("id") String id, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+	public List<PostResponse> getPostsByUserId(@PathVariable("id") String id, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 		List<PostResponse> postDto = postService.getPostsByUserId(id, page, size);
-		EntityModel<List<PostResponse>> resource = EntityModel.of(postDto);
-
-		WebMvcLinkBuilder linkToSelf = WebMvcLinkBuilder.linkTo(methodOn(this.getClass()).getPostsByUserId(id, page, size));
-		resource.add(linkToSelf.withRel("self"));
-
-		if (postDto.size() == size) { // if this page is full, there is likely a next page
-			WebMvcLinkBuilder linkToNext = WebMvcLinkBuilder.linkTo(methodOn(this.getClass()).getPostsByUserId(id, page + 1, size));
-			resource.add(linkToNext.withRel("next"));
-		}
-
-		if (page > 0) { // if not the first page, there is a previous page
-			WebMvcLinkBuilder linkToPrev = WebMvcLinkBuilder.linkTo(methodOn(this.getClass()).getPostsByUserId(id, page - 1, size));
-			resource.add(linkToPrev.withRel("prev"));
-		}
-
-		return ResponseEntity.ok(resource);
+		return postDto;
 	}
 
+
+	@GetMapping("/{username}")
+	@ApiResponse(description = "Get all posts by username", responseCode = "200")
+	public ResponseEntity<List<PostResponse>> getPostsByUsername(@PathVariable("username") String username, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+		List<PostResponse> postDto = postService.getPostsByUsername(username, page, size);
+		return ResponseEntity.ok(postDto);
+	}
 
 	@GetMapping("/")
 	@ApiResponse(description = "Get all posts", responseCode = "200")
-	public ResponseEntity<EntityModel<List<PostResponse>>> getAllPosts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+	public ResponseEntity<List<PostResponse>> getAllPosts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 		List<PostResponse> postDto = postService.getAllPosts(page, size);
-		EntityModel<List<PostResponse>> resource = EntityModel.of(postDto);
-
-		WebMvcLinkBuilder linkToSelf = WebMvcLinkBuilder.linkTo(methodOn(this.getClass()).getAllPosts(page, size));
-		resource.add(linkToSelf.withRel("self"));
-
-		if (postDto.size() == size) { // if this page is full, there is likely a next page
-			WebMvcLinkBuilder linkToNext = WebMvcLinkBuilder.linkTo(methodOn(this.getClass()).getAllPosts(page + 1, size));
-			resource.add(linkToNext.withRel("next"));
-		}
-
-		if (page > 0) { // if not the first page, there is a previous page
-			WebMvcLinkBuilder linkToPrev = WebMvcLinkBuilder.linkTo(methodOn(this.getClass()).getAllPosts(page - 1, size));
-			resource.add(linkToPrev.withRel("prev"));
-		}
-
-		return ResponseEntity.ok(resource);
+		return ResponseEntity.ok(postDto);
 	}
+
+	@PutMapping("/{id}")
+	@ApiResponse(description = "Update post by id", responseCode = "200")
+	public ResponseEntity<PostModel> updatePost(@PathVariable("id") String id, @RequestBody PostDto postDto) {
+		PostModel postModel = postService.updatePost(id, postDto);
+		return ResponseEntity.ok(postModel);
+	}
+
+	@DeleteMapping("/{id}")
+	@ApiResponse(description = "Delete post by id", responseCode = "204")
+	public ResponseEntity<Void> deletePost(@PathVariable("id") String id) {
+		postService.deletePost(id);
+		return ResponseEntity.noContent().build();
+	}
+
 }

@@ -1,24 +1,33 @@
 import { Injectable } from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {Observable, tap} from "rxjs";
 import  {jwtDecode} from 'jwt-decode';
+import {NotificationService} from "./notification.service";
+import {GatewayEnvironment} from "../../environments/gateway.environment";
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private authBaseUrl = environment.authApiUrl;
-  private userApiUrl = environment.userApiUrl;
+  private authBaseUrl = GatewayEnvironment.authApiUrl;
+  private userApiUrl = GatewayEnvironment.userApiUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(private notificationService: NotificationService,private http: HttpClient) { }
 
   register(user: any): Observable<any> {
-    return this.http.post(`${this.authBaseUrl}/register`, user);
+    return this.http.post(`${this.userApiUrl}/register`, user);
   }
 
   login(credentials: any): Observable<any> {
     return this.http.post(`${this.authBaseUrl}/login`, credentials);
+  }
+  handleLoginResponse(response: any): void {
+    const jwtToken = response.jwtToken;
+    const refreshToken = response.refreshToken;
+    localStorage.setItem('token', jwtToken);
+    localStorage.setItem('refresh', refreshToken);
+    this.notificationService.subscribeToUserQueue(this.getUsername());
   }
   checkFullName(fullName: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.userApiUrl}/checkFullName`, { params: { fullName } });
@@ -45,7 +54,6 @@ export class AuthService {
     if (decoded.exp) {
       const expirationDate = new Date(0);
       expirationDate.setUTCSeconds(decoded.exp);
-      console.log(expirationDate);
       return expirationDate < new Date();
     }
     return false;

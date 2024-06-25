@@ -6,6 +6,10 @@ import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {RegisterDTO} from "../../_models/register.model";
 import {LoginModel} from "../../_models/login.model";
 import {AuthService} from "../../_services/auth.service";
+import {NotificationService} from "../../_services/notification.service";
+import {PublicUserModel} from "../../shared/PublicUserModel";
+import { UserModelDTO } from '../../_models/usermodel.model';
+import { ProfileService } from '../../_services/profile.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +21,7 @@ import {AuthService} from "../../_services/auth.service";
 export class LoginComponent implements OnInit {
   loginForm: FormGroup = {} as FormGroup;
 
-  constructor(private authService: AuthService,private http:HttpClient,private router: Router) { }
+  constructor(private notificationService : NotificationService,private authService: AuthService,private http:HttpClient,private router: Router,private profileService:ProfileService) { }
 
   ngOnInit() {
     this.loginForm = new FormGroup({
@@ -33,16 +37,17 @@ export class LoginComponent implements OnInit {
         password: this.loginForm.get('password')?.value
       };
       this.authService.login(loginModel).subscribe(response => {
-        console.log(response);
-        const jwtToken = response.jwtToken;
-        const refreshToken = response.refreshToken;
-        localStorage.setItem('token', jwtToken);
-        localStorage.setItem('refresh', refreshToken);
+
+        PublicUserModel.email = this.loginForm.get('email')?.value;
+        this.authService.handleLoginResponse(response);
         this.router.navigate(['home']);
       }, error => {
         console.log(error);
       });
     }
   }
+
+
+
 
 }
