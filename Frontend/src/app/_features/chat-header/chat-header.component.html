@@ -1,0 +1,15 @@
+<!-- chat-header.component.html -->
+<div class="chat-head" *ngIf="selectedUser">
+  <header class="d-flex justify-content-between align-items-center bg-white pt-3 ps-3 pe-3 pb-3">
+    <div class="d-flex align-items-center">
+      <div class="sidebar-toggle">
+        <i class="ri-menu-3-line"></i>
+      </div>
+      <div class="avatar chat-user-profile m-0 me-3">
+        <img [src]="selectedUser.profilePicture" [alt]="selectedUser.profilePicture" class="avatar-50">
+        <span class="avatar-status"><i class="ri-checkbox-blank-circle-fill" [ngClass]="selectedUser.status ? getStatusClass(selectedUser.status) : ''"></i></span>
+      </div>
+      <h5 class="mb-0">{{ selectedUser.username }}</h5>
+    </div>
+  </header>
+</div>

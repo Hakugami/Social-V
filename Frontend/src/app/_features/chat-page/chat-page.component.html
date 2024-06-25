@@ -1,0 +1,22 @@
+<div id="content-page" class="content-page">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-body chat-page p-0">
+            <div class="chat-data-block">
+              <div class="row">
+                <div class="col-lg-3 chat-data-left scroller">
+                  <app-direct-message-members (userSelected)="onUserSelected($event)"></app-direct-message-members>
+                </div>
+                <div class="col-lg-9 chat-data p-0 chat-data-right">
+                  <app-chat-window [selectedUserId]="selectedUserId"></app-chat-window>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

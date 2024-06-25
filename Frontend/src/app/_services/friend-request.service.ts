@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import { FriendRequestDTO } from '../_models/request-dto.model';
 import { FriendRequest } from '../_models/friend-request.model';
 
@@ -12,6 +12,15 @@ import { UserModelDTO } from '../_models/usermodel.model';
 providedIn: 'root'
 })
 export class FriendRequestsService {
+  private friendSource = new BehaviorSubject<UserModelDTO[]>([]);
+  friends$ = this.friendSource.asObservable();
+
+
+  updateFriends(friends: UserModelDTO[]) {
+    this.friendSource.next(friends);
+  }
+
+
 
   removeFriend(currentUser: string, email: string) {
     return this.http.delete<void>(`${GatewayEnvironment.friendApiUrl}/${currentUser}?friendId=${email}`);
