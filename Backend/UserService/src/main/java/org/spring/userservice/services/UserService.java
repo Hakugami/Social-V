@@ -127,11 +127,19 @@ public class UserService {
 		return currentUserModel;
 	}
 
-	public UserModel updateProfileInfo(UserModelDto comingUserModelDto) {
-		UserModel userModel = userModelRepository.findUserModelByEmail(comingUserModelDto.email());
-		userModel = updateCurrentUserModel(comingUserModelDto, userModel);
-		UserModel saved = userModelRepository.save(userModel);
-		log.info("User updated successfully : {}", saved.getUsername());
+	public UserModel updateProfileInfo(UserModelDto comingUserModelDto, String profilePicUrl) {
+		UserModel saved = null;
+		try {
+			UserModel userModel = userModelRepository.findUserModelByEmail(comingUserModelDto.email());
+			if(profilePicUrl!=null && !profilePicUrl.isEmpty()){
+				userModel.setProfilePicture(profilePicUrl);
+			}
+			userModel = updateCurrentUserModel(comingUserModelDto, userModel);
+			saved = userModelRepository.save(userModel);
+			log.info("User updated successfully : {}", saved.getUsername());
+		} catch (RuntimeException e) {
+			log.info("something went wrong !");
+		}
 		kafkaTemplate.send(USER_TOPIC, new UserRegistrationEvent(saved.getId().toString(), saved.getUsername(),
 				saved.getEmail(), saved.getProfilePicture(), saved.getFirstName(), saved.getLastName()));
 		return saved;

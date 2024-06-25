@@ -207,6 +207,13 @@ public class PostController {
 	}
 
 
+	@GetMapping("/{username}")
+	@ApiResponse(description = "Get all posts by username", responseCode = "200")
+	public ResponseEntity<List<PostResponse>> getPostsByUsername(@PathVariable("username") String username, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+		List<PostResponse> postDto = postService.getPostsByUsername(username, page, size);
+		return ResponseEntity.ok(postDto);
+	}
+
 	@GetMapping("/")
 	@ApiResponse(description = "Get all posts", responseCode = "200")
 	public ResponseEntity<List<PostResponse>> getAllPosts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {

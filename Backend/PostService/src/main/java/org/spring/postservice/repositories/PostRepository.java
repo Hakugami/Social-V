@@ -13,4 +13,6 @@ public interface PostRepository extends MongoRepository<PostModel, String> {
 	Collection<PostModel> findAllBy(PageRequest of);
 
 	List<PostModel> findByIdAndType(String id, PageRequest of, String type);
+
+	List<PostModel> findByUsername(String username, PageRequest of);
 }
