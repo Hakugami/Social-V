@@ -7,13 +7,14 @@ import { UserModelDTO } from '../_models/userdto.model';
 import {GatewayEnvironment} from "../../environments/gateway.environment";
 
 
+
 @Injectable({
 providedIn: 'root'
 })
 export class FriendRequestsService {
-  
+
   removeFriend(currentUser: string, email: string) {
-    return this.http.delete<void>(`${environment.friendApiUrl}/${currentUser}?friendId=${email}`);
+    return this.http.delete<void>(`${GatewayEnvironment.friendApiUrl}/${currentUser}?friendId=${email}`);
   }
   deleteFriendRequest(id: string) :Observable<void> {
     return this.http.delete<void>(`${GatewayEnvironment.friendApiUrl}/request/${id}`);

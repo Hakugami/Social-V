@@ -6,6 +6,8 @@ import { NgFor } from '@angular/common';
 import { FriendRequestsService } from '../../_services/friend-request.service';
 import { AuthService } from '../../_services/auth.service'; // Assuming you have this service
 import { FriendRequest} from '../../_models/friend-request.model';
+import {Notification} from "../../_models/notification.model";
+import {NotificationService} from "../../_services/notification.service";
 
 @Component({
     selector: 'app-friend-request-dropdown',
@@ -21,11 +23,32 @@ export class FriendRequestDropdownComponent implements OnInit {
     constructor(
         private friendRequestService: FriendRequestsService,
         private authService: AuthService,
+        private notificationService: NotificationService
     ) {}
 
     ngOnInit(): void {
-        this.loadFriendRequests();
+      this.loadFriendRequests();
+      this.notificationService.newNotificationEvent.subscribe(
+        (notification: Notification) => {
+
+          if (notification.notificationType === 'FRIEND_REQUEST') {
+            console.log('New friend request:', notification);
+            this.friendRequests.push(this.mapToFriendRequest(notification));
+            this.number = this.friendRequests.length;
+          }
+        }
+      );
     }
+  private mapToFriendRequest(notification: Notification): FriendRequest {
+    return {
+      id:"",
+      firstname: "",
+      friendCount: 0,
+      image: "",
+      lastname: "",
+      username: notification.senderUsername,
+    };
+  }
 
     loadFriendRequests() {
         const userInfo = this.authService.getUserInfoFromToken();
@@ -56,7 +79,7 @@ export class FriendRequestDropdownComponent implements OnInit {
           }
         );
       }
-      
+
       deleteRequest(request: FriendRequest) {
         // Implement deletion logic here
         this.friendRequestService.deleteFriendRequest(request.id).subscribe(

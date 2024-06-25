@@ -56,8 +56,6 @@ public class FriendRequestService {
 
 
 
-
-
         FriendRequest friendRequest = new FriendRequest(
                 UUID.randomUUID().toString(),
                 FriendRequestStatus.PENDING,
@@ -65,10 +63,12 @@ public class FriendRequestService {
                 new UserReference(requesterId),
                 new UserReference(recipientId)
         );
+        UserModelDTO recipient = userClient.getUserDataByEmail(recipientId);
+        UserModelDTO sender = userClient.getUserDataByEmail(requesterId);
         kafkaTemplate.send("notifications-topic", Notification.builder()
                 .id(friendRequest.getId())
-                .senderUsername(requesterId)
-                .receiverUsername(recipientId)
+                .senderUsername(sender.username())
+                .receiverUsername(recipient.username())
                 .message("Friend request")
                 .notificationType("FRIEND_REQUEST")
                 .build());

@@ -10,6 +10,7 @@ import {map, Observable, tap} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {NotificationDto} from "../_models/notification-dto.model";
+import {GatewayEnvironment} from "../../environments/gateway.environment";
 
 
 
@@ -19,7 +20,7 @@ import {NotificationDto} from "../_models/notification-dto.model";
 export class NotificationService {
   private stompClient: Client | null = null;
   public newNotificationEvent = new EventEmitter<Notification>();
-  private notificationApiUrl = environment.notificationApiUrl;
+  private notificationApiUrl = GatewayEnvironment.notificationApiUrl;
 
   constructor(private http: HttpClient) {
     const username = this.getUsername()
@@ -49,7 +50,6 @@ export class NotificationService {
       }, 1000);
     };
     this.stompClient.onConnect = () => {
-      console.log('connected enta fen yabny');
       this.subscribeToUserQueue(username);
     };
     this.stompClient.activate();
@@ -92,6 +92,7 @@ export class NotificationService {
       console.log('received from private queue' + message.body);
       let notification: Notification = JSON.parse(message.body);
       notification = this.processNotification(notification);
+      console.log('processed notification:', notification);
       this.newNotificationEvent.emit(notification);
     });
   }

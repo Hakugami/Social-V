@@ -23,7 +23,7 @@ import java.util.List;
 @RequestMapping("/api/v1/notifications")
 @RequiredArgsConstructor
 @Slf4j
-@CrossOrigin(origins = "http://localhost:4200")
+
 public class NotificationController {
     private final NotificationService notificationService;
     @MessageMapping("/public.notifications")
