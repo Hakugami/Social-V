@@ -1,5 +1,6 @@
 package org.spring.messageservice.controller;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.spring.messageservice.model.ChatMessage;
 import org.spring.messageservice.model.ChatNotification;
@@ -11,6 +12,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class ChatController {
     private final ChatMessageService chatMessageService;
 
     @MessageMapping("/chat")
+    @ApiResponse(description = "send a chat message",responseCode = "200")
     public void processMessage(@Payload ChatMessage chatMessage) {
         ChatMessage savedMessage = chatMessageService.save(chatMessage);
 
@@ -36,6 +39,7 @@ public class ChatController {
     }
 
     @GetMapping("/messages/{senderId}/{recipientId}")
+    @ApiResponse(description = "get all the chat messages between two users",responseCode = "200")
     public ResponseEntity<List<ChatMessage>> getChatMessages(@PathVariable("senderId") String senderId,
                                                              @PathVariable("recipientId")  String recipientId)
     {

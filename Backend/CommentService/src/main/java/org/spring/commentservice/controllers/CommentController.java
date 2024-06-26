@@ -26,6 +26,7 @@ public class CommentController {
 	private final CommentService commentService;
 
 	@GetMapping("/{id}")
+	@ApiResponse(description = "Get comments by post id", responseCode = "200")
 	public ResponseEntity<List<CommentDto>> getCommentsByPostId(@PathVariable("id") String postId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 		log.info("Received request to get comments for post with id: {}", postId);
 		List<CommentDto> commentDtos = commentService.getCommentByPostId(postId, page, size);
@@ -37,6 +38,7 @@ public class CommentController {
 	}
 
 	@GetMapping("/")
+	@ApiResponse(description = "Get all comments", responseCode = "200")
 	public ResponseEntity<CollectionModel<EntityModel<CommentDto>>> getAllComments(
 			@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {

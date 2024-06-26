@@ -33,13 +33,14 @@ public class FriendshipController {
     }
 
     @GetMapping("/request/{userId}")
+    @ApiResponse(description = "get all the friend requests of a user",responseCode = "200")
     public ResponseEntity<List<FriendRequestNotificationDTO>> getFriendRequest(@PathVariable String userId) {
         List<FriendRequestNotificationDTO> friendRequest = friendRequestService.getFriendRequests(userId);
         return ResponseEntity.ok(friendRequest);
     }
 
     @PostMapping("/accept")
-    @ApiResponse(description = "method",responseCode = "200")
+    @ApiResponse(description = "accept friend request",responseCode = "200")
     public ResponseEntity<Void> acceptFriendRequest(@RequestParam String requestId) {
         friendRequestService.acceptFriendRequest(requestId);
         return ResponseEntity.ok().build();
