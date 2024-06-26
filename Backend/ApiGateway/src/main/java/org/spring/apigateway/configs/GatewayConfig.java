@@ -112,5 +112,15 @@ public class GatewayConfig {
 	}
 
 
+	@Bean
+	public RouterFunction<ServerResponse> chatRouter() {
+		return GatewayRouterFunctions.route("message-service")
+				.route(RequestPredicates.path("/messages/**"), HandlerFunctions.http())
+				.before(rewritePath("/messages/(?<segment>.*)", "/${segment}"))
+				.before(jwtValidationFilter) // remove this filter if you don't want to validate JWT
+				.filter(lb("message-service"))
+				.build();
+	}
+
 
 }

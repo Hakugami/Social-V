@@ -32,7 +32,9 @@ export class DirectMessageMembersComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.currentUser = this.publicUserModel.getUserModel();
+    this.publicUserModel.userModel$.subscribe(user => {
+      this.currentUser = user;
+    });
     this.subscribeToFriends();
   }
 

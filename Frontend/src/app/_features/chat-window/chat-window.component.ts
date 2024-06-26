@@ -1,116 +1,93 @@
-import {Component, Input, OnChanges, SimpleChanges, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
-import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
-import {ChatMessageComponent} from "../chat-message/chat-message.component";
-import {FormsModule} from "@angular/forms";
-import {ChatHeaderComponent} from "../chat-header/chat-header.component";
-import {MessageModel} from "../../_models/message.model";
-import {AuthService} from "../../_services/auth.service";
-import {UserModelDTO} from "../../_models/usermodel.model";
-import {SharedFriendRequestService} from "../../_services/shared-friend-request.service";
-import {Subscription} from 'rxjs';
+import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { BehaviorSubject, Subscription, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { MessageModel } from "../../_models/message.model";
+import { AuthService } from "../../_services/auth.service";
+import { UserModelDTO } from "../../_models/usermodel.model";
+import { SharedFriendRequestService } from "../../_services/shared-friend-request.service";
+import { ChatHeaderComponent } from "../chat-header/chat-header.component";
+import { ChatMessageComponent } from "../chat-message/chat-message.component";
+import { AsyncPipe, JsonPipe, NgForOf, NgIf } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { ChatService } from "../../_services/chat.service";
 
 @Component({
   selector: 'app-chat-window',
   templateUrl: './chat-window.component.html',
+  styleUrls: ['./chat-window.component.css'],
   standalone: true,
   imports: [
-    NgIf,
-    ChatMessageComponent,
-    FormsModule,
     ChatHeaderComponent,
-    NgClass,
-    NgForOf,
-    DatePipe
+    ChatMessageComponent,
+    AsyncPipe,
+    JsonPipe,
+    FormsModule,
+    NgIf,
+    NgForOf
   ],
-  styleUrls: ['./chat-window.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChatWindowComponent implements OnChanges, OnInit, OnDestroy {
-  private _selectedUserId: string | null = null;
-  selectedUser: UserModelDTO | null = null;
-  messages: MessageModel[] = [];
-  newMessage: string = '';
-  private friendsSubscription: Subscription | undefined;
-
-
-  @Input()
-  set selectedUserId(value: string | null) {
-    console.log('selectedUserId changed:', value);
-    this._selectedUserId = value;
-    // Trigger user and message loading when the ID changes
-    this.loadUser();
-    this.loadMessages();
+export class ChatWindowComponent implements OnInit, OnDestroy {
+  private selectedUserIdSubject = new BehaviorSubject<string | null>(null);
+  @Input() set selectedUserId(value: string | null) {
+    console.log('selectedUserId setter called with value:', value);
+    this.selectedUserIdSubject.next(value);
   }
-
   get selectedUserId(): string | null {
-    return this._selectedUserId;
+    return this.selectedUserIdSubject.getValue();
   }
+
+  selectedUser$ = new BehaviorSubject<UserModelDTO | null>(null);
+  messages$ = this.chatService.messages$;
+  newMessage: string = '';
+  private subscription: Subscription = new Subscription();
 
   constructor(
     private authService: AuthService,
     private sharedFriendRequestService: SharedFriendRequestService,
+    private chatService: ChatService,
     private cdr: ChangeDetectorRef
-  ) {
-    console.log('Chat window component initialized constructor ' + this.selectedUserId);
-  }
+  ) {}
 
   ngOnInit() {
-    this.subscribeTofriends();
-    console.log('Chat window component initialized' + this.selectedUserId);
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['selectedUserId']) {
-      this.loadUser();
-      this.loadMessages();
-    }
+    this.subscription.add(
+      combineLatest([
+        this.selectedUserIdSubject,
+        this.sharedFriendRequestService.friends$
+      ]).pipe(
+        map(([selectedUserId, friends]) => {
+          console.log('Combining selectedUserId and friends:', selectedUserId, friends);
+          return friends.find(friend => friend.username === selectedUserId) || null;
+        })
+      ).subscribe(selectedUser => {
+        console.log('New selected user:', selectedUser);
+        this.selectedUser$.next(selectedUser);
+        this.loadMessages();
+        this.cdr.detectChanges();
+      })
+    );
   }
 
   ngOnDestroy() {
-    if (this.friendsSubscription) {
-      this.friendsSubscription.unsubscribe();
-    }
-  }
-
-  private subscribeTofriends() {
-    this.friendsSubscription = this.sharedFriendRequestService.friends$.subscribe(friends => {
-      this.loadUser(friends);
-    });
-  }
-
-  loadUser(friends: UserModelDTO[] = []) {
-    const newSelectedUser = friends.find(friend => friend.username === this.selectedUserId) || null;
-    if (JSON.stringify(this.selectedUser) !== JSON.stringify(newSelectedUser)) {
-      this.selectedUser = newSelectedUser;
-      this.cdr.detectChanges();
-    }
+    this.subscription.unsubscribe();
   }
 
   loadMessages() {
-    // Here you would typically load messages from a service based on selectedUserId
-    const newMessages = [
-      {
-        senderId: this.authService.getUsername(),
-        content: 'Hello!',
-        recipientId: ''
-      }
-    ];
-    if (JSON.stringify(this.messages) !== JSON.stringify(newMessages)) {
-      this.messages = newMessages;
-      this.cdr.detectChanges();
+    const selectedUserId = this.selectedUserId;
+    if (selectedUserId) {
+      this.chatService.fetchMessages(this.authService.getUsername(), selectedUserId);
     }
   }
 
   sendMessage() {
-    if (this.newMessage.trim()) {
+    if (this.newMessage.trim() && this.selectedUserId) {
       const newMsg: MessageModel = {
         senderId: this.authService.getUsername(),
-        recipientId: this.selectedUserId ? this.selectedUserId.toString() : '',
+        recipientId: this.selectedUserId,
         content: this.newMessage,
       };
-      this.messages = [...this.messages, newMsg];
+      this.chatService.sendMessage(newMsg);
       this.newMessage = '';
-      this.cdr.detectChanges();
     }
   }
 

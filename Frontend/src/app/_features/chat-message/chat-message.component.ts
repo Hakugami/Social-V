@@ -13,6 +13,7 @@ import {AuthService} from "../../_services/auth.service";
 })
 export class ChatMessageComponent {
   @Input() message!:MessageModel ;
+  @Input() isMine!: boolean;
 
   constructor(private authService: AuthService) { }
 
