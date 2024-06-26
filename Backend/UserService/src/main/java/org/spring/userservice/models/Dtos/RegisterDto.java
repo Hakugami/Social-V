@@ -26,5 +26,9 @@ public class RegisterDto implements Serializable {
 	String password;
 	@Email
 	String email;
+	@NotEmpty(message = "first name can't be empty")
+	String firstName;
+	@NotEmpty(message = "last name can't be empty")
+	String lastName;
 
 }

@@ -1,12 +1,13 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {PostService} from '../../_services/post.service';
 import {AuthService} from '../../_services/auth.service';
 import {NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {HttpEvent, HttpEventType} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {finalize, Observable} from "rxjs";
 import { PublicUserModel } from '../../shared/PublicUserModel';
 import { DefaultImageDirective } from '../../_directives/default-image.directive';
+import {PostUpdateService} from "../../_services/post-update.service";
 
 @Component({
   selector: 'app-create-post',
@@ -21,15 +22,23 @@ import { DefaultImageDirective } from '../../_directives/default-image.directive
   ],
   styleUrls: ['./create-post.component.css']
 })
-export class CreatePostComponent {
+export class CreatePostComponent implements OnInit{
   newPostContent: string = '';
   selectedFiles: File[] = [];
   selectedVideo: File | null = null;
   uploadProgress: number = 0;
   isUploading: boolean = false;
-  userImage= PublicUserModel.user_model.profilePicture;
+  userImage?: string | null | undefined;
 
-  constructor(private postService: PostService, private authService: AuthService) {
+  ngOnInit() {
+    this.publicUserModel.userModel$.subscribe((userModel) => {
+      this.userImage = userModel?.profilePicture;
+    });
+  }
+
+  constructor(private postService: PostService, private authService: AuthService
+              ,private publicUserModel: PublicUserModel
+              ,private postUpdateService : PostUpdateService){
   }
 
   onFileSelected(event: any) {
@@ -125,7 +134,8 @@ export class CreatePostComponent {
   }
 
   createTextPost(postDto: any) {
-    this.postService.createTextPost(postDto).subscribe((response: any) => {
+    this.postService.createTextPost(postDto).pipe(finalize(() => this.postUpdateService.notifyPostCreated()))
+      .subscribe((response: any) => {
       console.log('Text post created successfully', response);
       this.resetForm();
     }, (error: any) => {

@@ -11,6 +11,7 @@ import org.spring.userservice.models.Dtos.UserModelDto;
 import org.spring.userservice.models.UserModel;
 import org.spring.userservice.repositories.UserModelRepository;
 import org.spring.userservice.utils.SecurityUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -23,7 +24,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
-
+	@Value("${default.user.image.url}")
+	private String defaultProfilePicture;
 	private final UserModelRepository userModelRepository;
 	private final SecurityUtil securityUtil;
 	private final RegisterMapper registerMapper;
@@ -33,7 +35,9 @@ public class UserService {
 	public boolean createUser(RegisterDto registerDto) {
 		try {
 			registerDto.setPassword(securityUtil.hashPassword(registerDto.getPassword()));
-			UserModel userModel = userModelRepository.save(registerMapper.toEntity(registerDto));
+			UserModel registerMapperEntity = registerMapper.toEntity(registerDto);
+			registerMapperEntity.setProfilePicture(defaultProfilePicture);
+			UserModel userModel = userModelRepository.save(registerMapperEntity);
 			kafkaTemplate.send(USER_TOPIC, new UserRegistrationEvent(userModel.getId().toString(), userModel.getUsername(),
 					userModel.getEmail(), userModel.getProfilePicture(), userModel.getFirstName(), userModel.getLastName()));
 			log.info("User created successfully : {}", registerDto.getUsername());
@@ -131,10 +135,11 @@ public class UserService {
 		UserModel saved = null;
 		try {
 			UserModel userModel = userModelRepository.findUserModelByEmail(comingUserModelDto.email());
+			userModel = updateCurrentUserModel(comingUserModelDto, userModel);
 			if(profilePicUrl!=null && !profilePicUrl.isEmpty()){
 				userModel.setProfilePicture(profilePicUrl);
 			}
-			userModel = updateCurrentUserModel(comingUserModelDto, userModel);
+			log.info("Updating user : {}", userModel);
 			saved = userModelRepository.save(userModel);
 			log.info("User updated successfully : {}", saved.getUsername());
 		} catch (RuntimeException e) {

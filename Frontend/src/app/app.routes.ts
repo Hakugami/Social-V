@@ -20,14 +20,14 @@ import {ChatWindowComponent} from "./_features/chat-window/chat-window.component
 
 export const routes: Routes = [
   {
-    path: 'profile/:username',
-    canActivate: [authGuard],
-    component: ProfilePageComponent
-  },
-  {
     path: 'profile/edit',
     canActivate: [authGuard],
     component: ProfileEditComponent
+  },
+  {
+    path: 'profile/:username',
+    canActivate: [authGuard],
+    component: ProfilePageComponent
   },
   {
     path: '',

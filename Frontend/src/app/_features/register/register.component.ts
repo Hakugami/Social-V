@@ -26,20 +26,31 @@ export class RegisterComponent implements OnInit{
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
-      fullName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      username: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, passwordValidator()]],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
       terms: [false, Validators.requiredTrue]
     });
 
-    this.registerForm.get('fullName')?.valueChanges.pipe(
+    this.registerForm.get('username')?.valueChanges.pipe(
       debounceTime(2000)  // Wait for 2 seconds of inactivity
     ).subscribe(value => {
       if (value) {
+        //check regex
+        if(!/^[a-zA-Z0-9]*$/.test(value)){
+          this.registerForm.get('username')?.setErrors({ 'pattern': true });
+        }
+
+        if(!/^\S*$/.test(value)){
+          this.registerForm.get('username')?.setErrors({ 'pattern': true });
+        }
         this.authService.checkFullName(value).subscribe(isTaken => {
           if (isTaken)
-            this.registerForm.get('fullName')?.setErrors({ 'taken': true });
+            this.registerForm.get('username')?.setErrors({ 'taken': true });
         });
+
       }
     });
 
@@ -58,9 +69,11 @@ export class RegisterComponent implements OnInit{
   onSubmit(): void {
     if (this.registerForm.valid) {
       const registerDTO: RegisterDTO = {
-        username: this.registerForm.get('fullName')?.value,
+        username: this.registerForm.get('username')?.value,
         email: this.registerForm.get('email')?.value,
-        password: this.registerForm.get('password')?.value
+        password: this.registerForm.get('password')?.value,
+        firstName: this.registerForm.get('firstName')?.value,
+        lastName: this.registerForm.get('lastName')?.value
       };
 
       //console.log(registerDTO);

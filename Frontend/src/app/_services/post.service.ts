@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient, HttpEvent, HttpRequest} from '@angular/common/http';
-import {environment} from '../../environments/environment';
 import {CreatePostModel} from "../_models/create-post.model";
 import {PostModel} from "../_models/post.model";
 import {LikeRequestModel} from "../_models/like-request.model";
@@ -39,8 +38,8 @@ export class PostService {
     return this.httpClient.request(req);
   }
 
-  getPosts(): Observable<PostModel[]> {
-    return this.httpClient.get<PostModel[]>(`${this.apiBaseUrl}/`,);
+  getPosts(page: number = 0, size: number = 10): Observable<PostModel[]> {
+    return this.httpClient.get<PostModel[]>(`${this.apiBaseUrl}/?page=${page}&size=${size}`);
   }
 
   likePost(likeRequestModel: LikeRequestModel): Observable<LikesModel> {
@@ -51,7 +50,7 @@ export class PostService {
     return this.httpClient.delete<LikesModel>(`${this.likeApiBaseUrl}/${likeId}`);
   }
 
-  addComment(commentRequest: CommentRequestModel ): Observable<any> {
+  addComment(commentRequest: CommentRequestModel): Observable<any> {
     return this.httpClient.post<any>(`${this.commentApiBaseUrl}/`, commentRequest);
 
   }

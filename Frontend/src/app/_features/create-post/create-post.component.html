@@ -60,7 +60,7 @@
       <div class="modal-body">
         <div class="d-flex align-items-center">
           <div class="user-img">
-            <img src="assets/images/user/1.jpg" alt="userimg" class="avatar-60 rounded-circle img-fluid">
+            <img [src]="userImage" alt="userimg" class="avatar-60 rounded-circle img-fluid">
           </div>
           <form class="post-text ms-3 w-100" (ngSubmit)="createPost()">
             <input type="text" class="form-control rounded" placeholder="Write something here..."

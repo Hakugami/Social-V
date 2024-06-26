@@ -2,6 +2,7 @@ package org.spring.userservice.controllers;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.spring.userservice.clients.UploadClient;
 import org.spring.userservice.models.Dtos.UserModelDto;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Objects;
+
 @RestController
 @RequestMapping("/api/v1/profile")
 @RequiredArgsConstructor
@@ -23,6 +26,7 @@ public class UpdateProfileInfoController {
 	private final UploadClient uploadClient;
 
 	@GetMapping("{username}")
+	@ApiResponse(description = "Get user data by username", responseCode = "200")
 	public ResponseEntity<Object> getUserData(@PathVariable String username) {
 		try {
 			UserModelDto userModelDto = userService.getByUsername(username);
@@ -32,13 +36,14 @@ public class UpdateProfileInfoController {
 		}
 	}
 
-	@PutMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PutMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@ApiResponse(description = "Update user profile info", responseCode = "200")
 	public ResponseEntity<Object> updateProfileInfo(@RequestPart("dto") String dtoJson,
-	                                                @RequestPart("file") MultipartFile image) {
+	                                                @RequestPart(value = "file", required = false) MultipartFile image) {
 		try {
 			UserModelDto comingUserModelDto = objectMapper.readValue(dtoJson, UserModelDto.class);
 			String url = null;
-			if (image != null && !image.isEmpty()) {
+			if (image != null && !image.isEmpty() && Objects.requireNonNull(image.getContentType()).startsWith("image")) {
 				url = uploadClient.uploadFile(image);
 			}
 			UserModel userModel = userService.updateProfileInfo(comingUserModelDto, url);
