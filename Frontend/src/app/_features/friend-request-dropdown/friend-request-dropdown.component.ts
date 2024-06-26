@@ -7,9 +7,12 @@ import {FriendRequestsService} from '../../_services/friend-request.service';
 import {AuthService} from '../../_services/auth.service'; // Assuming you have this service
 import {FriendRequest} from '../../_models/friend-request.model';
 import {SharedFriendRequestService} from "../../_services/shared-friend-request.service";
-import {Subscription} from "rxjs";
+import {catchError, firstValueFrom, Observable, of, Subscription} from "rxjs";
 import {Notification} from "../../_models/notification.model";
 import {NotificationService} from "../../_services/notification.service";
+import {ProfileService} from "../../_services/profile.service";
+import {UserModelDTO} from "../../_models/usermodel.model";
+import {switchMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-friend-request-dropdown',
@@ -27,7 +30,8 @@ export class FriendRequestDropdownComponent implements OnInit, OnDestroy {
     private friendRequestService: FriendRequestsService,
     private authService: AuthService,
     private notificationService: NotificationService,
-    private sharedFriendRequestService: SharedFriendRequestService
+    private sharedFriendRequestService: SharedFriendRequestService,
+    private profileService: ProfileService
   ) {}
 
   ngOnInit(): void {
@@ -39,13 +43,32 @@ export class FriendRequestDropdownComponent implements OnInit, OnDestroy {
       }
     );
     this.notificationService.newNotificationEvent.subscribe(
-      (notification: Notification) => {
+      async (notification: Notification) => {
         if (notification.notificationType === 'FRIEND_REQUEST') {
           console.log('New friend request notification received');
-          this.loadFriendRequests();
+          const friendRequest = await this.mapToFriendRequest(notification);
+          this.friendRequests.push(friendRequest);
+          this.number = this.friendRequests.length;
         }
       }
     );
+  }
+
+  private async mapToFriendRequest(notification: Notification): Promise<FriendRequest> {
+    try {
+      const friendProfile: UserModelDTO = await firstValueFrom(this.profileService.getProfile(notification.senderUsername));
+      return {
+        id: "",
+        firstname: friendProfile.firstName || "",
+        friendCount: 0,
+        image: friendProfile.profilePicture || "",
+        lastname: friendProfile.lastName || "",
+        username: notification.senderUsername,
+      };
+    } catch (error) {
+      console.error('Error fetching friend profile:', error);
+      throw error;  // or handle the error as needed
+    }
   }
 
   loadFriendRequests() {
