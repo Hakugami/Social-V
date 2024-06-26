@@ -67,13 +67,18 @@ export class ChatService implements OnDestroy {
     });
   }
 
-  sendMessage(chatMessage: MessageModel) {
-    if (this.stompClient && this.stompClient.connected) {
-      this.stompClient.publish({
-        destination: '/app/chat',
-        body: JSON.stringify(chatMessage)
-      });
-    }
+  sendMessage(chatMessage: MessageModel): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (this.stompClient && this.stompClient.connected) {
+        this.stompClient.publish({
+          destination: '/app/chat',
+          body: JSON.stringify(chatMessage)
+        });
+        resolve();
+      } else {
+        reject(new Error('WebSocket not connected'));
+      }
+    });
   }
 
   fetchMessages(senderId: string, recipientId: string) {

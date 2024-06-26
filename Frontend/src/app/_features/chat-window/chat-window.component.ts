@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { BehaviorSubject, Subscription, combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {distinctUntilChanged, map} from 'rxjs/operators';
 import { MessageModel } from "../../_models/message.model";
 import { AuthService } from "../../_services/auth.service";
 import { UserModelDTO } from "../../_models/usermodel.model";
@@ -38,7 +38,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
   }
 
   selectedUser$ = new BehaviorSubject<UserModelDTO | null>(null);
-  messages$ = this.chatService.messages$;
+  messages$ = new BehaviorSubject<MessageModel[]>([]);
   newMessage: string = '';
   private subscription: Subscription = new Subscription();
 
@@ -46,23 +46,32 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private sharedFriendRequestService: SharedFriendRequestService,
     private chatService: ChatService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
     this.subscription.add(
       combineLatest([
-        this.selectedUserIdSubject,
+        this.selectedUserIdSubject.pipe(distinctUntilChanged()),
         this.sharedFriendRequestService.friends$
       ]).pipe(
         map(([selectedUserId, friends]) => {
           console.log('Combining selectedUserId and friends:', selectedUserId, friends);
           return friends.find(friend => friend.username === selectedUserId) || null;
-        })
+        }),
+        distinctUntilChanged((prev, curr) => prev?.username === curr?.username)
       ).subscribe(selectedUser => {
         console.log('New selected user:', selectedUser);
         this.selectedUser$.next(selectedUser);
         this.loadMessages();
+        this.cdr.detectChanges();
+      })
+    );
+
+    this.subscription.add(
+      this.chatService.messages$.subscribe(newMessages => {
+        const currentMessages = this.messages$.getValue();
+        this.messages$.next([...currentMessages, ...newMessages]);
         this.cdr.detectChanges();
       })
     );
@@ -75,19 +84,33 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
   loadMessages() {
     const selectedUserId = this.selectedUserId;
     if (selectedUserId) {
+      this.messages$.next([]);
       this.chatService.fetchMessages(this.authService.getUsername(), selectedUserId);
+      this.cdr.detectChanges();
     }
   }
 
-  sendMessage() {
+  async sendMessage() {
     if (this.newMessage.trim() && this.selectedUserId) {
       const newMsg: MessageModel = {
         senderId: this.authService.getUsername(),
         recipientId: this.selectedUserId,
         content: this.newMessage,
       };
-      this.chatService.sendMessage(newMsg);
-      this.newMessage = '';
+
+      try {
+        await this.chatService.sendMessage(newMsg);
+
+        // Add the new message to the local messages array
+        const currentMessages = this.messages$.getValue();
+        this.messages$.next([...currentMessages, newMsg]);
+
+        this.newMessage = '';
+        this.cdr.detectChanges();
+      } catch (error) {
+        console.error('Failed to send message:', error);
+        // Handle the error (e.g., show a notification to the user)
+      }
     }
   }
 

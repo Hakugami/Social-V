@@ -4,7 +4,7 @@
       <div class="card-body p-0">
         <div class="media-height p-3" data-scrollbar="init">
           <ng-container *ngFor="let friend of friends; trackBy: trackByFn">
-            <app-friend-status [friend]="friend"></app-friend-status>
+            <app-friend-status [friend]="friend" (friendClicked)="onFriendClicked($event)"></app-friend-status>
           </ng-container>
         </div>
         <div class="right-sidebar-toggle bg-primary text-white mt-3">

@@ -7,8 +7,6 @@ import {RegisterComponent} from "./_features/register/register.component";
 import {AuthenticationComponent} from "./_features/authentication/authentication.component";
 import {FriendRequestPageComponent} from './_features/friend-request-page/friend-request-page.component';
 import {authGuard} from "./_guards/auth.guard";
-import {FriendProfilePageComponent} from './_features/friend-profile-page/friend-profile-page.component';
-import {UserMatchGuard} from "./_guards/UserMatch.guard";
 import {SearchResultsComponent} from './_features/search-results/search-results.component';
 import {ChatPageComponent} from "./_features/chat-page/chat-page.component";
 import {ChatWindowComponent} from "./_features/chat-window/chat-window.component";
@@ -51,24 +49,22 @@ export const routes: Routes = [
     ]
   },
   {
-    path: 'friend-request', component: FriendRequestPageComponent
-  },
-  {
-    path: 'profile/:username', component: ProfilePageComponent
+    path: 'friend-request', component: FriendRequestPageComponent, canActivate: [authGuard]
   },
   {
     path: 'chat',
-    component: ChatPageComponent
+    component: ChatPageComponent,
+    canActivate: [authGuard]
   },
   {
-    path: 'chat/:id', component: ChatWindowComponent
+    path: 'chat/:username', component: ChatPageComponent, canActivate: [authGuard]
   },
   {
-    path: 'search-results', component: SearchResultsComponent
+    path: 'search-results', component: SearchResultsComponent, canActivate: [authGuard]
   },
-  {path: 'search-results', component: SearchResultsComponent},
+  {path: 'search-results', component: SearchResultsComponent , canActivate: [authGuard]},
 
-  {path : '**' , redirectTo: '/home'}
+  {path: '**', redirectTo: '/home'}
 
 
 ];

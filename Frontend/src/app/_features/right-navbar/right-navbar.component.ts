@@ -1,4 +1,12 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  EventEmitter,
+  Output
+} from '@angular/core';
 import { interval, Subscription } from 'rxjs';
 import { startWith, switchMap } from 'rxjs/operators';
 import { Friend } from '../../_models/friend.model';
@@ -8,6 +16,7 @@ import { FriendRequestsService } from '../../_services/friend-request.service';
 import { AuthService } from '../../_services/auth.service';
 import { UserModelDTO } from "../../_models/usermodel.model";
 import { SharedFriendRequestService } from '../../_services/shared-friend-request.service';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-right-navbar',
@@ -22,11 +31,19 @@ export class RightNavbarComponent implements OnInit, OnDestroy {
   private friendsSubscription: Subscription | undefined;
   private pollingSubscription: Subscription | undefined;
 
+  @Output() friendSelected = new EventEmitter<string>();
+
+  onFriendClicked(username: string) {
+    this.router.navigate(['/chat', username]);
+
+  }
+
   constructor(
     private friendRequestsService: FriendRequestsService,
     private authService: AuthService,
     private sharedFriendRequestService: SharedFriendRequestService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router : Router
   ) { }
 
   ngOnInit(): void {
