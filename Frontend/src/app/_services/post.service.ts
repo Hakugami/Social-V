@@ -59,7 +59,7 @@ export class PostService {
     return this.httpClient.put<LikesModel>(`${this.likeApiBaseUrl}/${likeId}`, {emotion});
   }
 
-  getPostById(userId: string): Observable<PostModel[]> {
-    return this.httpClient.get<PostModel[]>(`${this.apiBaseUrl}/${userId}`);
+  getPostById(userId: string , page : number = 0 , size : number = 10): Observable<PostModel[]> {
+    return this.httpClient.get<PostModel[]>(`${this.apiBaseUrl}/${userId}?page=${page}&size=${size}`);
   }
 }

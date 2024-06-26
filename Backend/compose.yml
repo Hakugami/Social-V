@@ -196,6 +196,93 @@ services:
       retries: 10
       timeout: 2s
 
+  upload-service:
+    build:
+      context: ./UploadService  # Adjust this path to the directory containing the Dockerfile
+      dockerfile: Dockerfile  # Optional if the file is named Dockerfile
+    container_name: upload-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "8086:8086"
+    networks:
+      - my-network
+    depends_on:
+      service-discovery:
+        condition: service_healthy  # Wait until service-discovery is healthy
+      api-gateway:
+        condition: service_healthy  # Wait until api-gateway is healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8086/actuator/health" ]
+      interval: 10s
+      retries: 10
+      timeout: 2s
+
+  notification-service:
+    build:
+      context: ./NotificationService  # Adjust this path to the directory containing the Dockerfile
+      dockerfile: Dockerfile  # Optional if the file is named Dockerfile
+    container_name: notification-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "8087:8087"
+    networks:
+      - my-network
+    depends_on:
+      service-discovery:
+        condition: service_healthy  # Wait until service-discovery is healthy
+      api-gateway:
+        condition: service_healthy  # Wait until api-gateway is healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8087/actuator/health" ]
+      interval: 10s
+      retries: 10
+      timeout: 2s
+
+  search-service:
+    build:
+      context: ./SearchService  # Adjust this path to the directory containing the Dockerfile
+      dockerfile: Dockerfile  # Optional if the file is named Dockerfile
+    container_name: search-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "8088:8088"
+    networks:
+      - my-network
+    depends_on:
+      service-discovery:
+        condition: service_healthy  # Wait until service-discovery is healthy
+      api-gateway:
+        condition: service_healthy  # Wait until api-gateway is healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8088/actuator/health" ]
+      interval: 10s
+      retries: 10
+      timeout: 2s
+
+  chat-service:
+    build:
+      context: ./ChatService  # Adjust this path to the directory containing the Dockerfile
+      dockerfile: Dockerfile  # Optional if the file is named Dockerfile
+    container_name: chat-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "8089:8089"
+    networks:
+      - my-network
+    depends_on:
+      service-discovery:
+        condition: service_healthy  # Wait until service-discovery is healthy
+      api-gateway:
+        condition: service_healthy  # Wait until api-gateway is healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8089/actuator/health" ]
+      interval: 10s
+      retries: 10
+      timeout: 2s
 
 networks:
   my-network:
