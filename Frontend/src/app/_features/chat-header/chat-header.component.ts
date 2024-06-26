@@ -3,12 +3,6 @@ import { Component, Input } from '@angular/core';
 import {NgClass, NgIf} from "@angular/common";
 import {UserModelDTO} from "../../_models/usermodel.model";
 
-interface User {
-  id: number;
-  name: string;
-  avatar: string;
-  status: 'online' | 'offline' | 'away';
-}
 
 @Component({
   selector: 'app-chat-header',

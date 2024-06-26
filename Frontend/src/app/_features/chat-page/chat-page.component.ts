@@ -16,6 +16,7 @@ export class ChatPageComponent {
   selectedUserId: string | null = null;
 
   onUserSelected(userId: string) {
+    console.log('User selected chat page component:', userId);
     this.selectedUserId = userId;
   }
 }

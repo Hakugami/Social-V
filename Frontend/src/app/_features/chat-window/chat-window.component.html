@@ -9,7 +9,7 @@
   <div *ngIf="selectedUser" class="tab-pane fade show active" id="chatbox{{selectedUser.username}}" role="tabpanel">
     <app-chat-header [selectedUser]="selectedUser"></app-chat-header>
     <div class="chat-content scroller">
-      <app-chat-message *ngFor="let message of messages"
+      <app-chat-message *ngFor="let message of messages ; trackBy: trackByFn"
                         [message]="message">
       </app-chat-message>
     </div>

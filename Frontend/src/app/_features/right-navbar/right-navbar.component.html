@@ -3,9 +3,9 @@
     <div class="card shadow-none">
       <div class="card-body p-0">
         <div class="media-height p-3" data-scrollbar="init">
-          <div *ngFor="let friend of friends">
+          <ng-container *ngFor="let friend of friends; trackBy: trackByFn">
             <app-friend-status [friend]="friend"></app-friend-status>
-          </div>
+          </ng-container>
         </div>
         <div class="right-sidebar-toggle bg-primary text-white mt-3">
           <i class="ri-arrow-left-line side-left-icon"></i>

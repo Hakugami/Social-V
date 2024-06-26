@@ -24,13 +24,13 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     console.log('SearchResultsComponent initialized');
-    
+
     this.routeSubscription = this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.updateResults();
       }
     });
-    
+
     // Initial load
     this.updateResults();
   }
@@ -50,6 +50,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   }
 
   onFriendRequestSent(personEmail: string): void {
-    this.results = this.results.filter(person => person.email !== personEmail);
+    //refresh the component instead of removing the person from the list
+    this.updateResults();
   }
 }

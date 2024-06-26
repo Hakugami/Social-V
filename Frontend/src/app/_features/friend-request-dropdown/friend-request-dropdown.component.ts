@@ -21,16 +21,14 @@ import {NotificationService} from "../../_services/notification.service";
 export class FriendRequestDropdownComponent implements OnInit, OnDestroy {
   friendRequests: FriendRequest[] = [];
   number: number = 0;
-  subscription: Subscription | undefined;
+  private subscription: Subscription | undefined;
 
-
-    constructor(
-        private friendRequestService: FriendRequestsService,
-        private authService: AuthService,
-        private notificationService: NotificationService,
-        private sharedFriendRequestService: SharedFriendRequestService
-
-    ) {}
+  constructor(
+    private friendRequestService: FriendRequestsService,
+    private authService: AuthService,
+    private notificationService: NotificationService,
+    private sharedFriendRequestService: SharedFriendRequestService
+  ) {}
 
   ngOnInit(): void {
     this.loadFriendRequests();
@@ -42,24 +40,12 @@ export class FriendRequestDropdownComponent implements OnInit, OnDestroy {
     );
     this.notificationService.newNotificationEvent.subscribe(
       (notification: Notification) => {
-
         if (notification.notificationType === 'FRIEND_REQUEST') {
-          console.log('New friend request:', notification);
-          this.friendRequests.push(this.mapToFriendRequest(notification));
-          this.number = this.friendRequests.length;
+          console.log('New friend request notification received');
+          this.loadFriendRequests();
         }
       }
     );
-  }
-  private mapToFriendRequest(notification: Notification): FriendRequest {
-    return {
-      id:"",
-      firstname: "",
-      friendCount: 0,
-      image: "",
-      lastname: "",
-      username: notification.senderUsername,
-    };
   }
 
   loadFriendRequests() {
@@ -67,9 +53,7 @@ export class FriendRequestDropdownComponent implements OnInit, OnDestroy {
     if (userInfo && userInfo.email) {
       this.friendRequestService.getFriendRequests(userInfo.email).subscribe(
         (data) => {
-          this.friendRequests = data;
-          this.number = this.friendRequests.length;
-          this.sharedFriendRequestService.updateFriendRequests(this.friendRequests);
+          this.sharedFriendRequestService.updateFriendRequests(data);
         },
         (error) => {
           console.error('Error fetching friend requests:', error);
@@ -83,9 +67,12 @@ export class FriendRequestDropdownComponent implements OnInit, OnDestroy {
   confirmRequest(request: FriendRequest) {
     this.friendRequestService.acceptFriendRequest(request.id).subscribe(
       () => {
+        // Remove the accepted request from the local list
         this.sharedFriendRequestService.removeFriendRequest(request.id);
-        this.friendRequests = this.friendRequests.filter(r => r.id !== request.id);
-        this.number = this.friendRequests.length;
+
+        // Fetch updated friend list
+        this.loadFriends();
+
         console.log('Friend request accepted:', request);
       },
       (error) => {
@@ -94,21 +81,32 @@ export class FriendRequestDropdownComponent implements OnInit, OnDestroy {
     );
   }
 
+  loadFriends() {
+    const userInfo = this.authService.getUserInfoFromToken();
+    if (userInfo && userInfo.email) {
+      this.friendRequestService.getFriends(userInfo.email).subscribe(
+        (data) => {
+          this.sharedFriendRequestService.updateFriends(data);
+        },
+        (error) => {
+          console.error('Error fetching friends:', error);
+        }
+      );
+    } else {
+      console.error('User email not found in token');
+    }
+  }
+
   deleteRequest(request: FriendRequest) {
-    // Implement deletion logic here
     this.friendRequestService.deleteFriendRequest(request.id).subscribe(
       () => {
         this.sharedFriendRequestService.removeFriendRequest(request.id);
-        this.friendRequests = this.friendRequests.filter(r => r.id !== request.id);
-        this.number = this.friendRequests.length;
         console.log('Friend request deleted:', request);
       },
       (error) => {
         console.error('Error deleting friend request:', error);
       }
     );
-    console.log('Delete request:', request);
-
   }
 
   ngOnDestroy() {
