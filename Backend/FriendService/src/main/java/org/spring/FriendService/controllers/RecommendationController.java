@@ -1,5 +1,6 @@
 package org.spring.FriendService.controllers;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.spring.FriendService.models.dtos.UserModelDTO;
@@ -22,12 +23,14 @@ public class RecommendationController {
     private final RecommendationService recommendationService;
 
     @GetMapping("/recommendations")
+    @ApiResponse(description = "get recommended friends for a user",responseCode = "200")
     public ResponseEntity<List<UserModelDTO>> getRecommendations(@RequestParam String userId, @RequestParam int limit) {
         List<UserModelDTO> recommendedFriends = recommendationService.getRecommendedFriends(userId, limit);
         return ResponseEntity.ok(recommendedFriends);
     }
 
     @GetMapping("/second-degree-connections")
+    @ApiResponse(description = "get second degree connections for a user",responseCode = "200")
     public List<UserModelDTO> getSecondDegreeConnections(@RequestParam String userId, @RequestParam int limit) {
         return recommendationService.getSecondDegreeConnections(userId, limit);
     }

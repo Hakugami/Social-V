@@ -33,6 +33,7 @@ public class FriendshipController {
     }
 
     @GetMapping("/request/{userId}")
+    @ApiResponse(description = "get all the friend requests of a user",responseCode = "200")
     public ResponseEntity<List<FriendRequestNotificationDTO>> getFriendRequest(@PathVariable String userId) {
         List<FriendRequestNotificationDTO> friendRequest = friendRequestService.getFriendRequests(userId);
         return ResponseEntity.ok(friendRequest);

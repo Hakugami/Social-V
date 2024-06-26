@@ -1,5 +1,6 @@
 package org.spring.notificationservice.controllers;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.spring.notificationservice.events.PostCreatedEvent;
@@ -12,18 +13,14 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/api/v1/notifications")
 @RequiredArgsConstructor
 @Slf4j
-
 public class NotificationController {
     private final NotificationService notificationService;
     @MessageMapping("/public.notifications")
@@ -34,6 +31,7 @@ public class NotificationController {
     }
 
     @GetMapping("/{username}")
+    @ApiResponse(description = "Get all notifications for a user", responseCode = "200")
     public ResponseEntity<List<NotificationDto>> getUserNotifications(@PathVariable String username) {
         return ResponseEntity.ok(notificationService.findNotificationByReceiverUsername(username));
 
