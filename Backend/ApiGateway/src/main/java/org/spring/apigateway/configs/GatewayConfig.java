@@ -101,7 +101,26 @@ public class GatewayConfig {
 				.filter(lb("FRIENDSERVICE"))
 				.build();
 	}
+	@Bean
+	public RouterFunction<ServerResponse> notificationsRouter() {
+		return GatewayRouterFunctions.route("notification-service")
+				.route(RequestPredicates.path("/notifications/**"), HandlerFunctions.http())
+				.before(rewritePath("/notifications/(?<segment>.*)", "/${segment}"))
+				.before(jwtValidationFilter) // remove this filter if you don't want to validate JWT
+				.filter(lb("notification-service"))
+				.build();
+	}
 
+
+	@Bean
+	public RouterFunction<ServerResponse> chatRouter() {
+		return GatewayRouterFunctions.route("message-service")
+				.route(RequestPredicates.path("/messages/**"), HandlerFunctions.http())
+				.before(rewritePath("/messages/(?<segment>.*)", "/${segment}"))
+				.before(jwtValidationFilter) // remove this filter if you don't want to validate JWT
+				.filter(lb("message-service"))
+				.build();
+	}
 
 
 }

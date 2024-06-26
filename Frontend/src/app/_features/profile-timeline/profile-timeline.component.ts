@@ -23,7 +23,7 @@ import { AuthService } from "../../_services/auth.service";
   styleUrl: './profile-timeline.component.css'
 })
 export class ProfileTimelineComponent implements OnInit, OnChanges {
-  @Input() username!: string | null;
+  @Input() username!: string ;
   @Input() isOwnProfile: boolean = false;
 
   posts: PostModel[] = [];

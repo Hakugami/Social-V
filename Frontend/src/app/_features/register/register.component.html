@@ -3,10 +3,13 @@
 
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
   <div class="form-group">
-    <label class="form-label" for="fullName">Your Full Name</label>
-    <input type="text" formControlName="fullName" [class.input-error]="registerForm.get('fullName')?.errors?.['taken']" id="fullName" class="form-control mb-0" placeholder="Your Full Name">
-    <div *ngIf="registerForm.get('fullName')?.errors?.['taken']" class="text-danger">
-      Full name is already taken.
+    <label class="form-label" for="username">Username</label>
+    <input type="text" formControlName="username" [class.input-error]="registerForm.get('username')?.errors?.['taken']" id="username" class="form-control mb-0" placeholder="Your Username">
+    <div *ngIf="registerForm.get('username')?.errors?.['taken']" class="text-danger">
+      Username is already taken.
+    </div>
+    <div *ngIf="registerForm.get('username')?.errors?.['pattern']" class="text-danger">
+      Username can only contain letters and numbers. No spaces or special characters.
     </div>
   </div>
   <div class="form-group">
@@ -15,6 +18,14 @@
     <div *ngIf="registerForm.get('email')?.errors?.['taken']" class="text-danger">
      Email is already taken.
     </div>
+  </div>
+  <div class="form-group">
+    <label class="form-label" for="firstName">First name</label>
+    <input type="text" formControlName="firstName" [class.input-error]="registerForm.get('firstName')?.errors?.['taken']" id="firstName" class="form-control mb-0" placeholder="Your First Name">
+  </div>
+  <div class="form-group">
+    <label class="form-label" for="lastName">Last name</label>
+    <input type="text" formControlName="lastName" [class.input-error]="registerForm.get('lastName')?.errors?.['taken']" id="lastName" class="form-control mb-0" placeholder="Your Last Name">
   </div>
   <div class="form-group">
     <label class="form-label" for="password">Password</label>
@@ -30,13 +41,13 @@
   </div>
   <div class="form-check d-inline-block mt-2 pt-1">
     <input type="checkbox" class="form-check-input" id="terms" formControlName="terms">
-    <label class="form-check-label" for="terms">I accept <a href="#">Terms and Conditions</a></label>
+    <label class="form-check-label" for="terms">I accept <a >Terms and Conditions</a></label>
   </div>
   <button type="submit" class="btn btn-primary float-end" [disabled]="!registerForm.valid">Sign Up</button>
   <div class="sign-info">
     <span class="dark-color d-inline-block line-height-2">Already have an account? <a routerLink="/auth/login">Sign in</a></span>
     <ul class="iq-social-media">
-      <li><a href="#"><i class="ri-google-line"></i></a></li>
+      <li><a ><i class="ri-google-line"></i></a></li>
     </ul>
   </div>
 </form>

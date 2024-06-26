@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import { Friend } from '../../_models/friend.model';
 import { DefaultImageDirective } from '../../_directives/default-image.directive';
 import {UserModelDTO} from "../../_models/usermodel.model";
@@ -15,6 +15,11 @@ export class FriendStatusComponent {
 @Input()
 status: string='status-online';
   @Input()
-  friend!: UserModelDTO;
+  friend!: UserModelDTO
+  @Output() friendClicked = new EventEmitter<string>();
+
+  onFriendClick() {
+    this.friendClicked.emit(this.friend.username);
+  }
 
 }

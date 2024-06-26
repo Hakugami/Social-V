@@ -13,10 +13,5 @@ import {AuthService} from "../../_services/auth.service";
 })
 export class ChatMessageComponent {
   @Input() message!:MessageModel ;
-
-  constructor(private authService: AuthService) { }
-
-  checkIfCurrentUser(): boolean {
-    return this.message.senderId === this.authService.getUsername();
-  }
+  @Input() isMine!: boolean;
 }

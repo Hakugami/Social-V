@@ -39,9 +39,12 @@ public class UserModel implements Serializable {
     private String city;
     private LocalDate birthDate;
     private String phoneNumber;
+    @Column(name = "profile_picture", columnDefinition = "MEDIUMTEXT")
     private String profilePicture;
+    @Column(name = "cover_picture", columnDefinition = "MEDIUMTEXT")
     private String coverPicture;
     // URL For any Portfolio or other Social Media platform
+    @Column(name = "url", columnDefinition = "MEDIUMTEXT")
     private String url;
 
     public Integer getAge() {

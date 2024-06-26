@@ -10,7 +10,7 @@
                   <app-direct-message-members (userSelected)="onUserSelected($event)"></app-direct-message-members>
                 </div>
                 <div class="col-lg-9 chat-data p-0 chat-data-right">
-                  <app-chat-window [selectedUserId]="selectedUserId"></app-chat-window>
+                  <app-chat-window [selectedUserId]="selectedUserId$ | async"></app-chat-window>
                 </div>
               </div>
             </div>

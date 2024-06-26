@@ -6,6 +6,7 @@ import { FriendRequestDTO } from '../../_models/request-dto.model';
 import { DefaultImageDirective } from '../../_directives/default-image.directive';
 import { CommonModule, NgIf } from '@angular/common';
 import { UserModelDTO } from '../../_models/usermodel.model';
+import {SharedFriendRequestService} from "../../_services/shared-friend-request.service";
 
 @Component({
   selector: 'app-person-card',
@@ -23,7 +24,7 @@ export class PersonCardComponent implements OnInit {
   isFriend: boolean = false;
   isPending: boolean = false;
 
-  constructor(private friendService: FriendRequestsService, private authService: AuthService) {
+  constructor(private friendService: FriendRequestsService, private authService: AuthService,private sharedFriendRequest : SharedFriendRequestService) {
     const userInfo = this.authService.getUserInfoFromToken();
     this.currentUser = userInfo?.email || null;
   }
@@ -87,6 +88,7 @@ export class PersonCardComponent implements OnInit {
           console.log('Friend removed:', data);
           this.isFriend = false;
           this.friendRemoved.emit(this.person.email);
+          this.sharedFriendRequest.removeFriend(this.person.email);
         },
         (error) => {
           console.error('Error removing friend:', error);

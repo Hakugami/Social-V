@@ -6,11 +6,6 @@
           <img src="assets/images/logo.png" class="img-fluid" alt="">
           <span>SocialV</span>
         </a>
-        <div class="iq-menu-bt align-self-center">
-          <div class="wrapper-menu">
-            <div class="main-circle"><i class="ri-menu-line"></i></div>
-          </div>
-        </div>
       </div>
       <div class="iq-search-bar device-search">
         <app-user-search></app-user-search>
@@ -23,14 +18,14 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav  ms-auto navbar-list">
           <li>
-            <a href="home" class="  d-flex align-items-center">
+            <a [routerLink]="['/home']" class="  d-flex align-items-center">
               <i class="ri-home-line"></i>
             </a>
           </li>
           <app-friend-request-dropdown></app-friend-request-dropdown>
           <app-notification-dropdown></app-notification-dropdown>
           <li class="nav-item dropdown">
-            <a href="#" class="dropdown-toggle" id="mail-drop" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a  class="dropdown-toggle" id="mail-drop" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="ri-mail-line"></i>
             </a>
             <div class="sub-drop dropdown-menu" aria-labelledby="mail-drop">
@@ -42,7 +37,7 @@
                   <small class="badge bg-light text-dark">4</small>
                 </div>
                 <div class="card-body p-0 ">
-                  <a href="#" class="iq-sub-card">
+                  <a  class="iq-sub-card">
                     <div class="d-flex  align-items-center">
                       <div class="">
                         <img class="avatar-40 rounded" src="assets/images/user/01.jpg" alt="">
@@ -53,7 +48,7 @@
                       </div>
                     </div>
                   </a>
-                  <a href="#" class="iq-sub-card">
+                  <a  class="iq-sub-card">
                     <div class="d-flex align-items-center">
                       <div class="">
                         <img class="avatar-40 rounded" src="assets/images/user/02.jpg" alt="">
@@ -64,7 +59,7 @@
                       </div>
                     </div>
                   </a>
-                  <a href="#" class="iq-sub-card">
+                  <a  class="iq-sub-card">
                     <div class="d-flex align-items-center">
                       <div class="">
                         <img class="avatar-40 rounded" src="assets/images/user/03.jpg" alt="">
@@ -75,7 +70,7 @@
                       </div>
                     </div>
                   </a>
-                  <a href="#" class="iq-sub-card">
+                  <a  class="iq-sub-card">
                     <div class="d-flex align-items-center">
                       <div class="">
                         <img class="avatar-40 rounded" src="assets/images/user/04.jpg" alt="">
@@ -86,7 +81,7 @@
                       </div>
                     </div>
                   </a>
-                  <a href="#" class="iq-sub-card">
+                  <a  class="iq-sub-card">
                     <div class="d-flex align-items-center">
                       <div class="">
                         <img class="avatar-40 rounded" src="assets/images/user/05.jpg" alt="">

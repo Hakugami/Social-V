@@ -1,29 +1,36 @@
-<!-- chat-window.component.html -->
 <div class="tab-content">
-  <div *ngIf="!selectedUser" class="tab-pane fade show active" id="default-block" role="tabpanel">
-    <div class="chat-start">
-      <span class="iq-start-icon text-primary"><i class="ri-message-3-line"></i></span>
-      <button id="chat-start" class="btn bg-white mt-3">Start Conversation!</button>
+  <ng-container *ngIf="(selectedUser$ | async) as selectedUser; else defaultBlock">
+    <div class="tab-pane fade show active" id="chatbox{{selectedUser.firstName}} + {{selectedUser.lastName}}" role="tabpanel">
+      <app-chat-header [selectedUser]="selectedUser"></app-chat-header>
+      <div class="chat-content scroller">
+        <ng-container *ngIf="messages$ | async as messages">
+          <app-chat-message *ngFor="let message of messages; trackBy: trackByFn"
+                            [message]="message"
+                            [isMine]="checkMine(message)">
+          </app-chat-message>
+        </ng-container>
+      </div>
+      <div class="chat-footer p-3 bg-white">
+        <form class="d-flex align-items-center" (ngSubmit)="sendMessage()">
+          <div class="chat-attagement d-flex">
+            <a><i class="far fa-smile pe-3" aria-hidden="true"></i></a>
+            <a><i class="fa fa-paperclip pe-3" aria-hidden="true"></i></a>
+          </div>
+          <input type="text" class="form-control me-3" placeholder="Type your message" [(ngModel)]="newMessage" name="message">
+          <button type="submit" class="btn btn-primary d-flex align-items-center p-2">
+            <i class="far fa-paper-plane" aria-hidden="true"></i><span class="d-none d-lg-block ms-1">Send</span>
+          </button>
+        </form>
+      </div>
     </div>
-  </div>
-  <div *ngIf="selectedUser" class="tab-pane fade show active" id="chatbox{{selectedUser.username}}" role="tabpanel">
-    <app-chat-header [selectedUser]="selectedUser"></app-chat-header>
-    <div class="chat-content scroller">
-      <app-chat-message *ngFor="let message of messages"
-                        [message]="message">
-      </app-chat-message>
+  </ng-container>
+
+  <ng-template #defaultBlock>
+    <div class="tab-pane fade show active" id="default-block" role="tabpanel">
+      <div class="chat-start">
+        <span class="iq-start-icon text-primary"><i class="ri-message-3-line"></i></span>
+        <button id="chat-start" class="btn bg-white mt-3">Start Conversation!</button>
+      </div>
     </div>
-    <div class="chat-footer p-3 bg-white">
-      <form class="d-flex align-items-center" (ngSubmit)="sendMessage()">
-        <div class="chat-attagement d-flex">
-          <a href="#"><i class="far fa-smile pe-3" aria-hidden="true"></i></a>
-          <a href="#"><i class="fa fa-paperclip pe-3" aria-hidden="true"></i></a>
-        </div>
-        <input type="text" class="form-control me-3" placeholder="Type your message" [(ngModel)]="newMessage" name="message">
-        <button type="submit" class="btn btn-primary d-flex align-items-center p-2">
-          <i class="far fa-paper-plane" aria-hidden="true"></i><span class="d-none d-lg-block ms-1">Send</span>
-        </button>
-      </form>
-    </div>
-  </div>
+  </ng-template>
 </div>

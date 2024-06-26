@@ -21,7 +21,7 @@
                                                    <i class="ri-more-fill"></i>
                                                    </span>
               <div class="dropdown-menu m-0 p-0" >
-                <a class="dropdown-item p-3" href="#">
+                <a class="dropdown-item p-3" >
                   <div class="d-flex align-items-top">
                     <i class="ri-pencil-line h4"></i>
                     <div class="data ms-2">
@@ -30,7 +30,7 @@
                     </div>
                   </div>
                 </a>
-                <a class="dropdown-item p-3" href="#">
+                <a class="dropdown-item p-3" >
                   <div class="d-flex align-items-top">
                     <i class="ri-delete-bin-7-line h4"></i>
                     <div class="data ms-2">
@@ -58,7 +58,7 @@
     <!-- Display images if available -->
     <ng-container *ngIf="post.imagesUrl && post.imagesUrl.length > 0">
       <div *ngFor="let imageUrl of post.imagesUrl">
-        <a href="#"><img [src]="imageUrl" alt="post-image" class="img-fluid w-100"/></a>
+        <a ><img [src]="imageUrl" alt="post-image" class="img-fluid w-100"/></a>
       </div>
     </ng-container>
 
@@ -89,31 +89,31 @@
 
     </span>
               <div class="dropdown-menu py-2">
-                <a class="ms-2 me-2" data-bs-placement="top" data-bs-toggle="tooltip" href="#"
+                <a class="ms-2 me-2" data-bs-placement="top" data-bs-toggle="tooltip"
                    title="Like" (click)="selectEmotion(Emotion.LIKE, '../../../assets/images/icon/01.png'); closeDropdown() "><img alt=""
                                                                                                                  class="img-fluid"
                                                                                                                  src="../../../assets/images/icon/01.png"></a>
-                <a class="me-2" data-bs-placement="top" data-bs-toggle="tooltip" href="#"
+                <a class="me-2" data-bs-placement="top" data-bs-toggle="tooltip"
                    title="Love" (click)="selectEmotion(Emotion.LOVE, '../../../assets/images/icon/02.png'); closeDropdown()"><img alt=""
                                                                                                                  class="img-fluid"
                                                                                                                  src="../../../assets/images/icon/02.png"></a>
-                <a class="me-2" data-bs-placement="top" data-bs-toggle="tooltip" href="#"
+                <a class="me-2" data-bs-placement="top" data-bs-toggle="tooltip"
                    title="Happy" (click)="selectEmotion(Emotion.HAPPY, '../../../assets/images/icon/03.png'); closeDropdown()"><img
                   alt="" class="img-fluid"
                   src="../../../assets/images/icon/03.png"></a>
-                <a class="me-2" data-bs-placement="top" data-bs-toggle="tooltip" href="#"
+                <a class="me-2" data-bs-placement="top" data-bs-toggle="tooltip"
                    title="HaHa" (click)="selectEmotion(Emotion.HAHA, '../../../assets/images/icon/04.png'); closeDropdown()"><img alt=""
                                                                                                                  class="img-fluid"
                                                                                                                  src="../../../assets/images/icon/04.png"></a>
-                <a class="me-2" data-bs-placement="top" data-bs-toggle="tooltip" href="#"
+                <a class="me-2" data-bs-placement="top" data-bs-toggle="tooltip"
                    title="Think" (click)="selectEmotion(Emotion.THINK, '../../../assets/images/icon/05.png'); closeDropdown()"><img
                   alt="" class="img-fluid"
                   src="../../../assets/images/icon/05.png"></a>
-                <a class="me-2" data-bs-placement="top" data-bs-toggle="tooltip" href="#"
+                <a class="me-2" data-bs-placement="top" data-bs-toggle="tooltip"
                    title="Sade" (click)="selectEmotion(Emotion.SAD, '../../../assets/images/icon/06.png'); closeDropdown()"><img alt=""
                                                                                                                 class="img-fluid"
                                                                                                                 src="../../../assets/images/icon/06.png"></a>
-                <a class="me-2" data-bs-placement="top" data-bs-toggle="tooltip" href="#"
+                <a class="me-2" data-bs-placement="top" data-bs-toggle="tooltip"
                    title="Lovely" (click)="selectEmotion(Emotion.LOVELY, '../../../assets/images/icon/07.png'); closeDropdown()"><img alt="" class="img-fluid"
                                                                                                                      src="../../../assets/images/icon/07.png"></a>
 
@@ -127,10 +127,10 @@
 </span>
               <div class="dropdown-menu">
                 <ng-container *ngIf="post.likes.likes.length > 0; else noLikes">
-                  <a class="dropdown-item" href="#" *ngFor="let like of getDisplayedLikes(5)">
+                  <a class="dropdown-item"  *ngFor="let like of getDisplayedLikes(5)">
                     {{ like.username }}
                   </a>
-                  <a class="dropdown-item" href="#" *ngIf="post.likes.likes.length > 5">
+                  <a class="dropdown-item"  *ngIf="post.likes.likes.length > 5">
                     And {{ post.likes.likes.length - 5 }} more...
                   </a>
                 </ng-container>
@@ -149,7 +149,7 @@
     </span>
             <div class="dropdown-menu">
               <ng-container *ngIf="post.comments.length > 0; else noComments">
-                <a class="dropdown-item" href="#" *ngFor="let comment of post.comments">
+                <a class="dropdown-item"  *ngFor="let comment of post.comments">
                   {{ comment.username }}
                 </a>
               </ng-container>
@@ -161,7 +161,7 @@
         </div>
       </div>
       <div class="share-block d-flex align-items-center feather-icon mt-2 mt-md-0">
-        <a aria-controls="share-btn" data-bs-target="#share-btn" data-bs-toggle="offcanvas" href="#">
+        <a aria-controls="share-btn" data-bs-target="#share-btn" data-bs-toggle="offcanvas" >
           <!--          <i class="ri-share-line"></i>-->
           <!--          <span class="ms-1">{{ post.shares }} Share</span>-->
         </a>
@@ -177,7 +177,7 @@
       <input [(ngModel)]="commentText" name="commentText" class="form-control rounded" placeholder="Enter Your Comment"
              type="text">
       <div class="comment-attagement d-flex">
-        <a href="#"><i class="ri-user-smile-line me-3"></i></a>
+        <a ><i class="ri-user-smile-line me-3"></i></a>
       </div>
     </form>
   </div>

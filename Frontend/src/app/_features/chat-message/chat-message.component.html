@@ -1,21 +1,11 @@
-<div *ngIf="checkIfCurrentUser()" class="chat d-flex other-user">
-  <div class="chat-user">
-    <a class="avatar m-0">
-      <img src="assets/images/user/1.jpg" alt="avatar" class="avatar-35">
-    </a>
-  </div>
+<div *ngIf="isMine" class="chat d-flex other-user">
   <div class="chat-detail">
     <div class="chat-message">
       <p>{{ message.content }}</p>
     </div>
   </div>
 </div>
-<div *ngIf="!checkIfCurrentUser()" class="chat chat-left">
-  <div class="chat-user">
-    <a class="avatar m-0">
-      <img src="assets/images/user/10.jpg" alt="avatar" class="avatar-35">
-    </a>
-  </div>
+<div *ngIf="!isMine" class="chat chat-left">
   <div class="chat-detail">
     <div class="chat-message">
       <p>{{ message.content }}</p>

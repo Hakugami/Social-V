@@ -17,8 +17,8 @@
               alt="profile-pic"
             />
             <div class="p-image">
-              <i class="ri-pencil-line upload-button text-white"></i>
-              <input class="file-upload" type="file" accept="image/*" />
+              <i class="ri-pencil-line upload-button text-white" (click)="triggerFileInput()"></i>
+              <input #fileInput class="file-upload" type="file" accept="image/*" (change)="onFileSelected($event)" style="display: none;" />
             </div>
           </div>
         </div>
@@ -57,7 +57,7 @@
             id="uname"
             name="username"
             [(ngModel)]="userData.username"
-            placeholder="Bni@01"
+            placeholder="User"
             required
           />
         </div>
@@ -69,7 +69,7 @@
             id="cname"
             name="city"
             [(ngModel)]="userData.city"
-            placeholder="Atlanta"
+            placeholder="Giza"
             required
           />
         </div>
@@ -133,29 +133,13 @@
             placeholder="Enter country"
           />
         </div>
-
-        <!--        <div class="form-group col-sm-6">-->
-<!--          <label class="form-label">State:</label>-->
-<!--          <select-->
-<!--            class="form-select"-->
-<!--            aria-label="Default select example"-->
-<!--            name="state"-->
-<!--            [(ngModel)]="userData.state"-->
-<!--          >-->
-<!--            <option [value]="'California'">California</option>-->
-<!--            <option [value]="'Florida'">Florida</option>-->
-<!--            <option [value]="'Georgia'">Georgia</option>-->
-<!--            <option [value]="'Connecticut'">Connecticut</option>-->
-<!--            <option [value]="'Louisiana'">Louisiana</option>-->
-<!--          </select>-->
-<!--        </div>-->
         <div class="form-group col-sm-12">
           <label class="form-label">Address:</label>
           <textarea
             class="form-control"
             name="address"
             rows="2"
-            placeholder="Berkit Elsabaa - Menofia"
+            placeholder="{{userData.address}}"
             style="line-height: 22px"
             [(ngModel)]="userData.address"
           ></textarea>
